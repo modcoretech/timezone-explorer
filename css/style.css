@@ -19,12 +19,17 @@
     --card-hover-shadow: 0 8px 16px var(--shadow-color);
     --card-hover-border-color: var(--primary-color);
 
-    /* Forms */
+    /* Forms (Main Search) */
     --input-border-color: #ced4da;
     --input-focus-border-color: var(--primary-color);
     --input-focus-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 
     /* Buttons & Links */
+    --button-bg-color: var(--primary-color); /* Consistent button color */
+    --button-text-color: white;
+    --button-hover-bg: #0056b3; /* Darker Blue */
+    --button-focus-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Use primary color shadow */
+
     --support-bg-color: #28a745; /* Green */
     --support-hover-bg-color: #218838; /* Darker Green */
     --link-color: var(--primary-color);
@@ -35,27 +40,15 @@
     /* Loading & Messages */
     --loading-text-color: #6c757d; /* Medium Gray */
 
-    /* Modal */
-    --modal-overlay-bg: rgba(0, 0, 0, 0.7); /* Darker Overlay */
-    --modal-bg-color: #ffffff;
-    --modal-border-color: #dee2e6;
+    /* Detail View */
+    --detail-card-bg: #e9ecef; /* Light Gray */
+    --detail-card-border: #ced4da; /* Lighter Gray */
 
-    /* Tabs */
-    --tab-sidebar-border-color: #dee2e6;
-    --tab-button-color: #6c757d;
-    --tab-button-hover-bg: #e9ecef;
-    --tab-button-active-color: var(--primary-color);
-    --tab-button-active-border: var(--primary-color);
-    --tab-icon-color: #6c757d;
-    --tab-icon-active-color: var(--primary-color);
+    /* Icons (using CSS mask) */
+    /* Icon background-color is now controlled by these variables */
+    --icon-color: var(--text-color);
+    --icon-hover-color: var(--primary-color);
 
-     /* Settings Specific */
-    --setting-item-border: #e9ecef;
-
-    /* Icons */
-    --settings-icon-color: var(--text-color); /* Match text color by default */
-    --nav-icon-color: var(--text-color); /* Nav icon color */
-    --nav-icon-hover-color: var(--primary-color); /* Nav icon hover color */
 
     /* Scrollbar */
     --scrollbar-thumb: #adb5bd; /* Gray */
@@ -69,6 +62,8 @@
     --nav-search-bg-color: var(--secondary-color); /* Background for expanded search */
     --nav-search-input-border: var(--border-color);
     --nav-search-input-focus-border: var(--primary-color);
+    --nav-icon-color: var(--text-color); /* Nav icon color */
+    --nav-icon-hover-color: var(--primary-color); /* Nav icon hover color */
 }
 
 /* Dark Mode Variables */
@@ -92,30 +87,28 @@
     --input-focus-border-color: var(--primary-color);
     --input-focus-shadow: 0 0 0 0.2rem rgba(0, 170, 255, 0.25);
 
+    --button-bg-color: var(--primary-color);
+    --button-text-color: #212529; /* Dark text on light primary */
+    --button-hover-bg: #0077cc;
+    --button-focus-shadow: 0 0 0 0.2rem rgba(0, 170, 255, 0.25); /* Use primary color shadow */
+
     --support-bg-color: #1e7e34;
     --support-hover-bg-color: #1c7430;
     --link-color: var(--primary-color);
     --link-hover-color: #0077cc;
+    --clear-cache-button-bg: #c82333;
+    --clear-cache-button-hover-bg: #bd2130;
 
     --loading-text-color: #adb5bd;
 
-    --modal-overlay-bg: rgba(0, 0, 0, 0.85);
-    --modal-bg-color: #343a40;
-    --modal-border-color: #495057;
+    --detail-card-bg: #495057;
+    --detail-card-border: #6c757d;
 
-    --tab-sidebar-border-color: #495057;
-    --tab-button-color: #adb5bd;
-    --tab-button-hover-bg: #495057;
-    --tab-button-active-color: var(--primary-color);
-    --tab-button-active-border: var(--primary-color);
-    --tab-icon-color: #adb5bd;
-    --tab-icon-active-color: var(--primary-color);
+    --icon-color: var(--text-color); /* Icons in dark mode match text */
+    --icon-hover-color: var(--primary-color); /* Hover color is primary */
+    --nav-icon-color: var(--text-color); /* Nav icons in dark mode match text */
+    --nav-icon-hover-color: var(--primary-color); /* Nav hover color is primary */
 
-    --setting-item-border: #495057;
-
-    --settings-icon-color: var(--text-color);
-    --nav-icon-color: var(--text-color);
-    --nav-icon-hover-color: var(--primary-color);
 
     --scrollbar-thumb: #495057;
     --scrollbar-track: #343a40;
@@ -129,63 +122,7 @@
     --nav-search-input-focus-border: var(--primary-color);
 }
 
-/* Blue Theme Variables */
-.blue-theme {
-    --background-color: #e0f7fa;
-    --container-bg-color: #ffffff;
-    --text-color: #003f5c;
-    --heading-color: #002a4d;
-    --primary-color: #0077b6;
-    --secondary-color: #b3e5fc;
-    --border-color: #b0bec5;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-
-    --card-bg-color: #ffffff;
-    --card-border-color: #b3e5fc;
-    --card-shadow: 0 4px 8px var(--shadow-color);
-    --card-hover-shadow: 0 8px 16px var(--shadow-color);
-    --card-hover-border-color: var(--primary-color);
-
-    --input-border-color: #90a4ae;
-    --input-focus-border-color: var(--primary-color);
-    --input-focus-shadow: 0 0 0 0.2rem rgba(0, 119, 182, 0.25);
-
-    --support-bg-color: #00bfa5;
-    --support-hover-bg-color: #00a18a;
-    --link-color: var(--primary-color);
-    --link-hover-color: #005f99;
-
-    --loading-text-color: #546e7a;
-
-    --modal-overlay-bg: rgba(0, 0, 0, 0.6);
-    --modal-bg-color: #ffffff;
-    --modal-border-color: #b0bec5;
-
-    --tab-sidebar-border-color: #b0bec5;
-    --tab-button-color: #546e7a;
-    --tab-button-hover-bg: #e0f7fa;
-    --tab-button-active-color: var(--primary-color);
-    --tab-button-active-border: var(--primary-color);
-    --tab-icon-color: #546e7a;
-    --tab-icon-active-color: var(--primary-color);
-
-    --setting-item-border: #b0bec5;
-
-    --settings-icon-color: var(--text-color);
-    --nav-icon-color: var(--text-color);
-    --nav-icon-hover-color: var(--primary-color);
-
-    --scrollbar-thumb: #81d4fa;
-    --scrollbar-track: #e0f7fa;
-
-    --nav-bg-color: var(--container-bg-color);
-    --nav-border-color: var(--border-color);
-    --nav-shadow: 0 2px 8px var(--shadow-color);
-    --nav-text-color: var(--heading-color);
-    --nav-search-bg-color: var(--secondary-color);
-    --nav-search-input-border: var(--border-color);
-    --nav-search-input-focus-border: var(--primary-color);
-}
+/* Removed Blue Theme Variables */
 
 
 /* --- Base Styles --- */
@@ -248,149 +185,22 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     overflow: hidden;
 }
 
-/* --- Sticky Navigation Bar --- */
-.sticky-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: var(--nav-bg-color);
-    box-shadow: var(--nav-shadow);
-    z-index: 50; /* Below modal, above content */
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, background-color 0.3s ease, box-shadow 0.3s ease;
-    transform: translateY(-100%); /* Start off-screen */
-    opacity: 0;
-    border-bottom: 1px solid var(--nav-border-color);
-    box-sizing: border-box;
-    backdrop-filter: blur(8px); /* Initial blur */
-    -webkit-backdrop-filter: blur(8px); /* Safari */
-}
-
-.sticky-nav.visible {
-    transform: translateY(0); /* Slide in */
-    opacity: 1;
-}
-
-.nav-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    max-width: 1400px; /* Match container max-width */
-    margin: 0 auto; /* Center nav content */
-}
-
-.nav-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--nav-text-color);
-    transition: color 0.3s ease;
-}
-
-.nav-icons {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Space between icons */
-}
-
-/* Nav Icons (Search and Settings) */
-.nav-search-icon,
-.nav-settings-icon {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    background-color: var(--nav-icon-color);
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    outline: none;
-}
-
-.nav-search-icon:hover,
-.nav-settings-icon:hover {
-    background-color: var(--nav-icon-hover-color);
-    transform: scale(1.1); /* Slight scale on hover */
-}
-
-.nav-search-icon:focus-visible,
-.nav-settings-icon:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: 4px;
-    background-color: var(--nav-icon-hover-color);
-}
-
-/* Specific Nav Icon Masks */
-.nav-search-icon { mask-image: url('../icons/search.svg'); -webkit-mask-image: url('../icons/search.svg'); }
-.nav-settings-icon { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
-
-
-/* Animated Search Bar in Nav */
-.nav-search-bar {
-    background-color: var(--nav-search-bg-color);
-    padding: 10px 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-    overflow: hidden; /* Hide the input when collapsed */
-    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, background-color 0.3s ease;
-    max-height: 0; /* Start collapsed */
-    padding-top: 0;
-    padding-bottom: 0;
-    filter: blur(0); /* No blur when collapsed */
-    -webkit-filter: blur(0);
-}
-
-.nav-search-bar.expanded {
-    max-height: 60px; /* Adjust based on content height */
-    padding-top: 10px;
-    padding-bottom: 10px;
-    filter: blur(0); /* Remove blur when expanded */
-    -webkit-filter: blur(0);
-}
-
-#nav-search-input-container {
-    width: 100%;
-}
-
-#nav-timezone-search { /* Styling for the input when it's in the nav */
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--nav-search-input-border);
-    font-size: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--nav-search-bg-color); /* Match nav search bar background */
-    color: var(--text-color);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-    outline: none;
-}
-
-#nav-timezone-search:focus {
-    border-color: var(--nav-search-input-focus-border);
-    box-shadow: var(--input-focus-shadow); /* Use same focus shadow as main input */
-}
-
-
 /* --- Settings Icon (Main) --- */
-#main-settings-icon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+/* Target the div/span element using CSS mask */
+.settings-icon {
     width: 30px;
     height: 30px;
     cursor: pointer;
+    /* Use mask-image to apply the SVG */
     mask-image: url('../icons/settings.svg');
     mask-repeat: no-repeat;
     mask-size: contain;
     mask-position: center;
-    background-color: var(--settings-icon-color);
+    /* Use background-color to color the mask */
+    background-color: var(--icon-color); /* Use the icon color variable */
     transition: background-color 0.3s ease, transform 0.2s ease;
     z-index: 10;
+    /* Add webkit prefix for broader compatibility */
     -webkit-mask-image: url('../icons/settings.svg');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
@@ -398,28 +208,33 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     outline: none;
 }
 
-#main-settings-icon:hover {
-    transform: rotate(45deg);
-    background-color: var(--primary-color);
+#main-settings-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
-#main-settings-icon:focus-visible {
+.settings-icon:hover {
+    transform: rotate(45deg);
+    background-color: var(--icon-hover-color); /* Change background-color on hover */
+}
+
+.settings-icon:focus-visible {
      outline: 2px solid var(--primary-color);
      outline-offset: 2px;
      border-radius: 4px;
-     background-color: var(--primary-color);
+     background-color: var(--icon-hover-color); /* Change background-color on focus */
 }
 
 
-/* --- Main Controls (Search Input) --- */
+/* --- Controls (Main Search) --- */
 #main-controls {
     margin-bottom: 40px;
     text-align: left;
-    /* Removed flex layout - now just a container for the search input */
     transition: opacity 0.3s ease;
 }
 
-.controls label { /* Styling for the label associated with the search input */
+.controls label {
     display: block;
     font-size: 1.2rem;
     font-weight: 600;
@@ -428,7 +243,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     transition: color 0.3s ease;
 }
 
-#timezone-search { /* Styling for the main search input when visible */
+#timezone-search { /* Styling for the single search input element */
     padding: 14px;
     border-radius: 8px;
     border: 1px solid var(--input-border-color);
@@ -446,6 +261,126 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     outline: none;
     border-color: var(--primary-color);
     box-shadow: var(--input-focus-shadow);
+}
+
+/* Styling for the search input when it's in the nav */
+#timezone-search.in-nav {
+     padding: 10px;
+     border-radius: 6px;
+     border: 1px solid var(--nav-search-input-border);
+     font-size: 1rem;
+     background-color: var(--nav-search-bg-color);
+     color: var(--text-color);
+}
+
+#timezone-search.in-nav:focus {
+    border-color: var(--nav-search-input-focus-border);
+    box-shadow: var(--input-focus-shadow);
+}
+
+
+/* --- Sticky Navigation Bar --- */
+.sticky-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--nav-bg-color);
+    box-shadow: var(--nav-shadow);
+    z-index: 50;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, background-color 0.3s ease, box-shadow 0.3s ease;
+    transform: translateY(-100%);
+    opacity: 0;
+    border-bottom: 1px solid var(--nav-border-color);
+    box-sizing: border-box;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.sticky-nav.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.nav-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--nav-text-color);
+    transition: color 0.3s ease;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Nav Icons (Search and Settings) - using CSS mask */
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    background-color: var(--nav-icon-color); /* Color the mask */
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+    outline: none;
+}
+
+/* Specific Nav Icon Masks */
+/* Ensure these paths are correct relative to the CSS file location */
+.nav-search-icon { mask-image: url('../icons/search.svg'); -webkit-mask-image: url('../icons/search.svg'); }
+/* Settings icon mask is defined in .settings-icon */
+
+
+.nav-icon:hover {
+    background-color: var(--nav-icon-hover-color); /* Change color on hover */
+    transform: scale(1.1);
+}
+
+.nav-icon:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+    background-color: var(--nav-icon-hover-color); /* Change color on focus */
+}
+
+
+/* Animated Search Bar in Nav */
+.nav-search-bar {
+    background-color: var(--nav-search-bg-color);
+    padding: 10px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, background-color 0.3s ease;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    /* Removed filter blur here - apply blur to the nav itself */
+}
+
+.nav-search-bar.expanded {
+    max-height: 60px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#nav-search-input-container {
+    width: 100%;
 }
 
 
@@ -541,6 +476,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 
 .detail-card h3 {
     font-size: 2rem;
+    font-family: 'Inter', sans-serif; /* Use Inter for detail heading */
     margin-bottom: 20px;
     border-bottom: 2px solid var(--primary-color);
     padding-bottom: 10px;
@@ -605,22 +541,34 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     margin-bottom: 20px;
 }
 
-.support-link {
+/* Apply general button styles to support links with the 'button' class */
+.support-link.button {
     display: inline-block;
-    background-color: var(--support-bg-color);
-    color: white;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
     padding: 12px 25px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin: 0 15px;
+    border: none; /* Ensure no default button border */
+    cursor: pointer; /* Ensure cursor is pointer */
+    outline: none; /* Remove default outline */
 }
 
-.support-link:hover {
-    background-color: var(--support-hover-bg-color);
+.support-link.button:hover {
+    background-color: var(--button-hover-bg);
     transform: translateY(-3px);
 }
+
+.support-link.button:focus-visible {
+     outline: 2px solid var(--primary-color);
+     outline-offset: 2px;
+     border-radius: 4px;
+     box-shadow: var(--button-focus-shadow);
+}
+
 
 /* --- Accessibility --- */
 @media (prefers-reduced-motion: reduce) {
@@ -640,314 +588,11 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
   border-radius: 4px;
 }
 
-/* --- Modal Styles (Settings) --- */
-.modal {
-    position: fixed;
-    z-index: 100;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: var(--modal-overlay-bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.modal:not(.hidden) {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-content {
-    background-color: var(--modal-bg-color);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    max-width: 800px;
-    width: 100%;
-    position: relative;
-    text-align: left;
-    max-height: 90vh;
-    overflow: hidden;
-    display: flex;
-    transition: background-color 0.3s ease;
-    border: 1px solid var(--modal-border-color);
-}
-
-.modal-content h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 10px;
-    color: var(--heading-color);
-}
-
-.close-button {
-    color: var(--loading-text-color);
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-    z-index: 1;
-    background: none;
-    border: none;
-    padding: 5px;
-    line-height: 1;
-    outline: none;
-}
-
-.close-button:hover,
-.close-button:focus-visible {
-    color: var(--heading-color);
-    text-decoration: none;
-    cursor: pointer;
-    outline: 2px solid var(--heading-color);
-    outline-offset: 2px;
-    border-radius: 4px;
-}
-
-.modal-body {
-    display: flex;
-    width: 100%;
-    max-height: calc(90vh - 60px);
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-}
-
-/* Modal Body Scrollbar (Webkit) */
-.modal-body::-webkit-scrollbar { width: 10px; }
-.modal-body::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
-.modal-body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; border: 2px solid var(--scrollbar-track); }
-
-
-/* Modal Tabs (Sidebar) */
-.tabs-sidebar {
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--tab-sidebar-border-color);
-    margin-right: 30px;
-    padding-right: 20px;
-    flex-shrink: 0;
-    width: 180px;
-    transition: border-color 0.3s ease;
-}
-
-.tab-button {
-    background-color: transparent;
-    border: none;
-    padding: 10px 0;
-    cursor: pointer;
-    font-size: 1rem;
-    color: var(--tab-button-color);
-    border-left: 4px solid transparent;
-    transition: color 0.3s ease, border-left-color 0.3s ease, background-color 0.3s ease;
-    flex-shrink: 0;
-    text-align: left;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    outline: none;
-}
-
-.tab-button:hover:not(.active) {
-    background-color: var(--tab-button-hover-bg);
-}
-
-.tab-button.active {
-    color: var(--tab-button-active-color);
-    border-left-color: var(--tab-button-active-border);
-    font-weight: 600;
-}
-
-.tab-button:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: 4px;
-}
-
-
-/* Tab Icons */
-.tab-icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    background-color: var(--tab-icon-color);
-    transition: background-color 0.3s ease;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-}
-
-.tab-button.active .tab-icon {
-    background-color: var(--tab-icon-active-color);
-}
-
-/* Specific Icon Masks */
-.settings-icon-svg { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
-.palette-icon-svg { mask-image: url('../icons/palette.svg'); -webkit-mask-image: url('../icons/palette.svg'); }
-.info-icon-svg { mask-image: url('../icons/info.svg'); -webkit-mask-image: url('../icons/info.svg'); }
-.search-icon-svg { mask-image: url('../icons/search.svg'); -webkit-mask-image: url('../icons/search.svg'); }
-
-
-.tab-content-area {
-    flex-grow: 1;
-    padding-right: 10px;
-}
-
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-/* Settings within Tabs */
-.setting-item {
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--setting-item-border);
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.setting-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
-}
-
-.setting-item label {
-    font-weight: 600;
-    color: var(--text-color);
-    flex-shrink: 0;
-}
-
-.setting-item select,
-.setting-item input[type="radio"] {
-    /* margin-top: 5px; Removed margin-top as gap handles spacing */
-}
-
-.setting-item select {
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid var(--input-border-color);
-    font-size: 1rem;
-    background-color: var(--container-bg-color);
-    color: var(--text-color);
-    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-    outline: none;
-}
-
-.setting-item select:focus-visible {
-     outline: 2px solid var(--primary-color);
-     outline-offset: 2px;
-     border-radius: 4px;
-}
-
-
-.theme-option {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-    cursor: pointer;
-    outline: none;
-}
-
-.theme-option input[type="radio"] {
-    margin-right: 8px;
-    cursor: pointer;
-    outline: none;
-}
-
-.theme-option:focus-visible {
-     outline: 2px solid var(--primary-color);
-     outline-offset: 2px;
-     border-radius: 4px;
-}
-
-
-.settings-note {
-    font-size: 0.9rem;
-    color: var(--loading-text-color);
-    margin-top: 10px;
-}
-
-.clear-cache-button {
-    display: block;
-    width: auto;
-    margin: 20px auto 0 auto;
-    padding: 10px 20px;
-    background-color: var(--clear-cache-button-bg);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-    outline: none;
-}
-
-.clear-cache-button:hover {
-    background-color: var(--clear-cache-button-hover-bg);
-}
-.clear-cache-button:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: 4px;
-}
-
-
-/* Support section within settings modal */
-.settings-support {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
-}
-
-.settings-support h2 {
-    font-size: 1.5rem;
-    margin-top: 0;
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-.settings-support .support-link {
-    padding: 8px 15px;
-    font-size: 0.95rem;
-    outline: none;
-}
-.settings-support .support-link:focus-visible {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: 4px;
-}
-
-
-/* Responsive adjustments */
+/* --- Responsive adjustments --- */
 @media (max-width: 768px) {
     body {
-        padding: 10px; /* Reduced padding on small screens */
-        padding-top: 70px; /* Adjust padding top for smaller nav */
+        padding: 10px;
+        padding-top: 70px;
     }
 
     .container {
@@ -990,114 +635,44 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
         font-size: 1rem;
      }
 
-    .support-link {
+    .support-link.button { /* Adjusted selector */
         display: block;
         margin: 10px auto;
     }
 
     /* Nav adjustments */
     .sticky-nav {
-        padding: 0 10px; /* Reduced padding */
+        padding: 0 10px;
     }
     .nav-content {
-        padding: 8px 10px; /* Reduced padding */
+        padding: 8px 10px;
     }
     .nav-title {
-        font-size: 1.4rem; /* Smaller title */
+        font-size: 1.4rem;
     }
-    .nav-search-icon,
-    .nav-settings-icon {
-        width: 20px; /* Smaller icons */
+    /* Target div/span nav icons */
+    .nav-icon {
+        width: 20px;
         height: 20px;
     }
     .nav-search-bar {
-        padding: 8px 10px; /* Reduced padding */
+        padding: 8px 10px;
     }
     .nav-search-bar.expanded {
-        max-height: 50px; /* Adjusted height */
+        max-height: 50px;
     }
-    #nav-timezone-search {
-        padding: 8px; /* Reduced padding */
+    #timezone-search.in-nav { /* Adjusted selector */
+        padding: 8px;
         font-size: 0.9rem;
     }
 
-
-    .settings-icon {
+    /* Target div/span main settings icon */
+    #main-settings-icon.settings-icon {
         top: 10px;
         right: 10px;
         width: 25px;
         height: 25px;
     }
 
-    .modal-content {
-        padding: 20px;
-        flex-direction: column;
-        max-width: 95%;
-        max-height: 95vh;
-    }
-
-    .modal-content h3 {
-        font-size: 1.8rem;
-    }
-
-    .close-button {
-        top: 5px;
-        right: 10px;
-        font-size: 24px;
-    }
-
-    .modal-body {
-        flex-direction: column;
-        max-height: calc(95vh - 50px);
-        overflow-y: auto;
-    }
-
-    .tabs-sidebar {
-        flex-direction: row;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        margin-right: 0;
-        padding-right: 0;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        overflow-x: auto;
-        width: 100%;
-        justify-content: space-around;
-    }
-
-    .tab-button {
-        border-left: none;
-        border-bottom: 2px solid transparent;
-        padding: 10px 5px;
-        justify-content: center;
-        gap: 5px;
-        margin-bottom: 0;
-    }
-
-     .tab-button.active {
-        border-left-color: transparent;
-        border-bottom-color: var(--tab-button-active-border);
-     }
-
-    .tab-content-area {
-        flex-grow: 1;
-        padding-right: 0;
-    }
-
-
-    .setting-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-
-    .setting-item label {
-        margin-right: 0;
-        margin-bottom: 0;
-    }
-
-    .theme-option {
-        margin-right: 10px;
-        margin-bottom: 5px;
-    }
+    /* Modal adjustments moved to settings.css */
 }
