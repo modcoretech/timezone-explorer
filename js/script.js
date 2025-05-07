@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Main Settings Icon (Hidden when nav is visible)
     const mainSettingsIcon = document.getElementById('main-settings-icon');
 
-
     // Detail View Elements
     const detailTimezoneName = document.getElementById('detail-timezone-name');
     const detailDisplayDate = document.getElementById('detail-display-date');
@@ -31,18 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailDisplayOffset = document.getElementById('detail-display-offset');
     const detailDstStatus = document.getElementById('detail-dst-status');
     // Add elements for other detailed info if you add a data source
-
-    // Settings Modal Elements
-    const settingsModal = document.getElementById('settings-modal');
-    const settingsCloseButton = document.getElementById('settings-close-button');
-    const tabButtons = settingsModal.querySelectorAll('.tab-button');
-    const tabContents = settingsModal.querySelectorAll('.tab-content');
-
-    // Settings Form Elements
-    const timeFormatSelect = document.getElementById('time-format');
-    const dateLocaleSelect = document.getElementById('date-locale');
-    const themeRadioButtons = document.querySelectorAll('input[name="theme"]');
-    const clearCacheButton = document.getElementById('clear-cache-button');
 
     // --- State Variables ---
     let allTimezones = []; // Array to store all timezone identifiers
@@ -54,84 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastScrollTop = 0; // To track scroll direction
     let isNavSearchExpanded = false; // State of the nav search bar
 
-    // User Preferences (loaded from localStorage)
-    let userPreferences = {
-        timeFormat: '12', // '12' or '24'
-        dateLocale: 'en-US',
-        theme: 'light' // 'light', 'dark', 'blue', etc.
-    };
-
     // --- Constants ---
-    const LOCAL_STORAGE_KEY = 'timezoneExplorerPreferences';
     const SCROLL_THRESHOLD = 100; // Scroll distance before showing/hiding nav
 
 
     // --- Utility Functions ---
-
-    /**
-     * Loads user preferences from local storage.
-     */
-    function loadPreferences() {
-        const savedPreferences = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (savedPreferences) {
-            try {
-                 const parsedPreferences = JSON.parse(savedPreferences);
-                 // Validate loaded preferences or apply defaults if invalid/missing
-                 userPreferences.timeFormat = ['12', '24'].includes(parsedPreferences.timeFormat) ? parsedPreferences.timeFormat : '12';
-                 userPreferences.dateLocale = (typeof parsedPreferences.dateLocale === 'string' && parsedPreferences.dateLocale.length >= 2) ? parsedPreferences.dateLocale : 'en-US';
-                 // Basic validation for theme - ensure it's one of the known themes or default to light
-                 userPreferences.theme = (typeof parsedPreferences.theme === 'string' && ['light', 'dark', 'blue'].includes(parsedPreferences.theme)) ? parsedPreferences.theme : 'light';
-
-            } catch (e) {
-                 console.error("Error parsing saved preferences:", e);
-                 // Reset to default if parsing fails
-                 userPreferences = {
-                     timeFormat: '12',
-                     dateLocale: 'en-US',
-                     theme: 'light'
-                 };
-                 // Clear invalid data from local storage
-                 localStorage.removeItem(LOCAL_STORAGE_KEY);
-            }
-        }
-         console.log("Loaded preferences:", userPreferences); // Log loaded preferences
-    }
-
-    /**
-     * Saves user preferences to local storage.
-     */
-    function savePreferences() {
-        try {
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userPreferences));
-             console.log("Saved preferences:", userPreferences); // Log saved preferences
-        } catch (e) {
-            console.error("Error saving preferences to local storage:", e);
-            alert("Could not save preferences. Local storage might be disabled or full.");
-        }
-    }
-
-    /**
-     * Applies the current theme preference to the body.
-     */
-    function applyTheme() {
-        // Remove all potential theme classes first
-        document.body.classList.forEach(className => {
-            if (className.endsWith('-theme') || className === 'dark-mode') {
-                document.body.classList.remove(className);
-            }
-        });
-
-        // Apply the selected theme class
-        if (userPreferences.theme !== 'light') { // 'light' theme has no specific class
-             document.body.classList.add(`${userPreferences.theme}-theme`);
-        }
-
-         // Special handling for 'dark-mode' class if needed for specific CSS rules (e.g., for icon color)
-         if (userPreferences.theme === 'dark') {
-             document.body.classList.add('dark-mode');
-         }
-         console.log("Applied theme:", userPreferences.theme); // Log applied theme
-    }
 
     /**
      * Formats date, time, offset, and basic DST status for a given timezone
@@ -140,6 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
      * @returns {{date: string, time: string, offset: string, dstStatus: string}} Formatted timezone information.
      */
     function formatTimezoneDateTime(timezone) {
+        // Use userPreferences from settings.js
+        // Ensure settings module is loaded before accessing preferences
+        const prefs = window.timezoneExplorerSettings ? window.timezoneExplorerSettings.getPreferences() : { timeFormat: '12', dateLocale: 'en-US' };
+
+
         try {
             const now = new Date();
 
@@ -158,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: userPreferences.timeFormat === '12' // Use 12-hour format if preferred
+                hour12: prefs.timeFormat === '12' // Use 12-hour format if preferred
             };
 
             const offsetOptions = {
@@ -169,17 +88,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Use Intl.DateTimeFormat with error handling and fallback
             let formattedDate = 'N/A';
             try {
-                 formattedDate = new Intl.DateTimeFormat(userPreferences.dateLocale, dateOptions).format(now);
+                 formattedDate = new Intl.DateTimeFormat(prefs.dateLocale, dateOptions).format(now);
             } catch (e) {
-                 console.warn(`Could not format date for locale "${userPreferences.dateLocale}" for timezone "${timezone}":`, e);
+                 console.warn(`Could not format date for locale "${prefs.dateLocale}" for timezone "${timezone}":`, e);
                  formattedDate = new Intl.DateTimeFormat('en-US', dateOptions).format(now); // Fallback to English
             }
 
              let formattedTime = 'N/A';
              try {
-                 formattedTime = new Intl.DateTimeFormat(userPreferences.dateLocale, timeOptions).format(now); // Use user locale for time format too
+                 formattedTime = new Intl.DateTimeFormat(prefs.dateLocale, timeOptions).format(now); // Use user locale for time format too
              } catch (e) {
-                 console.warn(`Could not format time for locale "${userPreferences.dateLocale}" for timezone "${timezone}":`, e);
+                 console.warn(`Could not format time for locale "${prefs.dateLocale}" for timezone "${timezone}":`, e);
                  formattedTime = new Intl.DateTimeFormat('en-US', timeOptions).format(now); // Fallback to English
              }
 
@@ -468,8 +387,9 @@ document.addEventListener('DOMContentLoaded', () => {
         isNavSearchExpanded = false;
 
          // Move the search input back to the main controls
-         if (mainControls.contains(mainControls.querySelector('.search-container'))) { // Check if the container exists
-             mainControls.querySelector('.search-container').appendChild(timezoneSearchInput);
+         const mainSearchContainer = mainControls.querySelector('.search-container');
+         if (mainSearchContainer && !mainSearchContainer.contains(timezoneSearchInput)) { // Check if the container exists and input is not already there
+             mainSearchContainer.appendChild(timezoneSearchInput);
               // Remove nav styling from input
              timezoneSearchInput.classList.remove('in-nav');
          }
@@ -492,136 +412,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // --- Settings Modal Functions ---
-
-    /**
-     * Opens the settings modal.
-     */
-    function openSettingsModal() {
-        settingsModal.classList.remove('hidden');
-         // Populate settings form with current preferences
-         timeFormatSelect.value = userPreferences.timeFormat;
-         dateLocaleSelect.value = userPreferences.dateLocale;
-         themeRadioButtons.forEach(radio => {
-             if (radio.value === userPreferences.theme) {
-                 radio.checked = true;
-             }
-         });
-         // Ensure the first tab ('general') is active when opening the modal
-         switchTab('general');
-          // Add event listener for Escape key when modal is open
-         document.addEventListener('keydown', handleModalKeyDown);
-          // Trap focus inside the modal (basic)
-          settingsModal.focus(); // Focus the modal container
-    }
-
-    /**
-     * Closes the settings modal.
-     */
-    function closeSettingsModal() {
-        settingsModal.classList.add('hidden');
-         // Remove event listener for Escape key
-         document.removeEventListener('keydown', handleModalKeyDown);
-    }
-
-    /**
-     * Switches between tabs in the settings modal.
-     * @param {string} tabId - The ID of the tab content to show (e.g., 'general').
-     */
-    function switchTab(tabId) {
-        tabContents.forEach(content => {
-            if (content.id === `tab-${tabId}`) {
-                content.classList.add('active');
-            } else {
-                content.classList.remove('active');
-            }
-        });
-
-        tabButtons.forEach(button => {
-            if (button.dataset.tab === tabId) {
-                button.classList.add('active');
-                button.setAttribute('aria-selected', 'true'); // Accessibility
-            } else {
-                button.classList.remove('active');
-                 button.setAttribute('aria-selected', 'false'); // Accessibility
-            }
-        });
-         // Set aria-hidden for tab panels
-         tabContents.forEach(content => {
-             content.setAttribute('aria-hidden', !content.classList.contains('active'));
-         });
-    }
-
-    /**
-     * Handles changes in the settings form and updates preferences.
-     */
-    function handleSettingChange() {
-        // Update time format preference
-        userPreferences.timeFormat = timeFormatSelect.value;
-
-        // Update date locale preference
-        userPreferences.dateLocale = dateLocaleSelect.value;
-
-        // Update theme preference
-        themeRadioButtons.forEach(radio => {
-            if (radio.checked) {
-                userPreferences.theme = radio.value;
-            }
-        });
-
-        savePreferences(); // Save updated preferences
-        applyTheme(); // Apply the new theme
-
-        // Re-render visible times with new preferences
-        updateVisibleCardTimes();
-         // If in grid view, update all currently displayed cards
-         if (!gridView.classList.contains('hidden')) {
-             const cards = timezonesGrid.querySelectorAll('.timezone-card');
-             cards.forEach(card => updateCardTime(card));
-         }
-         // If in detail view, update the detail view
-         if (!detailView.classList.contains('hidden')) {
-              const detailTimezone = detailTimezoneName.textContent;
-              if (detailTimezone && detailTimezone !== 'Loading...') {
-                  const { date, time, offset, dstStatus } = formatTimezoneDateTime(detailTimezone);
-                  detailDisplayDate.textContent = date;
-                  detailDisplayTime.textContent = time;
-                  detailDisplayOffset.textContent = offset;
-                  detailDstStatus.textContent = dstStatus;
-              }
-         }
-    }
-
-    /**
-     * Clears all saved preferences from local storage.
-     */
-    function clearSavedSettings() {
-        if (confirm('Are you sure you want to clear all saved settings? This will reset your theme and time/date preferences.')) {
-            try {
-                localStorage.removeItem(LOCAL_STORAGE_KEY);
-                // Reset preferences to default
-                userPreferences = {
-                    timeFormat: '12',
-                    dateLocale: 'en-US',
-                    theme: 'light'
-                };
-                applyTheme(); // Apply default theme
-                // Update settings form to reflect defaults
-                timeFormatSelect.value = userPreferences.timeFormat;
-                dateLocaleSelect.value = userPreferences.dateLocale;
-                 themeRadioButtons.forEach(radio => {
-                     radio.checked = (radio.value === userPreferences.theme);
-                 });
-                updateVisibleCardTimes(); // Update times with default preferences
-                alert('Saved settings cleared.');
-            } catch (e) {
-                 console.error("Error clearing local storage:", e);
-                 alert("Could not clear saved settings.");
-            }
-        }
-    }
-
-
     // --- Event Handlers ---
 
     // Handle search input (attached to the single input element)
@@ -632,24 +422,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleScroll = () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        // Show/hide sticky nav based on scroll direction and position
-        if (scrollTop > lastScrollTop && scrollTop > SCROLL_THRESHOLD) {
-            // Scrolling down past threshold
-            // stickyNav.classList.remove('visible'); // Hide on scroll down
-             // Let's keep it visible on scroll down past threshold for easier access
-             showStickyNav();
-        } else if (scrollTop < lastScrollTop && scrollTop > SCROLL_THRESHOLD) {
-             // Scrolling up past threshold
-             showStickyNav();
-        } else if (scrollTop <= SCROLL_THRESHOLD) {
-            // At or near the top
-            hideStickyNav();
+        // Check if settings modal is currently open
+        // Use the exposed function from settings.js
+        const isSettingsModalOpen = window.timezoneExplorerSettings ? window.timezoneExplorerSettings.isModalOpen() : false;
+
+        if (!isSettingsModalOpen) { // Only update nav visibility if modal is closed
+             // Show/hide sticky nav based on scroll position
+             if (scrollTop > SCROLL_THRESHOLD) {
+                  showStickyNav();
+             } else {
+                 hideStickyNav();
+             }
         }
+
 
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
 
         // Only trigger load more if in grid view and not in a modal
-        if (gridView.classList.contains('hidden') || !settingsModal.classList.contains('hidden')) return;
+        if (gridView.classList.contains('hidden') || isSettingsModalOpen) return;
 
         const { scrollHeight, clientHeight } = document.documentElement;
 
@@ -659,6 +449,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     window.addEventListener('scroll', handleScroll);
+
+    // Listen for the custom settingsChange event from settings.js
+    document.addEventListener('settingsChange', updateVisibleCardTimes);
 
 
     // Handle timezone card click to navigate to detail page (using event delegation)
@@ -706,100 +499,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Handle main settings icon click
-    mainSettingsIcon.addEventListener('click', openSettingsModal);
+    mainSettingsIcon.addEventListener('click', () => {
+        // Call the exposed openModal function from settings.js
+        if (window.timezoneExplorerSettings) {
+            window.timezoneExplorerSettings.openModal();
+        }
+    });
      // Allow main settings icon to be opened by Enter or Space key when focused
      mainSettingsIcon.addEventListener('keydown', (event) => {
          if (event.key === 'Enter' || event.key === ' ') {
              event.preventDefault(); // Prevent default scroll/click
-             openSettingsModal();
+              // Call the exposed openModal function from settings.js
+             if (window.timezoneExplorerSettings) {
+                 window.timezoneExplorerSettings.openModal();
+             }
          }
      });
 
-     // Handle nav settings icon click (if you decide to add it back)
-     // if (navSettingsIcon) {
-     //     navSettingsIcon.addEventListener('click', openSettingsModal);
-     //      navSettingsIcon.addEventListener('keydown', (event) => {
-     //          if (event.key === 'Enter' || event.key === ' ') {
-     //              event.preventDefault();
-     //              openSettingsModal();
-     //          }
-     //      });
-     // }
-
-
-    // Handle settings modal close button click
-    settingsCloseButton.addEventListener('click', closeSettingsModal);
-
-    // Handle clicking outside the settings modal content to close
-    settingsModal.addEventListener('click', (event) => {
-        if (event.target === settingsModal) {
-            closeSettingsModal();
-        }
-    });
-
-    // Handle keyboard shortcuts for modal (Escape key)
-    function handleModalKeyDown(event) {
-        if (event.key === 'Escape') {
-            closeSettingsModal();
-        }
-         // Basic focus trap - prevent tabbing outside the modal
-         if (event.key === 'Tab') {
-             const focusableElements = settingsModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-             const firstElement = focusableElements[0];
-             const lastElement = focusableElements[focusableElements.length - 1];
-
-             if (event.shiftKey) { // Shift + Tab
-                 if (document.activeElement === firstElement) {
-                     lastElement.focus();
-                     event.preventDefault();
-                 }
-             } else { // Tab
-                 if (document.activeElement === lastElement) {
-                     firstElement.focus();
-                     event.preventDefault();
-                 }
+     // Handle nav settings icon click
+     if (navSettingsIcon) {
+         navSettingsIcon.addEventListener('click', () => {
+              // Call the exposed openModal function from settings.js
+             if (window.timezoneExplorerSettings) {
+                 window.timezoneExplorerSettings.openModal();
              }
-         }
-    }
-
-
-    // Handle settings tab button clicks (using event delegation)
-    settingsModal.addEventListener('click', (event) => {
-        const tabButton = event.target.closest('.tab-button');
-        if (tabButton) {
-            const tabId = tabButton.dataset.tab;
-            if (tabId) {
-                switchTab(tabId);
-            }
-        }
-    });
-
-    // Handle changes in settings form (time format, date locale, theme)
-    timeFormatSelect.addEventListener('change', handleSettingChange);
-    dateLocaleSelect.addEventListener('change', handleSettingChange);
-    themeRadioButtons.forEach(radio => {
-        radio.addEventListener('change', handleSettingChange);
-    });
-
-    // Handle clear cache button click
-    clearCacheButton.addEventListener('click', clearSavedSettings);
+         });
+          navSettingsIcon.addEventListener('keydown', (event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                   // Call the exposed openModal function from settings.js
+                  if (window.timezoneExplorerSettings) {
+                      window.timezoneExplorerSettings.openModal();
+                  }
+              }
+          });
+     }
 
 
     // --- Initialization ---
 
     /**
-     * Initializes the application: loads timezones, applies theme, checks URL for detail view.
+     * Initializes the application: loads timezones, checks URL for detail view.
+     * Settings initialization is handled by settings.js loading.
      */
     function initialize() {
          if (Intl.supportedValuesOf) {
             // Load all timezones
             allTimezones = Intl.supportedValuesOf('timeZone').sort();
 
-            // Load user preferences
-            loadPreferences();
-
-            // Apply saved theme or system preference
-            applyTheme();
+            // Settings initialization (loads preferences and applies theme)
+            // is handled by the IIFE in settings.js upon script load.
 
             // Check if a specific timezone is requested in the URL
             const urlParams = new URLSearchParams(window.location.search);
@@ -835,5 +584,6 @@ document.addEventListener('DOMContentLoaded', () => {
         handleScroll();
     }
 
-    initialize(); // Start the application
+    // Initialize the main script
+    initialize();
 });
