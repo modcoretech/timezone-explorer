@@ -4,24 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timezone Explorer</title>
-    <link rel="stylesheet" href="css/timezone-explorer.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Timezone Explorer</h1>
-        <p>Find the current time and detailed information for various timezones around the world.</p>
+        <h1>Timezone Explorer</h1>
+        <p>Select a timezone from the list below to see the current time and information.</p>
 
-        <div class="timezone-list">
-            <h2>Explore Timezones:</h2>
-            <ul>
-                <li><a href="timezone/utc.html">UTC (Coordinated Universal Time)</a></li>
-                <li><a href="timezone/london.html">Europe/London</a></li>
-                <li><a href="timezone/new-york.html">America/New_York</a></li>
-                <li><a href="timezone/tokyo.html">Asia/Tokyo</a></li>
-                <li><a href="timezone/sydney.html">Australia/Sydney</a></li>
-                </ul>
+        <div class="controls">
+            <label for="timezone-select">Choose a Timezone:</label>
+            <select id="timezone-select">
+                <option value="">-- Select a Timezone --</option>
+                </select>
         </div>
+
+        <div id="result" class="info-box hidden">
+            <h3>Timezone Information:</h3>
+            <p><strong>Timezone:</strong> <span id="display-timezone"></span></p>
+            <p><strong>Current Time:</strong> <span id="display-time"></span></p>
+            <p><strong>UTC Offset:</strong> <span id="display-offset"></span></p>
+            </div>
 
         <div class="support-section">
             <h2>Support This Project</h2>
@@ -32,5 +35,96 @@
             </p>
         </div>
     </div>
+
+    <script>
+        const timezoneSelect = document.getElementById('timezone-select');
+        const resultDiv = document.getElementById('result');
+        const displayTimezone = document.getElementById('display-timezone');
+        const displayTime = document.getElementById('display-time');
+        const displayOffset = document.getElementById('display-offset');
+
+        // Populate the timezone dropdown with all supported timezones
+        function populateTimezones() {
+            // Use Intl.supportedValuesOf for a comprehensive list
+            if (Intl.supportedValuesOf) {
+                const timezones = Intl.supportedValuesOf('timeZone').sort();
+                timezones.forEach(tz => {
+                    const option = document.createElement('option');
+                    option.value = tz;
+                    option.textContent = tz;
+                    timezoneSelect.appendChild(option);
+                });
+            } else {
+                // Fallback or message if Intl.supportedValuesOf is not available
+                console.error("Intl.supportedValuesOf is not supported in this browser.");
+                const option = document.createElement('option');
+                option.value = "";
+                option.textContent = "Browser does not support timezone listing.";
+                timezoneSelect.appendChild(option);
+            }
+        }
+
+        // Get and display time and info for the selected timezone
+        function updateTimeAndInfo() {
+            const selectedTimezone = timezoneSelect.value;
+
+            if (selectedTimezone) {
+                try {
+                    // Get current time in the selected timezone
+                    const now = new Date();
+                    const options = {
+                        timeZone: selectedTimezone,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    const formattedTime = new Intl.DateTimeFormat('en-US', options).format(now);
+
+                    // Get UTC offset (requires a bit more work, this is a simplified approach)
+                    // A more accurate offset might require a library or external data
+                    const offsetInMinutes = now.getTimezoneOffset(); // Offset of local time from UTC in minutes
+                    const localOffset = -offsetInMinutes; // Standard offset convention
+                    const targetOffset = new Date().toLocaleTimeString('en-US', { timeZone: selectedTimezone, timeZoneName: 'short' });
+                    // Extract offset from the timezone name string - this is a heuristic and might not always work perfectly
+                    const offsetMatch = targetOffset.match(/[+-]\d{1,2}(:\d{2})?/);
+                    const utcOffset = offsetMatch ? offsetMatch[0] : 'N/A';
+
+
+                    // Display the results
+                    displayTimezone.textContent = selectedTimezone;
+                    displayTime.textContent = formattedTime;
+                    displayOffset.textContent = utcOffset; // Display the extracted offset
+                    resultDiv.classList.remove('hidden'); // Show the result div
+
+                } catch (error) {
+                    console.error("Error getting time for timezone:", error);
+                    displayTimezone.textContent = selectedTimezone;
+                    displayTime.textContent = "Could not retrieve time.";
+                    displayOffset.textContent = "Could not retrieve offset.";
+                    resultDiv.classList.remove('hidden');
+                }
+            } else {
+                // Hide result if no timezone is selected
+                resultDiv.classList.add('hidden');
+            }
+        }
+
+        // Event listener for dropdown change
+        timezoneSelect.addEventListener('change', updateTimeAndInfo);
+
+        // Populate timezones when the page loads
+        populateTimezones();
+
+        // Optional: Automatically update time every second for the selected timezone
+        setInterval(() => {
+            if (timezoneSelect.value) {
+                updateTimeAndInfo();
+            }
+        }, 1000);
+
+    </script>
 </body>
 </html>
