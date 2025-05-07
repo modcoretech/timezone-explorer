@@ -1,1 +1,144 @@
+/* css/style.css */
 
+body {
+    font-family: 'Archivo', sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0; /* Remove default body margin */
+    line-height: 1.6; /* Improved readability */
+    color: #374151; /* Default text color */
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1f2937;
+}
+
+p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.controls {
+    margin-bottom: 30px;
+}
+
+.controls label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #1f2937;
+    text-align: left; /* Align label left */
+}
+
+#timezone-select {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Archivo', sans-serif;
+    background-color: #ffffff;
+    cursor: pointer;
+    appearance: none; /* Remove default dropdown arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234f46e5%22%20d%3D%22M287%2C114.7L159.2%2C7c-3.8-3.8-10.2-3.8-14%2C0L5.4%2C114.7c-5.1%2C5.1-1.3%2C14.3%2C6.4%2C14.3h271.9C288.3%2C129%2C292.1%2C119.8%2C287%2C114.7z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 12px auto;
+}
+
+#timezone-select:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.info-box {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #eef2ff;
+    border-radius: 8px;
+    border: 1px dashed #a5b4fc;
+    text-align: left;
+    transition: opacity 0.5s ease; /* Smooth transition for showing/hiding */
+}
+
+.info-box.hidden {
+    display: none;
+    opacity: 0; /* Start hidden with opacity 0 */
+}
+
+.info-box:not(.hidden) {
+    opacity: 1; /* Fade in when not hidden */
+}
+
+
+.info-box h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #4f46e5;
+    border-bottom: 1px solid #c4b5fd;
+    padding-bottom: 8px;
+}
+
+.info-box p {
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+}
+
+.info-box strong {
+    color: #1f2937;
+}
+
+.support-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.support-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 15px;
+}
+
+.support-section p {
+    margin-bottom: 15px;
+}
+
+.support-link {
+    display: inline-block;
+    background-color: #10b981;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin: 0 10px;
+}
+
+.support-link:hover {
+    background-color: #059669;
+}
