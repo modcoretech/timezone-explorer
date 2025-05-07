@@ -10,6 +10,7 @@ body {
     margin: 0;
     line-height: 1.6;
     color: #374151;
+    box-sizing: border-box; /* Ensure padding is included */
 }
 
 .heading-archivo {
@@ -19,113 +20,124 @@ body {
 .container {
     background-color: #ffffff;
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    max-width: 1200px;
+    border-radius: 16px; /* More rounded corners */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Stronger, more modern shadow */
+    max-width: 1400px; /* Increased max width */
     width: 100%;
     text-align: center;
     box-sizing: border-box;
 }
 
 h1 {
-    font-size: 2.5rem;
-    font-weight: 700; /* Use bold for h1 */
-    margin-bottom: 15px;
+    font-size: 3rem; /* Larger h1 */
+    font-weight: 700;
+    margin-bottom: 20px;
     color: #1f2937;
 }
 
 h2 {
-     font-size: 1.75rem;
+    font-size: 2rem; /* Larger h2 */
     font-weight: 600;
     color: #4f46e5;
-    margin-top: 30px; /* Space above h2 */
-    margin-bottom: 15px;
-    border-bottom: 2px solid #eef2ff;
-    padding-bottom: 10px;
+    margin-top: 40px; /* More space above h2 */
+    margin-bottom: 20px;
+    border-bottom: 3px solid #eef2ff; /* Thicker border */
+    padding-bottom: 15px;
 }
 
 h3 {
-    font-size: 1.25rem;
+    font-size: 1.5rem; /* Larger h3 */
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: #4f46e5;
     border-bottom: 1px solid #c4b5fd;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
 }
 
 h4 {
-    font-size: 1.1rem;
+    font-size: 1.2rem; /* Larger h4 */
     font-weight: 600;
     margin-bottom: 10px;
     color: #1f2937;
 }
 
-
 p {
-    font-size: 1rem; /* Slightly smaller paragraph font */
+    font-size: 1.1rem; /* Slightly larger paragraph font */
     margin-bottom: 15px;
 }
 
 .controls {
-    margin-bottom: 30px;
+    margin-bottom: 40px; /* More space below controls */
     text-align: left;
 }
 
 .controls label {
     display: block;
-    font-size: 1.1rem;
+    font-size: 1.2rem; /* Larger label font */
     font-weight: 600;
     margin-bottom: 10px;
     color: #1f2937;
 }
 
 #timezone-search {
-    padding: 12px;
+    padding: 14px; /* More padding */
     border-radius: 8px;
     border: 1px solid #d1d5db;
-    font-size: 1rem;
+    font-size: 1.1rem; /* Larger input font */
     width: 100%;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif; /* Use Inter for input */
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Add transition */
 }
 
 #timezone-search:focus {
     outline: none;
     border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2); /* Larger shadow on focus */
 }
 
+/* Grid Layout */
 .timezones-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Wider min column width */
+    gap: 30px; /* More space between grid items */
+    margin-top: 30px;
 }
 
 .timezone-card {
-    background-color: #eef2ff;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px dashed #a5b4fc;
+    background-color: #ffffff; /* White background for cards */
+    padding: 25px; /* More padding */
+    border-radius: 12px; /* More rounded corners */
+    border: 1px solid #e5e7eb; /* Solid border */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08); /* Subtle shadow */
     text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-    cursor: pointer; /* Indicate clickable */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Add hover effect */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .timezone-card:hover {
-    transform: translateY(-5px); /* Lift card on hover */
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+    transform: translateY(-8px); /* More pronounced lift on hover */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12); /* Stronger shadow on hover */
+    border-color: #4f46e5; /* Highlight border on hover */
 }
 
+.timezone-card h3 {
+    font-size: 1.35rem; /* Slightly larger card heading */
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #1f2937; /* Darker color for card heading */
+    border-bottom: none; /* Remove border from card heading */
+    padding-bottom: 0;
+}
 
 .timezone-card p {
-    margin-bottom: 8px;
-    font-size: 0.95rem; /* Slightly smaller text in cards */
-    line-height: 1.5;
+    margin-bottom: 6px; /* Reduced margin for paragraphs in cards */
+    font-size: 1rem;
+    line-height: 1.4;
 }
 
 .timezone-card strong {
@@ -135,9 +147,9 @@ p {
 .loading-message, .loading-more, .end-of-list {
     grid-column: 1 / -1;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.3rem; /* Larger loading text */
     color: #6b7280;
-    padding: 20px;
+    padding: 30px; /* More padding */
 }
 
 .loading-more, .end-of-list {
@@ -148,109 +160,99 @@ p {
     display: none;
 }
 
+/* Detail Page View */
+#detail-view {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.detail-card {
+    background-color: #eef2ff;
+    padding: 30px; /* More padding */
+    border-radius: 12px;
+    border: 1px dashed #a5b4fc;
+    margin-bottom: 30px; /* Space below detail card */
+}
+
+.detail-card h3 {
+    font-size: 2rem; /* Larger detail heading */
+    margin-bottom: 20px;
+    border-bottom: 2px solid #c4b5fd; /* Stronger border */
+    padding-bottom: 10px;
+}
+
+.detail-card p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.detail-more-info {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.detail-more-info h4 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.back-link:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+
 /* Support Section */
 .support-section {
-    margin-top: 40px;
-    padding-top: 30px;
+    margin-top: 60px; /* More space above support section */
+    padding-top: 40px;
     border-top: 1px solid #e5e7eb;
 }
 
 .support-section h2 {
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* Slightly larger support heading */
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: none; /* Remove border */
+    padding-bottom: 0;
 }
 
 .support-section p {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .support-link {
     display: inline-block;
     background-color: #10b981;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 25px; /* More padding */
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
-    transition: background-color 0.3s ease;
-    margin: 0 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 0 15px; /* More space between links */
 }
 
 .support-link:hover {
     background-color: #059669;
-}
-
-/* Modal Styles */
-.modal {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6); /* Semi-transparent black background */
-    display: flex; /* Use flexbox to center modal content */
-    justify-content: center;
-    align-items: center;
-    padding: 20px; /* Add padding to prevent content touching edges on small screens */
-    box-sizing: border-box;
-}
-
-.modal-content {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    max-width: 600px; /* Max width for modal */
-    width: 100%;
-    position: relative; /* Needed for close button positioning */
-    text-align: left;
-    max-height: 90vh; /* Limit modal height */
-    overflow-y: auto; /* Add scroll if content overflows */
-}
-
-.close-button {
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: #777;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.modal-content h3 {
-    margin-top: 0; /* Remove top margin from modal heading */
-    margin-bottom: 20px;
-    border-bottom: 2px solid #c4b5fd; /* Stronger border */
-    padding-bottom: 10px;
-}
-
-.modal-content p {
-    margin-bottom: 10px; /* Reduced margin in modal */
-}
-
-.modal-details {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #e5e7eb;
+    transform: translateY(-3px); /* Lift button on hover */
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .container {
-        padding: 15px; /* Reduced padding on smaller screens */
+        padding: 20px;
     }
 
     h1 {
@@ -258,33 +260,39 @@ p {
     }
 
     h2 {
-        font-size: 1.5rem;
+         font-size: 1.5rem;
     }
 
     h3 {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
 
     .timezone-card {
-        padding: 15px; /* Reduced card padding */
+        padding: 15px;
+    }
+
+    .timezone-card h3 {
+        font-size: 1.1rem;
     }
 
     .timezone-card p {
         font-size: 0.9rem;
     }
 
+     .detail-card {
+        padding: 20px;
+     }
+
+     .detail-card h3 {
+        font-size: 1.5rem;
+     }
+
+     .detail-card p {
+        font-size: 1rem;
+     }
+
     .support-link {
         display: block;
         margin: 10px auto;
-    }
-
-    .modal-content {
-        padding: 20px; /* Reduced modal padding */
-    }
-
-    .close-button {
-        top: 5px;
-        right: 10px;
-        font-size: 24px;
     }
 }
