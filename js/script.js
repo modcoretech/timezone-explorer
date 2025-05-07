@@ -59,13 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedPreferences = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (savedPreferences) {
             try {
-                 userPreferences = JSON.parse(savedPreferences);
+                 const parsedPreferences = JSON.parse(savedPreferences);
                  // Validate loaded preferences or apply defaults if invalid/missing
-                 if (!['12', '24'].includes(userPreferences.timeFormat)) userPreferences.timeFormat = '12';
-                 // Basic validation for locale - could be more robust
-                 if (typeof userPreferences.dateLocale !== 'string' || userPreferences.dateLocale.length < 2) userPreferences.dateLocale = 'en-US';
-                 // Basic validation for theme - could be more robust if themes are dynamic
-                 if (typeof userPreferences.theme !== 'string' || userPreferences.theme.length === 0) userPreferences.theme = 'light';
+                 userPreferences.timeFormat = ['12', '24'].includes(parsedPreferences.timeFormat) ? parsedPreferences.timeFormat : '12';
+                 userPreferences.dateLocale = (typeof parsedPreferences.dateLocale === 'string' && parsedPreferences.dateLocale.length >= 2) ? parsedPreferences.dateLocale : 'en-US';
+                 // Basic validation for theme - ensure it's one of the known themes or default to light
+                 userPreferences.theme = (typeof parsedPreferences.theme === 'string' && ['light', 'dark', 'blue'].includes(parsedPreferences.theme)) ? parsedPreferences.theme : 'light';
 
             } catch (e) {
                  console.error("Error parsing saved preferences:", e);
@@ -79,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  localStorage.removeItem(LOCAL_STORAGE_KEY);
             }
         }
+         console.log("Loaded preferences:", userPreferences); // Log loaded preferences
     }
 
     /**
@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function savePreferences() {
         try {
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userPreferences));
+             console.log("Saved preferences:", userPreferences); // Log saved preferences
         } catch (e) {
             console.error("Error saving preferences to local storage:", e);
             alert("Could not save preferences. Local storage might be disabled or full.");
@@ -109,10 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
              document.body.classList.add(`${userPreferences.theme}-theme`);
         }
 
-         // Special handling for 'dark-mode' class if needed for specific CSS rules
+         // Special handling for 'dark-mode' class if needed for specific CSS rules (e.g., for icon color)
          if (userPreferences.theme === 'dark') {
              document.body.classList.add('dark-mode');
          }
+         console.log("Applied theme:", userPreferences.theme); // Log applied theme
     }
 
     /**
@@ -148,12 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeZoneName: 'shortOffset' // Request short offset name (+HH:MM or -HH:MM)
             };
 
-            // Use Intl.DateTimeFormat with error handling
+            // Use Intl.DateTimeFormat with error handling and fallback
             let formattedDate = 'N/A';
             try {
                  formattedDate = new Intl.DateTimeFormat(userPreferences.dateLocale, dateOptions).format(now);
             } catch (e) {
-                 console.warn(`Could not format date for locale ${userPreferences.dateLocale}:`, e);
+                 console.warn(`Could not format date for locale "${userPreferences.dateLocale}" for timezone "${timezone}":`, e);
                  formattedDate = new Intl.DateTimeFormat('en-US', dateOptions).format(now); // Fallback to English
             }
 
@@ -161,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
              try {
                  formattedTime = new Intl.DateTimeFormat(userPreferences.dateLocale, timeOptions).format(now); // Use user locale for time format too
              } catch (e) {
-                 console.warn(`Could not format time for locale ${userPreferences.dateLocale}:`, e);
+                 console.warn(`Could not format time for locale "${userPreferences.dateLocale}" for timezone "${timezone}":`, e);
                  formattedTime = new Intl.DateTimeFormat('en-US', timeOptions).format(now); // Fallback to English
              }
 
@@ -411,8 +413,12 @@ document.addEventListener('DOMContentLoaded', () => {
                  radio.checked = true;
              }
          });
-         // Ensure the first tab is active when opening the modal
+         // Ensure the first tab ('general') is active when opening the modal
          switchTab('general');
+          // Add event listener for Escape key when modal is open
+         document.addEventListener('keydown', handleModalKeyDown);
+          // Trap focus inside the modal (basic)
+          settingsModal.focus();
     }
 
     /**
@@ -420,6 +426,8 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function closeSettingsModal() {
         settingsModal.classList.add('hidden');
+         // Remove event listener for Escape key
+         document.removeEventListener('keydown', handleModalKeyDown);
     }
 
     /**
@@ -438,10 +446,16 @@ document.addEventListener('DOMContentLoaded', () => {
         tabButtons.forEach(button => {
             if (button.dataset.tab === tabId) {
                 button.classList.add('active');
+                button.setAttribute('aria-selected', 'true'); // Accessibility
             } else {
                 button.classList.remove('active');
+                 button.setAttribute('aria-selected', 'false'); // Accessibility
             }
         });
+         // Set aria-hidden for tab panels
+         tabContents.forEach(content => {
+             content.setAttribute('aria-hidden', !content.classList.contains('active'));
+         });
     }
 
     /**
@@ -489,22 +503,27 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function clearSavedSettings() {
         if (confirm('Are you sure you want to clear all saved settings? This will reset your theme and time/date preferences.')) {
-            localStorage.removeItem(LOCAL_STORAGE_KEY);
-            // Reset preferences to default
-            userPreferences = {
-                timeFormat: '12',
-                dateLocale: 'en-US',
-                theme: 'light'
-            };
-            applyTheme(); // Apply default theme
-            // Update settings form to reflect defaults
-            timeFormatSelect.value = userPreferences.timeFormat;
-            dateLocaleSelect.value = userPreferences.dateLocale;
-             themeRadioButtons.forEach(radio => {
-                 radio.checked = (radio.value === userPreferences.theme);
-             });
-            updateVisibleCardTimes(); // Update times with default preferences
-            alert('Saved settings cleared.');
+            try {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                // Reset preferences to default
+                userPreferences = {
+                    timeFormat: '12',
+                    dateLocale: 'en-US',
+                    theme: 'light'
+                };
+                applyTheme(); // Apply default theme
+                // Update settings form to reflect defaults
+                timeFormatSelect.value = userPreferences.timeFormat;
+                dateLocaleSelect.value = userPreferences.dateLocale;
+                 themeRadioButtons.forEach(radio => {
+                     radio.checked = (radio.value === userPreferences.theme);
+                 });
+                updateVisibleCardTimes(); // Update times with default preferences
+                alert('Saved settings cleared.');
+            } catch (e) {
+                 console.error("Error clearing local storage:", e);
+                 alert("Could not clear saved settings.");
+            }
         }
     }
 
@@ -589,6 +608,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle settings icon click
     settingsIcon.addEventListener('click', openSettingsModal);
+     // Allow settings icon to be opened by Enter or Space key when focused
+     settingsIcon.addEventListener('keydown', (event) => {
+         if (event.key === 'Enter' || event.key === ' ') {
+             event.preventDefault(); // Prevent default scroll/click
+             openSettingsModal();
+         }
+     });
+
 
     // Handle settings modal close button click
     settingsCloseButton.addEventListener('click', closeSettingsModal);
@@ -599,6 +626,32 @@ document.addEventListener('DOMContentLoaded', () => {
             closeSettingsModal();
         }
     });
+
+    // Handle keyboard shortcuts for modal (Escape key)
+    function handleModalKeyDown(event) {
+        if (event.key === 'Escape') {
+            closeSettingsModal();
+        }
+         // Basic focus trap - prevent tabbing outside the modal
+         if (event.key === 'Tab') {
+             const focusableElements = settingsModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+             const firstElement = focusableElements[0];
+             const lastElement = focusableElements[focusableElements.length - 1];
+
+             if (event.shiftKey) { // Shift + Tab
+                 if (document.activeElement === firstElement) {
+                     lastElement.focus();
+                     event.preventDefault();
+                 }
+             } else { // Tab
+                 if (document.activeElement === lastElement) {
+                     firstElement.focus();
+                     event.preventDefault();
+                 }
+             }
+         }
+    }
+
 
     // Handle settings tab button clicks (using event delegation)
     settingsModal.addEventListener('click', (event) => {
@@ -646,7 +699,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (requestedTimezone && allTimezones.includes(requestedTimezone)) {
                 showDetailView(requestedTimezone);
             } else {
-                // Default to grid view
+                // Default to grid view - DO NOT open modal on load
                 filteredTimezones = [...allTimezones]; // Initially filtered list is all timezones
                 loadingMessage.classList.add('hidden'); // Hide initial loading message
                 showGridView(); // Show the grid view and load first batch
