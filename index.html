@@ -13,6 +13,9 @@
         <div class="nav-content">
             <div class="nav-title">Timezone Explorer</div>
             <div class="nav-icons">
+                 <a href="about.html" class="nav-link-icon" aria-label="About Your Timezone & Me">
+                      <span class="nav-icon info-icon-svg" aria-hidden="true"></span>
+                 </a>
                 <div class="nav-icon nav-search-icon" id="nav-search-icon" aria-label="Toggle Search" role="button" tabindex="0"></div>
                 <div class="nav-icon nav-settings-icon settings-icon" id="nav-settings-icon" aria-label="Open Settings" role="button" tabindex="0"></div>
             </div>
@@ -30,10 +33,10 @@
 
         <div class="controls" id="main-controls">
              <div class="search-container">
-                <label for="timezone-search">Search Timezone:</label>
-                <input type="text" id="timezone-search" placeholder="e.g., London, New York, Asia/Tokyo">
+                 <label for="timezone-search">Search Timezone:</label>
+                 <input type="text" id="timezone-search" placeholder="e.g., London, New York, Asia/Tokyo">
              </div>
-        </div>
+             </div>
 
         <div id="grid-view">
             <div id="timezones-grid" class="timezones-grid">
@@ -68,8 +71,8 @@
             <h2>Support This Project</h2>
             <p>If you find this tool helpful, please consider supporting its development.</p>
             <p>
-                <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link button">Sponsor on GitHub</a>
-                <a href="YOUR_OTHER_DONATION_URL" class="support-link button">Donate</a>
+                <a href="https://github.com/Nitra-Global/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                <a href="https://github.com/Nitra-Global/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">Donate</a>
             </p>
         </div>
     </div>
@@ -95,51 +98,55 @@
 
                 <div class="tab-content-area">
                     <div class="tab-content active" id="tab-general" role="tabpanel" aria-labelledby="tab-button-general" aria-hidden="false">
-                        <h4>General Settings</h4>
-                        <div class="setting-item">
-                            <label for="time-format">Time Format:</label>
-                            <select id="time-format">
-                                <option value="12">12-Hour (AM/PM)</option>
-                                <option value="24">24-Hour</option>
-                            </select>
-                        </div>
-                        <div class="setting-item">
-                            <label for="date-locale">Date Display Format:</label>
-                            <select id="date-locale">
-                                <option value="en-US">English (US)</option>
-                                <option value="de-DE">German (DE)</option>
-                                <option value="fr-FR">French (FR)</option>
-                                <option value="es-ES">Spanish (ES)</option>
-                                </select>
-                        </div>
+                         <h4>General Settings</h4>
                          <div class="setting-item">
-                             <label class="theme-option">
-                                 <input type="checkbox" id="dark-mode-toggle">
-                                 Enable Dark Mode
-                             </label>
+                             <label for="time-format">Time Format:</label>
+                             <select id="time-format">
+                                 <option value="12">12-Hour (AM/PM)</option>
+                                 <option value="24">24-Hour</option>
+                             </select>
                          </div>
-                        <p class="setting-description">Choose your preferred time format (12-hour with AM/PM or 24-hour), the language and format used for displaying dates (like weekdays and months, influenced by locale), and toggle Dark Mode.</p>
-                    </div>
+                         <div class="setting-item">
+                             <label for="date-locale">Date Display Format:</label>
+                             <select id="date-locale">
+                                 <option value="en-US">English (US)</option>
+                                 <option value="de-DE">German (DE)</option>
+                                 <option value="fr-FR">French (FR)</option>
+                                 <option value="es-ES">Spanish (ES)</option>
+                                 </select>
+                         </div>
+                          <div class="setting-item">
+                              <label class="theme-option">
+                                  <input type="checkbox" id="dark-mode-toggle">
+                                  Enable Dark Mode
+                              </label>
+                          </div>
+                         <p class="setting-description">Choose your preferred time format (12-hour with AM/PM or 24-hour), the language and format used for displaying dates (like weekdays and months, influenced by locale), and toggle Dark Mode.</p>
+                     </div>
 
-                    <div class="tab-content" id="tab-support" role="tabpanel" aria-labelledby="tab-button-support" aria-hidden="true">
-                        <h4>Support</h4>
-                        <p>This project is developed by UNBOUND LABEL.</p>
-                        <p>For support or inquiries, please contact: <a href="mailto:NGDE@WEB.DE">NGDE@WEB.DE</a></p>
-                        <div class="support-section settings-support">
-                            <h2>Support This Project</h2>
-                            <p>If you find this tool helpful, please consider supporting its development.</p>
-                            <p>
-                                <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link button">Sponsor on GitHub</a>
-                                <a href="YOUR_OTHER_DONATION_URL" class="support-link button">Donate</a>
-                            </p>
-                        </div>
-                        <button id="clear-cache-button" class="clear-cache-button button">Clear Saved Settings</button>
-                        <p class="setting-description">Clearing saved settings will remove your saved time/date preferences and disable Dark Mode in this browser, resetting them to default.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                     <div class="tab-content" id="tab-support" role="tabpanel" aria-labelledby="tab-button-support" aria-hidden="true">
+                         <h4>Support</h4>
+                         <p>This project is developed by UNBOUND LABEL.</p>
+                         <p>For support or inquiries, please contact: <a href="mailto:NGDE@WEB.DE">NGDE@WEB.DE</a></p>
+                         <div class="support-section settings-support">
+                             <h2>Support This Project</h2>
+                             <p>If you find this tool helpful, please consider supporting its development.</p>
+                             <p>
+                                 <a href="https://github.com/Nitra-Global/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                                 <a href="https://github.com/Nitra-Global/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">Donate</a>
+                             </p>
+                         </div>
+                         <div class="settings-about-link">
+                              <p>Learn more about this project and your local timezone:</p>
+                              <a href="about.html" class="button support-link">About Your Timezone & Us</a>
+                         </div>
+                         <button id="clear-cache-button" class="clear-cache-button button">Clear Saved Settings</button>
+                         <p class="setting-description">Clearing saved settings will remove your saved time/date preferences and disable Dark Mode in this browser, resetting them to default.</p>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
 
     <script src="js/script.js"></script>
 </body>
