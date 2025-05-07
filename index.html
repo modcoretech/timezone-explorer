@@ -5,29 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timezone Explorer</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Timezone Explorer</h1>
-        <p>Select a timezone from the list below to see the current time and information.</p>
+        <h1 class="heading-archivo">Timezone Explorer</h1>
+        <p>Explore current time and detailed information for timezones around the world.</p>
 
         <div class="controls">
-            <label for="timezone-select">Choose a Timezone:</label>
-            <select id="timezone-select">
-                <option value="">-- Select a Timezone --</option>
-                </select>
+            <label for="timezone-search">Search Timezone:</label>
+            <input type="text" id="timezone-search" placeholder="e.g., London, New York, Asia/Tokyo">
         </div>
 
-        <div id="result" class="info-box hidden">
-            <h3>Timezone Information:</h3>
-            <p><strong>Timezone:</strong> <span id="display-timezone"></span></p>
-            <p><strong>Current Date:</strong> <span id="display-date"></span></p> <p><strong>Current Time:</strong> <span id="display-time"></span></p>
-            <p><strong>UTC Offset:</strong> <span id="display-offset"></span></p>
-            </div>
+        <div id="timezones-grid" class="timezones-grid">
+            <div class="loading-message">Loading timezones...</div>
+        </div>
 
-        <div class="support-section">
-            <h2>Support This Project</h2>
+        <div class="loading-more hidden">Loading more...</div> <div class="end-of-list hidden">End of list</div> <div class="support-section">
+            <h2 class="heading-archivo">Support This Project</h2>
             <p>If you find this tool helpful, please consider supporting its development.</p>
             <p>
                 <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link">Sponsor on GitHub</a> |
@@ -35,6 +31,22 @@
             </p>
         </div>
     </div>
+
+    <div id="timezone-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 id="modal-timezone-name" class="heading-archivo"></h3>
+            <p><strong>Current Date:</strong> <span id="modal-display-date"></span></p>
+            <p><strong>Current Time:</strong> <span id="modal-display-time"></span></p>
+            <p><strong>UTC Offset:</strong> <span id="modal-display-offset"></span></p>
+            <div class="modal-details">
+                 <h4>More Details:</h4>
+                 <p><strong>Example Countries:</strong> <span id="modal-countries">Information not available in this version.</span></p>
+                 <p><strong>DST Status:</strong> <span id="modal-dst-status">Loading...</span></p>
+                 </div>
+        </div>
+    </div>
+
 
     <script src="js/script.js"></script>
 </body>
