@@ -71,14 +71,17 @@
     --nav-icon-color: var(--text-color); /* Nav icon color */
     --nav-icon-hover-color: var(--primary-color); /* Nav icon hover color */
 
-    /* Time Difference Indicator */
-    --time-diff-color-ahead: #28a745; /* Green for ahead */
-    --time-diff-color-behind: #dc3545; /* Red for behind */
-    --time-diff-color-same: #6c757d; /* Gray for same */
+    /* Time Difference Indicator - REMOVED STYLES */
+    /* --time-diff-color-ahead: #28a745; */
+    /* --time-diff-color-behind: #dc3545; */
+    /* --time-diff-color-same: #6c757d; */
+    /* --time-diff-color-error: #dc3545; Added error color */
+
 
     /* Skeleton Loading */
     --skeleton-bg-color: #e9ecef;
     --skeleton-highlight-color: #f8f9fa;
+    animation: pulse 1.5s infinite ease-in-out; /* Pulse animation */
 }
 
 /* Dark Mode Variables */
@@ -143,9 +146,12 @@
     --nav-search-input-border: var(--border-color);
     --nav-search-input-focus-border: var(--primary-color);
 
-    --time-diff-color-ahead: #28a745; /* Green for ahead */
-    --time-diff-color-behind: #dc3545; /* Red for behind */
-    --time-diff-color-same: #adb5bd; /* Gray for same */
+    /* Time Difference Indicator - REMOVED STYLES */
+    /* --time-diff-color-ahead: #28a745; */
+    /* --time-diff-color-behind: #dc3545; */
+    /* --time-diff-color-same: #adb5bd; */
+    /* --time-diff-color-error: #dc3545; */
+
 
     --skeleton-bg-color: #495057;
     --skeleton-highlight-color: #6c757d;
@@ -410,11 +416,16 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 
 
 /* --- Grid Layout --- */
+#grid-view {
+    /* Ensures padding/margins outside the grid-view container */
+     margin-top: 30px;
+     margin-bottom: 30px;
+}
+
 .timezones-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 30px;
-    margin-top: 30px;
     padding: 0 10px;
     box-sizing: border-box;
 }
@@ -480,10 +491,10 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 /* Favorite Icon on Card */
 .timezone-card .favorite-icon {
     position: absolute;
-    top: 15px; /* Adjust position */
-    right: 15px; /* Adjust position */
-    width: 24px;
-    height: 24px;
+    top: 10px; /* Adjusted position */
+    right: 10px; /* Adjusted position */
+    width: 28px; /* Slightly larger */
+    height: 28px; /* Slightly larger */
     cursor: pointer;
     mask-image: url('../icons/star.svg'); /* Path to your star SVG */
     mask-repeat: no-repeat;
@@ -514,32 +525,37 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
      border-radius: 4px;
 }
 
-/* Time Difference Indicator */
-.timezone-card .time-difference {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px dashed var(--border-color);
-    text-align: right;
-    transition: color 0.3s ease, border-top-color 0.3s ease;
-}
+/* Time Difference Indicator - REMOVED STYLES */
+/* .timezone-card .time-difference { */
+/* font-size: 0.9rem; */
+/* font-weight: 600; */
+/* margin-top: 10px; */
+/* padding-top: 8px; */
+/* border-top: 1px dashed var(--border-color); */
+/* text-align: right; */
+/* transition: color 0.3s ease, border-top-color 0.3s ease; */
+/* } */
 
-.timezone-card .time-difference.ahead {
-    color: var(--time-diff-color-ahead);
-}
+/* .timezone-card .time-difference.ahead { */
+/* color: var(--time-diff-color-ahead); */
+/* } */
 
-.timezone-card .time-difference.behind {
-    color: var(--time-diff-color-behind);
-}
+/* .timezone-card .time-difference.behind { */
+/* color: var(--time-diff-color-behind); */
+/* } */
 
-.timezone-card .time-difference.same {
-    color: var(--time-diff-color-same);
-}
+/* .timezone-card .time-difference.same { */
+/* color: var(--time-diff-color-same); */
+/* } */
+
+/* .timezone-card .time-difference.error { */
+/* color: var(--time-diff-color-error); */
+/* } */
 
 
+/* Loading/Status messages outside the grid */
 .loading-message, .loading-more, .end-of-list {
-    grid-column: 1 / -1;
+    grid-column: 1 / -1; /* Span across all grid columns if inside grid */
     text-align: center;
     font-size: 1.3rem;
     color: var(--loading-text-color);
@@ -549,10 +565,13 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     justify-content: center;
     align-items: center;
     gap: 10px; /* Space between icon and text */
+    width: 100%; /* Ensure they take full width below the grid */
+    box-sizing: border-box;
 }
 
 .loading-more, .end-of-list {
-    margin-top: 20px;
+    margin-top: 0; /* Remove extra margin */
+    padding: 15px 30px; /* Adjust padding */
 }
 
 /* Loading Icon Style */
@@ -565,7 +584,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     mask-size: contain;
     mask-position: center;
     background-color: var(--loading-icon-color); /* Color the icon */
-    -webkit-mask-image: url('../icons/loading.svg');
+    -webkit-mask-image: url('../icons/icons/loading.svg'); /* Corrected path */
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
     -webkit-mask-position: center;
@@ -852,10 +871,10 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
         height: 20px;
     }
 
-    /* Time Difference (Mobile) */
-    .timezone-card .time-difference {
-        font-size: 0.8rem;
-    }
+    /* Time Difference (Mobile) - REMOVED STYLES */
+    /* .timezone-card .time-difference { */
+    /* font-size: 0.7rem; */
+    /* } */
 
     /* Skeleton Card (Mobile) */
     .skeleton-card {
@@ -865,7 +884,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     /* Loading Message (Mobile) */
     .loading-message, .loading-more, .end-of-list {
         font-size: 1.1rem;
-        padding: 20px;
+        padding: 15px;
     }
 
     .loading-icon {
