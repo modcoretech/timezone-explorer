@@ -18,6 +18,9 @@
     --card-shadow: 0 4px 8px var(--shadow-color);
     --card-hover-shadow: 0 8px 16px var(--shadow-color);
     --card-hover-border-color: var(--primary-color);
+    --card-favorite-border-color: #ffc107; /* Yellow for favorites */
+    --card-favorite-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); /* Yellow shadow */
+
 
     /* Forms (Main Search) */
     --input-border-color: #ced4da;
@@ -47,9 +50,10 @@
     --detail-card-border: #ced4da; /* Lighter Gray */
 
     /* Icons (using CSS mask) */
-    /* Icon background-color is now controlled by these variables */
     --icon-color: var(--text-color);
     --icon-hover-color: var(--primary-color);
+    --favorite-icon-color: #adb5bd; /* Default gray star */
+    --favorite-icon-color-active: #ffc107; /* Yellow star when favorited */
 
 
     /* Scrollbar */
@@ -66,6 +70,15 @@
     --nav-search-input-focus-border: var(--primary-color);
     --nav-icon-color: var(--text-color); /* Nav icon color */
     --nav-icon-hover-color: var(--primary-color); /* Nav icon hover color */
+
+    /* Time Difference Indicator */
+    --time-diff-color-ahead: #28a745; /* Green for ahead */
+    --time-diff-color-behind: #dc3545; /* Red for behind */
+    --time-diff-color-same: #6c757d; /* Gray for same */
+
+    /* Skeleton Loading */
+    --skeleton-bg-color: #e9ecef;
+    --skeleton-highlight-color: #f8f9fa;
 }
 
 /* Dark Mode Variables */
@@ -84,6 +97,9 @@
     --card-shadow: 0 4px 8px var(--shadow-color);
     --card-hover-shadow: 0 8px 16px var(--shadow-color);
     --card-hover-border-color: var(--primary-color);
+    --card-favorite-border-color: #ffc107; /* Yellow for favorites */
+    --card-favorite-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); /* Yellow shadow */
+
 
     --input-border-color: #495057;
     --input-focus-border-color: var(--primary-color);
@@ -104,11 +120,14 @@
     --loading-text-color: #adb5bd;
     --loading-icon-color: var(--loading-text-color); /* Loading icon color in dark mode */
 
+
     --detail-card-bg: #495057;
     --detail-card-border: #6c757d;
 
     --icon-color: var(--text-color); /* Icons in dark mode match text */
     --icon-hover-color: var(--primary-color); /* Hover color is primary */
+    --favorite-icon-color: #adb5bd; /* Default gray star */
+    --favorite-icon-color-active: #ffc107; /* Yellow star when favorited */
     --nav-icon-color: var(--text-color); /* Nav icons in dark mode match text */
     --nav-icon-hover-color: var(--primary-color); /* Nav hover color is primary */
 
@@ -123,6 +142,13 @@
     --nav-search-bg-color: var(--secondary-color);
     --nav-search-input-border: var(--border-color);
     --nav-search-input-focus-border: var(--primary-color);
+
+    --time-diff-color-ahead: #28a745; /* Green for ahead */
+    --time-diff-color-behind: #dc3545; /* Red for behind */
+    --time-diff-color-same: #adb5bd; /* Gray for same */
+
+    --skeleton-bg-color: #495057;
+    --skeleton-highlight-color: #6c757d;
 }
 
 
@@ -408,8 +434,16 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     overflow: hidden;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    height: auto;
+    height: auto; /* Allow height to adjust based on content */
+    position: relative; /* Needed for absolute positioning of favorite icon */
 }
+
+/* Style for favorite cards */
+.timezone-card.favorite {
+    border-color: var(--card-favorite-border-color);
+    box-shadow: var(--card-favorite-shadow);
+}
+
 
 .timezone-card:hover {
     box-shadow: var(--card-hover-shadow);
@@ -425,6 +459,9 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     padding-bottom: 0;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    padding-right: 35px; /* Add padding to make space for favorite icon */
+    position: relative; /* Needed for z-index if favorite icon is inside h3 */
+    z-index: 1; /* Ensure text is above icon if icon is inside h3 */
 }
 
 .timezone-card p {
@@ -438,6 +475,66 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 .timezone-card p strong {
     display: inline-block;
     margin-right: 5px;
+}
+
+/* Favorite Icon on Card */
+.timezone-card .favorite-icon {
+    position: absolute;
+    top: 15px; /* Adjust position */
+    right: 15px; /* Adjust position */
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    mask-image: url('../icons/star.svg'); /* Path to your star SVG */
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    background-color: var(--favorite-icon-color); /* Default color */
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    -webkit-mask-image: url('../icons/star.svg');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+    z-index: 2; /* Ensure icon is above heading */
+    outline: none;
+}
+
+.timezone-card .favorite-icon:hover {
+    transform: scale(1.1);
+    background-color: var(--favorite-icon-color-active); /* Highlight color on hover */
+}
+
+.timezone-card .favorite-icon.active {
+    background-color: var(--favorite-icon-color-active); /* Active color */
+}
+
+.timezone-card .favorite-icon:focus-visible {
+     outline: 2px solid var(--primary-color);
+     outline-offset: 2px;
+     border-radius: 4px;
+}
+
+/* Time Difference Indicator */
+.timezone-card .time-difference {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border-color);
+    text-align: right;
+    transition: color 0.3s ease, border-top-color 0.3s ease;
+}
+
+.timezone-card .time-difference.ahead {
+    color: var(--time-diff-color-ahead);
+}
+
+.timezone-card .time-difference.behind {
+    color: var(--time-diff-color-behind);
+}
+
+.timezone-card .time-difference.same {
+    color: var(--time-diff-color-same);
 }
 
 
@@ -485,6 +582,50 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 .hidden {
     display: none !important;
 }
+
+/* --- Skeleton Loading Styles --- */
+.skeleton-card {
+    background-color: var(--skeleton-bg-color);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color); /* Use general border */
+    box-shadow: var(--card-shadow); /* Use general shadow */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between skeleton lines */
+    animation: pulse 1.5s infinite ease-in-out; /* Pulse animation */
+    min-height: 150px; /* Ensure a minimum height */
+}
+
+.skeleton-line {
+    height: 1em; /* Height based on font size */
+    background: linear-gradient(90deg, var(--skeleton-bg-color) 0%, var(--skeleton-highlight-color) 50%, var(--skeleton-bg-color) 100%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: loading 1.5s infinite;
+}
+
+.skeleton-line-lg {
+    width: 70%; /* Longer line for title */
+}
+
+.skeleton-line-sm {
+    width: 40%; /* Shorter line for details */
+}
+
+/* Animation for skeleton lines */
+@keyframes loading {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Pulse animation for the card */
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
 
 /* --- Detail Page View --- */
 #detail-view {
@@ -645,6 +786,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 
     .timezone-card h3 {
         font-size: 1.1rem;
+        padding-right: 30px; /* Adjust padding for smaller favorite icon */
     }
 
     .timezone-card p {
@@ -700,6 +842,35 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
         right: 10px;
         width: 25px;
         height: 25px;
+    }
+
+    /* Favorite Icon on Card (Mobile) */
+    .timezone-card .favorite-icon {
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Time Difference (Mobile) */
+    .timezone-card .time-difference {
+        font-size: 0.8rem;
+    }
+
+    /* Skeleton Card (Mobile) */
+    .skeleton-card {
+        padding: 15px;
+    }
+
+    /* Loading Message (Mobile) */
+    .loading-message, .loading-more, .end-of-list {
+        font-size: 1.1rem;
+        padding: 20px;
+    }
+
+    .loading-icon {
+        width: 20px;
+        height: 20px;
     }
 
     /* Modal adjustments moved to settings.css */
