@@ -1,0 +1,79 @@
+/* css/timezones.css */
+
+body {
+    font-family: 'Archivo', sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0; /* Remove default body margin */
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px; /* Increased padding */
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+    max-width: 700px; /* Increased max width */
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem; /* Larger heading */
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+.time-display {
+    font-size: 3.5rem; /* Even larger time font */
+    font-weight: 600;
+    color: #4f46e5;
+    margin-bottom: 30px; /* More space below time */
+}
+
+.info-box {
+    margin-top: 30px; /* More space above info box */
+    padding: 25px; /* Increased padding */
+    background-color: #eef2ff;
+    border-radius: 8px;
+    border: 1px dashed #a5b4fc;
+    text-align: left;
+}
+
+.info-box h3 {
+    font-size: 1.5rem; /* Larger info heading */
+    font-weight: 600;
+    margin-bottom: 15px; /* More space below info heading */
+    color: #4f46e5;
+    border-bottom: 1px solid #c4b5fd; /* Subtle separator */
+    padding-bottom: 8px;
+}
+
+.info-box p {
+    margin-bottom: 12px; /* More space between paragraphs */
+    color: #374151;
+    line-height: 1.6; /* Improved readability */
+    font-size: 1.05rem;
+}
+
+.info-box strong {
+    color: #1f2937;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 30px; /* Space above back link */
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
