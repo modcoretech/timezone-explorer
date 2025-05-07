@@ -6,37 +6,39 @@
     --container-bg-color: #ffffff;
     --text-color: #374151;
     --heading-color: #1f2937;
-    --primary-color: #4f46e5;
-    --secondary-color: #eef2ff;
-    --border-color: #e5e7eb;
+    --primary-color: #4f46e5; /* Purple */
+    --secondary-color: #eef2ff; /* Light Purple */
+    --border-color: #e5e7eb; /* Light Gray */
     --card-bg-color: #ffffff;
     --card-border-color: #e5e7eb;
     --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
-    --card-hover-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+    --card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Slightly reduced hover shadow */
     --input-border-color: #d1d5db;
     --input-focus-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
-    --support-bg-color: #10b981;
-    --support-hover-bg-color: #059669;
-    --link-color: #3b82f6;
-    --link-hover-color: #2563eb;
-    --loading-text-color: #6b7280;
-    --detail-card-bg: #eef2ff;
-    --detail-card-border: #a5b4fc;
+    --support-bg-color: #10b981; /* Green */
+    --support-hover-bg-color: #059669; /* Darker Green */
+    --link-color: #3b82f6; /* Blue */
+    --link-hover-color: #2563eb; /* Darker Blue */
+    --loading-text-color: #6b7280; /* Gray */
+    --detail-card-bg: #eef2ff; /* Light Purple */
+    --detail-card-border: #a5b4fc; /* Medium Purple */
+    --scrollbar-thumb: #c1c1c1; /* Default scrollbar */
+    --scrollbar-track: #f1f1f1; /* Default scrollbar track */
 }
 
 /* Dark Mode Variables */
 .dark-mode {
-    --background-color: #1a202c;
-    --container-bg-color: #2d3748;
-    --text-color: #e2e8f0;
-    --heading-color: #f7fafc;
-    --primary-color: #a78bfa; /* Lighter primary for dark mode */
-    --secondary-color: #4a5568;
+    --background-color: #1a202c; /* Dark Blue-Gray */
+    --container-bg-color: #2d3748; /* Slightly Lighter Dark Blue-Gray */
+    --text-color: #e2e8f0; /* Light Gray */
+    --heading-color: #f7fafc; /* Off White */
+    --primary-color: #a78bfa; /* Lighter Purple for dark mode */
+    --secondary-color: #4a5568; /* Dark Grayish Blue */
     --border-color: #4a5568;
     --card-bg-color: #2d3748;
     --card-border-color: #4a5568;
     --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-    --card-hover-shadow: 0 12px 20px rgba(0, 0, 0, 0.6);
+    --card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
     --input-border-color: #4a5568;
     --input-focus-shadow: 0 0 0 4px rgba(167, 139, 250, 0.3);
     --support-bg-color: #047857;
@@ -46,9 +48,11 @@
     --loading-text-color: #a0aec0;
     --detail-card-bg: #4a5568;
     --detail-card-border: #667eea;
+    --scrollbar-thumb: #555; /* Darker scrollbar */
+    --scrollbar-track: #333; /* Darker scrollbar track */
 }
 
-
+/* Basic Reset and Body Styles */
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background-color);
@@ -61,7 +65,31 @@ body {
     color: var(--text-color);
     box-sizing: border-box;
     transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
+    overflow-y: scroll; /* Always show scrollbar to prevent layout shifts */
 }
+
+/* Scrollbar Styling (for modern browsers) */
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 10px;
+  border: 3px solid var(--scrollbar-track); /* Add border for better visibility */
+}
+
+/* Scrollbar Styling (for Firefox) */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
 
 .heading-archivo {
     font-family: 'Archivo', sans-serif;
@@ -71,12 +99,12 @@ body {
     background-color: var(--container-bg-color);
     padding: 40px;
     border-radius: 16px;
-    box-shadow: var(--card-shadow); /* Use card shadow variable */
+    box-shadow: var(--card-shadow);
     max-width: 1400px;
     width: 100%;
     text-align: center;
     box-sizing: border-box;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth theme transition */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 h1 {
@@ -84,7 +112,7 @@ h1 {
     font-weight: 700;
     margin-bottom: 20px;
     color: var(--heading-color);
-    transition: color 0.3s ease; /* Smooth theme transition */
+    transition: color 0.3s ease;
 }
 
 h2 {
@@ -95,17 +123,17 @@ h2 {
     margin-bottom: 20px;
     border-bottom: 3px solid var(--secondary-color);
     padding-bottom: 15px;
-    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth theme transition */
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 h3 {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 15px;
-    color: var(--primary-color); /* Use primary color for card/detail headings */
-    border-bottom: 1px solid var(--secondary-color); /* Use secondary color for border */
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--secondary-color);
     padding-bottom: 10px;
-    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth theme transition */
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 h4 {
@@ -113,25 +141,35 @@ h4 {
     font-weight: 600;
     margin-bottom: 10px;
     color: var(--heading-color);
-    transition: color 0.3s ease; /* Smooth theme transition */
+    transition: color 0.3s ease;
 }
 
 p {
     font-size: 1.1rem;
     margin-bottom: 15px;
     color: var(--text-color);
-    transition: color 0.3s ease; /* Smooth theme transition */
+    transition: color 0.3s ease;
 }
 
 strong {
-    color: var(--heading-color); /* Use heading color for strong text */
-    transition: color 0.3s ease; /* Smooth theme transition */
+    color: var(--heading-color);
+    transition: color 0.3s ease;
 }
 
 .controls {
     margin-bottom: 40px;
     text-align: left;
+    display: flex; /* Use flexbox for controls */
+    gap: 20px; /* Space between search and potential future controls */
+    flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
+    align-items: flex-end; /* Align items to the bottom */
 }
+
+.controls .search-container {
+    flex-grow: 1; /* Allow search bar to take available space */
+    min-width: 250px; /* Minimum width for search */
+}
+
 
 .controls label {
     display: block;
@@ -139,7 +177,7 @@ strong {
     font-weight: 600;
     margin-bottom: 10px;
     color: var(--heading-color);
-    transition: color 0.3s ease; /* Smooth theme transition */
+    transition: color 0.3s ease;
 }
 
 #timezone-search {
@@ -150,9 +188,9 @@ strong {
     width: 100%;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
-    background-color: var(--container-bg-color); /* Match container background */
-    color: var(--text-color); /* Match text color */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 #timezone-search:focus {
@@ -161,13 +199,58 @@ strong {
     box-shadow: var(--input-focus-shadow);
 }
 
+/* Dark Mode Toggle */
+.theme-switch {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    margin-bottom: 10px; /* Align with search label */
+}
+
+.theme-switch input[type="checkbox"] {
+    display: none; /* Hide the default checkbox */
+}
+
+.theme-switch .slider {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    transition: background-color 0.4s;
+    margin-left: 10px;
+}
+
+.theme-switch input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+.theme-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.4s;
+}
+
+.theme-switch input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
 /* Grid Layout */
 .timezones-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Slightly wider cards */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 30px;
     margin-top: 30px;
-    padding: 0 10px; /* Add horizontal padding to prevent cards from touching container edges */
+    padding: 0 10px;
     box-sizing: border-box;
 }
 
@@ -181,34 +264,40 @@ strong {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* Removed height: 100% to allow content to dictate height and prevent overflow issues */
     cursor: pointer;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.3s ease; /* Smooth theme transition */
-    overflow: hidden; /* Hide overflowing content if any */
-    word-wrap: break-word; /* Break long words */
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.3s ease; /* Removed transform */
+    overflow: hidden;
+    word-wrap: break-word;
+    height: auto; /* Ensure height adapts to content */
 }
 
 .timezone-card:hover {
-    transform: translateY(-8px);
     box-shadow: var(--card-hover-shadow);
-    border-color: var(--primary-color);
+    border-color: var(--primary-color); /* Only border color change on hover */
 }
 
 .timezone-card h3 {
     font-size: 1.35rem;
     font-weight: 600;
     margin-bottom: 12px;
-    color: var(--heading-color); /* Use heading color for card title */
+    color: var(--heading-color);
     border-bottom: none;
     padding-bottom: 0;
-    word-wrap: break-word; /* Ensure long timezone names wrap */
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* Modern alternative to word-wrap */
 }
 
 .timezone-card p {
     margin-bottom: 6px;
     font-size: 1rem;
     line-height: 1.4;
-    word-wrap: break-word; /* Ensure long text wraps */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.timezone-card p strong {
+    display: inline-block; /* Prevent strong from breaking word wrap */
+    margin-right: 5px; /* Small space after strong */
 }
 
 
@@ -218,7 +307,7 @@ strong {
     font-size: 1.3rem;
     color: var(--loading-text-color);
     padding: 30px;
-    transition: color 0.3s ease; /* Smooth theme transition */
+    transition: color 0.3s ease;
 }
 
 .loading-more, .end-of-list {
@@ -241,16 +330,18 @@ strong {
     border-radius: 12px;
     border: 1px dashed var(--detail-card-border);
     margin-bottom: 30px;
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth theme transition */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .detail-card h3 {
     font-size: 2rem;
     margin-bottom: 20px;
-    border-bottom: 2px solid var(--primary-color); /* Use primary color for detail heading border */
+    border-bottom: 2px solid var(--primary-color);
     padding-bottom: 10px;
-    color: var(--heading-color); /* Use heading color for detail title */
-    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth theme transition */
+    color: var(--heading-color);
+    transition: color 0.3s ease, border-color 0.3s ease;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .detail-card p {
@@ -262,12 +353,12 @@ strong {
     margin-top: 25px;
     padding-top: 20px;
     border-top: 1px solid var(--border-color);
-    transition: border-color 0.3s ease; /* Smooth theme transition */
+    transition: border-color 0.3s ease;
 }
 
 .detail-more-info h4 {
-     color: var(--heading-color); /* Use heading color for detail info heading */
-     transition: color 0.3s ease; /* Smooth theme transition */
+     color: var(--heading-color);
+     transition: color 0.3s ease;
 }
 
 
@@ -291,7 +382,7 @@ strong {
     margin-top: 60px;
     padding-top: 40px;
     border-top: 1px solid var(--border-color);
-    transition: border-color 0.3s ease; /* Smooth theme transition */
+    transition: border-color 0.3s ease;
 }
 
 .support-section h2 {
@@ -301,7 +392,7 @@ strong {
     margin-bottom: 20px;
     border-bottom: none;
     padding-bottom: 0;
-    transition: color 0.3s ease; /* Smooth theme transition */
+    transition: color 0.3s ease;
 }
 
 .support-section p {
@@ -311,7 +402,7 @@ strong {
 .support-link {
     display: inline-block;
     background-color: var(--support-bg-color);
-    color: white; /* Text color remains white for contrast */
+    color: white;
     padding: 12px 25px;
     border-radius: 8px;
     text-decoration: none;
@@ -341,7 +432,7 @@ strong {
 *:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
-  border-radius: 4px; /* Add border radius to outline */
+  border-radius: 4px;
 }
 
 /* Responsive adjustments */
