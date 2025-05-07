@@ -54,10 +54,21 @@
 
     /* Icons */
     --settings-icon-color: var(--text-color); /* Match text color by default */
+    --nav-icon-color: var(--text-color); /* Nav icon color */
+    --nav-icon-hover-color: var(--primary-color); /* Nav icon hover color */
 
     /* Scrollbar */
     --scrollbar-thumb: #adb5bd; /* Gray */
     --scrollbar-track: #f8f9fa; /* Very Light Gray */
+
+    /* Navigation Bar */
+    --nav-bg-color: var(--container-bg-color);
+    --nav-border-color: var(--border-color);
+    --nav-shadow: 0 2px 8px var(--shadow-color);
+    --nav-text-color: var(--heading-color);
+    --nav-search-bg-color: var(--secondary-color); /* Background for expanded search */
+    --nav-search-input-border: var(--border-color);
+    --nav-search-input-focus-border: var(--primary-color);
 }
 
 /* Dark Mode Variables */
@@ -66,7 +77,7 @@
     --container-bg-color: #343a40;
     --text-color: #e9ecef;
     --heading-color: #f8f9fa;
-    --primary-color: #00aaff; /* Lighter Blue for Dark Mode */
+    --primary-color: #00aaff;
     --secondary-color: #495057;
     --border-color: #495057;
     --shadow-color: rgba(0, 0, 0, 0.4);
@@ -102,21 +113,31 @@
 
     --setting-item-border: #495057;
 
-    --settings-icon-color: var(--text-color); /* Match text color */
+    --settings-icon-color: var(--text-color);
+    --nav-icon-color: var(--text-color);
+    --nav-icon-hover-color: var(--primary-color);
 
     --scrollbar-thumb: #495057;
     --scrollbar-track: #343a40;
+
+    --nav-bg-color: var(--container-bg-color);
+    --nav-border-color: var(--border-color);
+    --nav-shadow: 0 2px 8px var(--shadow-color);
+    --nav-text-color: var(--heading-color);
+    --nav-search-bg-color: var(--secondary-color);
+    --nav-search-input-border: var(--border-color);
+    --nav-search-input-focus-border: var(--primary-color);
 }
 
 /* Blue Theme Variables */
 .blue-theme {
-    --background-color: #e0f7fa; /* Very Light Cyan */
+    --background-color: #e0f7fa;
     --container-bg-color: #ffffff;
-    --text-color: #003f5c; /* Dark Blue */
-    --heading-color: #002a4d; /* Very Dark Blue */
-    --primary-color: #0077b6; /* Ocean Blue */
-    --secondary-color: #b3e5fc; /* Light Cyan */
-    --border-color: #b0bec5; /* Blue Gray */
+    --text-color: #003f5c;
+    --heading-color: #002a4d;
+    --primary-color: #0077b6;
+    --secondary-color: #b3e5fc;
+    --border-color: #b0bec5;
     --shadow-color: rgba(0, 0, 0, 0.1);
 
     --card-bg-color: #ffffff;
@@ -129,8 +150,8 @@
     --input-focus-border-color: var(--primary-color);
     --input-focus-shadow: 0 0 0 0.2rem rgba(0, 119, 182, 0.25);
 
-    --support-bg-color: #00bfa5; /* Teal */
-    --support-hover-bg-color: #00a18a; /* Darker Teal */
+    --support-bg-color: #00bfa5;
+    --support-hover-bg-color: #00a18a;
     --link-color: var(--primary-color);
     --link-hover-color: #005f99;
 
@@ -151,9 +172,19 @@
     --setting-item-border: #b0bec5;
 
     --settings-icon-color: var(--text-color);
+    --nav-icon-color: var(--text-color);
+    --nav-icon-hover-color: var(--primary-color);
 
     --scrollbar-thumb: #81d4fa;
     --scrollbar-track: #e0f7fa;
+
+    --nav-bg-color: var(--container-bg-color);
+    --nav-border-color: var(--border-color);
+    --nav-shadow: 0 2px 8px var(--shadow-color);
+    --nav-text-color: var(--heading-color);
+    --nav-search-bg-color: var(--secondary-color);
+    --nav-search-input-border: var(--border-color);
+    --nav-search-input-focus-border: var(--primary-color);
 }
 
 
@@ -171,8 +202,9 @@ body {
     box-sizing: border-box;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-y: scroll;
-    -webkit-font-smoothing: antialiased; /* Improve font rendering */
+    -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    padding-top: 80px; /* Add padding to the top to prevent content from being hidden by sticky nav */
 }
 
 /* Scrollbar Styling */
@@ -213,39 +245,165 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     box-sizing: border-box;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
-    overflow: hidden; /* Prevent any potential overflow from absolute positioning */
+    overflow: hidden;
 }
 
-/* --- Settings Icon --- */
-.settings-icon {
+/* --- Sticky Navigation Bar --- */
+.sticky-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--nav-bg-color);
+    box-shadow: var(--nav-shadow);
+    z-index: 50; /* Below modal, above content */
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, background-color 0.3s ease, box-shadow 0.3s ease;
+    transform: translateY(-100%); /* Start off-screen */
+    opacity: 0;
+    border-bottom: 1px solid var(--nav-border-color);
+    box-sizing: border-box;
+    backdrop-filter: blur(8px); /* Initial blur */
+    -webkit-backdrop-filter: blur(8px); /* Safari */
+}
+
+.sticky-nav.visible {
+    transform: translateY(0); /* Slide in */
+    opacity: 1;
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    max-width: 1400px; /* Match container max-width */
+    margin: 0 auto; /* Center nav content */
+}
+
+.nav-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--nav-text-color);
+    transition: color 0.3s ease;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between icons */
+}
+
+/* Nav Icons (Search and Settings) */
+.nav-search-icon,
+.nav-settings-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    background-color: var(--nav-icon-color);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+    outline: none;
+}
+
+.nav-search-icon:hover,
+.nav-settings-icon:hover {
+    background-color: var(--nav-icon-hover-color);
+    transform: scale(1.1); /* Slight scale on hover */
+}
+
+.nav-search-icon:focus-visible,
+.nav-settings-icon:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+    background-color: var(--nav-icon-hover-color);
+}
+
+/* Specific Nav Icon Masks */
+.nav-search-icon { mask-image: url('../icons/search.svg'); -webkit-mask-image: url('../icons/search.svg'); }
+.nav-settings-icon { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
+
+
+/* Animated Search Bar in Nav */
+.nav-search-bar {
+    background-color: var(--nav-search-bg-color);
+    padding: 10px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow: hidden; /* Hide the input when collapsed */
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, background-color 0.3s ease;
+    max-height: 0; /* Start collapsed */
+    padding-top: 0;
+    padding-bottom: 0;
+    filter: blur(0); /* No blur when collapsed */
+    -webkit-filter: blur(0);
+}
+
+.nav-search-bar.expanded {
+    max-height: 60px; /* Adjust based on content height */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    filter: blur(0); /* Remove blur when expanded */
+    -webkit-filter: blur(0);
+}
+
+#nav-search-input-container {
+    width: 100%;
+}
+
+#nav-timezone-search { /* Styling for the input when it's in the nav */
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--nav-search-input-border);
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--nav-search-bg-color); /* Match nav search bar background */
+    color: var(--text-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+}
+
+#nav-timezone-search:focus {
+    border-color: var(--nav-search-input-focus-border);
+    box-shadow: var(--input-focus-shadow); /* Use same focus shadow as main input */
+}
+
+
+/* --- Settings Icon (Main) --- */
+#main-settings-icon {
     position: absolute;
     top: 20px;
     right: 20px;
     width: 30px;
     height: 30px;
     cursor: pointer;
-    /* Use mask-image to apply the SVG shape */
     mask-image: url('../icons/settings.svg');
     mask-repeat: no-repeat;
     mask-size: contain;
     mask-position: center;
-    /* Control the color using background-color */
     background-color: var(--settings-icon-color);
     transition: background-color 0.3s ease, transform 0.2s ease;
     z-index: 10;
-    -webkit-mask-image: url('../icons/settings.svg'); /* Vendor prefix for Safari */
+    -webkit-mask-image: url('../icons/settings.svg');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
     -webkit-mask-position: center;
-    outline: none; /* Remove default outline */
+    outline: none;
 }
 
-.settings-icon:hover {
+#main-settings-icon:hover {
     transform: rotate(45deg);
     background-color: var(--primary-color);
 }
 
-.settings-icon:focus-visible {
+#main-settings-icon:focus-visible {
      outline: 2px solid var(--primary-color);
      outline-offset: 2px;
      border-radius: 4px;
@@ -253,22 +411,15 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 }
 
 
-/* --- Controls (Search) --- */
-.controls {
+/* --- Main Controls (Search Input) --- */
+#main-controls {
     margin-bottom: 40px;
     text-align: left;
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: flex-end;
+    /* Removed flex layout - now just a container for the search input */
+    transition: opacity 0.3s ease;
 }
 
-.controls .search-container {
-    flex-grow: 1;
-    min-width: 250px;
-}
-
-.controls label {
+.controls label { /* Styling for the label associated with the search input */
     display: block;
     font-size: 1.2rem;
     font-weight: 600;
@@ -277,7 +428,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     transition: color 0.3s ease;
 }
 
-#timezone-search {
+#timezone-search { /* Styling for the main search input when visible */
     padding: 14px;
     border-radius: 8px;
     border: 1px solid var(--input-border-color);
@@ -288,6 +439,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     background-color: var(--container-bg-color);
     color: var(--text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    outline: none;
 }
 
 #timezone-search:focus {
@@ -295,6 +447,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     border-color: var(--primary-color);
     box-shadow: var(--input-focus-shadow);
 }
+
 
 /* --- Grid Layout --- */
 .timezones-grid {
@@ -368,7 +521,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 }
 
 .hidden {
-    display: none !important; /* Use !important to ensure it overrides flex/grid */
+    display: none !important;
 }
 
 /* --- Detail Page View --- */
@@ -496,14 +649,14 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: var(--modal-overlay-bg); /* Use variable for overlay color */
+    background-color: var(--modal-overlay-bg);
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
-    opacity: 0; /* Start hidden */
-    visibility: hidden; /* Hide from screen readers when closed */
+    opacity: 0;
+    visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
@@ -525,7 +678,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     overflow: hidden;
     display: flex;
     transition: background-color 0.3s ease;
-    border: 1px solid var(--modal-border-color); /* Add modal border */
+    border: 1px solid var(--modal-border-color);
 }
 
 .modal-content h3 {
@@ -546,11 +699,11 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     cursor: pointer;
     transition: color 0.3s ease;
     z-index: 1;
-    background: none; /* Remove default button background */
-    border: none; /* Remove default button border */
-    padding: 5px; /* Add padding for easier clicking */
-    line-height: 1; /* Adjust line height */
-    outline: none; /* Remove default outline */
+    background: none;
+    border: none;
+    padding: 5px;
+    line-height: 1;
+    outline: none;
 }
 
 .close-button:hover,
@@ -558,7 +711,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     color: var(--heading-color);
     text-decoration: none;
     cursor: pointer;
-    outline: 2px solid var(--heading-color); /* Add focus outline */
+    outline: 2px solid var(--heading-color);
     outline-offset: 2px;
     border-radius: 4px;
 }
@@ -568,8 +721,8 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     width: 100%;
     max-height: calc(90vh - 60px);
     overflow-y: auto;
-    scrollbar-width: thin; /* Firefox scrollbar */
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Firefox scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 /* Modal Body Scrollbar (Webkit) */
@@ -605,7 +758,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     display: flex;
     align-items: center;
     gap: 10px;
-    outline: none; /* Remove default outline */
+    outline: none;
 }
 
 .tab-button:hover:not(.active) {
@@ -633,7 +786,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     mask-repeat: no-repeat;
     mask-size: contain;
     mask-position: center;
-    background-color: var(--tab-icon-color); /* Control color with background */
+    background-color: var(--tab-icon-color);
     transition: background-color 0.3s ease;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
@@ -641,25 +794,24 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 }
 
 .tab-button.active .tab-icon {
-    background-color: var(--tab-icon-active-color); /* Active icon color */
+    background-color: var(--tab-icon-active-color);
 }
 
 /* Specific Icon Masks */
 .settings-icon-svg { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
 .palette-icon-svg { mask-image: url('../icons/palette.svg'); -webkit-mask-image: url('../icons/palette.svg'); }
 .info-icon-svg { mask-image: url('../icons/info.svg'); -webkit-mask-image: url('../icons/info.svg'); }
+.search-icon-svg { mask-image: url('../icons/search.svg'); -webkit-mask-image: url('../icons/search.svg'); }
 
 
 .tab-content-area {
     flex-grow: 1;
-    /* Removed overflow-y: auto; here, let modal-body handle it */
-    padding-right: 10px; /* Add some padding for scrollbar spacing */
+    padding-right: 10px;
 }
 
 
 .tab-content {
     display: none;
-    /* Removed overflow-y: auto; from here */
 }
 
 .tab-content.active {
@@ -702,7 +854,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     background-color: var(--container-bg-color);
     color: var(--text-color);
     transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-    outline: none; /* Remove default outline */
+    outline: none;
 }
 
 .setting-item select:focus-visible {
@@ -717,13 +869,13 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     align-items: center;
     margin-right: 20px;
     cursor: pointer;
-    outline: none; /* Remove default outline */
+    outline: none;
 }
 
 .theme-option input[type="radio"] {
     margin-right: 8px;
     cursor: pointer;
-    outline: none; /* Remove default outline */
+    outline: none;
 }
 
 .theme-option:focus-visible {
@@ -752,7 +904,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     font-size: 1rem;
     font-weight: 600;
     transition: background-color 0.3s ease;
-    outline: none; /* Remove default outline */
+    outline: none;
 }
 
 .clear-cache-button:hover {
@@ -782,7 +934,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 .settings-support .support-link {
     padding: 8px 15px;
     font-size: 0.95rem;
-    outline: none; /* Remove default outline */
+    outline: none;
 }
 .settings-support .support-link:focus-visible {
     outline: 2px solid var(--primary-color);
@@ -793,8 +945,13 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    body {
+        padding: 10px; /* Reduced padding on small screens */
+        padding-top: 70px; /* Adjust padding top for smaller nav */
+    }
+
     .container {
-        padding: 20px;
+        padding: 15px;
     }
 
     h1 {
@@ -838,6 +995,33 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
         margin: 10px auto;
     }
 
+    /* Nav adjustments */
+    .sticky-nav {
+        padding: 0 10px; /* Reduced padding */
+    }
+    .nav-content {
+        padding: 8px 10px; /* Reduced padding */
+    }
+    .nav-title {
+        font-size: 1.4rem; /* Smaller title */
+    }
+    .nav-search-icon,
+    .nav-settings-icon {
+        width: 20px; /* Smaller icons */
+        height: 20px;
+    }
+    .nav-search-bar {
+        padding: 8px 10px; /* Reduced padding */
+    }
+    .nav-search-bar.expanded {
+        max-height: 50px; /* Adjusted height */
+    }
+    #nav-timezone-search {
+        padding: 8px; /* Reduced padding */
+        font-size: 0.9rem;
+    }
+
+
     .settings-icon {
         top: 10px;
         right: 10px;
@@ -847,47 +1031,57 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
 
     .modal-content {
         padding: 20px;
-        flex-direction: column; /* Stack modal body vertically */
-        max-width: 95%; /* Allow modal to be wider on small screens */
-        max-height: 95vh; /* Adjust max height */
+        flex-direction: column;
+        max-width: 95%;
+        max-height: 95vh;
+    }
+
+    .modal-content h3 {
+        font-size: 1.8rem;
+    }
+
+    .close-button {
+        top: 5px;
+        right: 10px;
+        font-size: 24px;
     }
 
     .modal-body {
-        flex-direction: column; /* Stack modal body vertically */
-        max-height: calc(95vh - 50px); /* Adjust height for smaller title area */
-        overflow-y: auto; /* Ensure scrolling works */
+        flex-direction: column;
+        max-height: calc(95vh - 50px);
+        overflow-y: auto;
     }
 
     .tabs-sidebar {
-        flex-direction: row; /* Arrange tabs horizontally */
+        flex-direction: row;
         border-right: none;
-        border-bottom: 1px solid var(--border-color); /* Add bottom border */
+        border-bottom: 1px solid var(--border-color);
         margin-right: 0;
         padding-right: 0;
-        margin-bottom: 20px; /* Space below tabs */
+        margin-bottom: 20px;
         padding-bottom: 10px;
-        overflow-x: auto; /* Allow horizontal scrolling for tabs */
-        width: 100%; /* Full width */
-        justify-content: space-around; /* Distribute space */
+        overflow-x: auto;
+        width: 100%;
+        justify-content: space-around;
     }
 
     .tab-button {
-        border-left: none; /* Remove left indicator */
-        border-bottom: 2px solid transparent; /* Add bottom indicator */
-        padding: 10px 5px; /* Adjust padding */
-        justify-content: center; /* Center icon and text */
-        gap: 5px; /* Reduced gap */
-        margin-bottom: 0; /* Remove bottom margin */
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        padding: 10px 5px;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 0;
     }
 
      .tab-button.active {
-        border-left-color: transparent; /* Remove left indicator */
-        border-bottom-color: var(--tab-button-active-border); /* Add bottom indicator */
+        border-left-color: transparent;
+        border-bottom-color: var(--tab-button-active-border);
      }
 
     .tab-content-area {
         flex-grow: 1;
-        padding-right: 0; /* Remove padding */
+        padding-right: 0;
     }
 
 
@@ -907,4 +1101,3 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
         margin-bottom: 5px;
     }
 }
-
