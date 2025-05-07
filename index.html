@@ -5,20 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timezone Explorer</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    </head>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&display=swap" rel="stylesheet">
+</head>
 <body>
     <nav id="sticky-nav" class="sticky-nav">
         <div class="nav-content">
             <div class="nav-title heading-archivo">Timezone Explorer</div>
             <div class="nav-icons">
-                <div class="nav-search-icon" id="nav-search-icon" aria-label="Toggle Search" role="button" tabindex="0">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
-                     </svg>
-                 </div>
-                <div class="nav-settings-icon settings-icon" id="nav-settings-icon" aria-label="Open Settings" role="button" tabindex="0">
-                      </div>
+                <div class="nav-icon nav-search-icon" id="nav-search-icon" aria-label="Toggle Search" role="button" tabindex="0"></div>
+                <div class="nav-icon nav-settings-icon settings-icon" id="nav-settings-icon" aria-label="Open Settings" role="button" tabindex="0"></div>
             </div>
         </div>
         <div class="nav-search-bar" id="nav-search-bar">
@@ -26,79 +23,71 @@
         </div>
     </nav>
 
-
     <div class="container">
         <h1 class="heading-archivo">Timezone Explorer</h1>
         <p>Explore current time and detailed information for timezones around the world.</p>
 
-        <div class="settings-icon" id="main-settings-icon" aria-label="Open Settings" role="button" tabindex="0">
-            </div>
-
+        <div class="settings-icon" id="main-settings-icon" aria-label="Open Settings" role="button" tabindex="0"></div>
 
         <div class="controls" id="main-controls">
              <div class="search-container">
                 <label for="timezone-search">Search Timezone:</label>
                 <input type="text" id="timezone-search" placeholder="e.g., London, New York, Asia/Tokyo">
              </div>
-             </div>
-
+        </div>
 
         <div id="grid-view">
             <div id="timezones-grid" class="timezones-grid">
                 <div class="loading-message">Loading timezones...</div>
             </div>
-
-            <div class="loading-more hidden">Loading more...</div> <div class="end-of-list hidden">End of list</div> </div>
+            <div class="loading-more hidden">Loading more...</div>
+            <div class="end-of-list hidden">End of list</div>
+        </div>
 
         <div id="detail-view" class="hidden">
             <div class="detail-card">
                 <h3 id="detail-timezone-name" class="heading-archivo"></h3>
-                 <p><strong>Current Date:</strong> <span id="detail-display-date"></span></p>
+                <p><strong>Current Date:</strong> <span id="detail-display-date"></span></p>
                 <p><strong>Current Time:</strong> <span id="detail-display-time"></span></p>
                 <p><strong>UTC Offset:</strong> <span id="detail-display-offset"></span></p>
                 <div class="detail-more-info">
-                     <h4>More Details:</h4>
-                     <p><strong>Example Countries:</strong> <span id="detail-countries">Information not available in this version.</span></p>
-                     <p><strong>DST Status:</strong> <span id="detail-dst-status">Loading...</span></p>
-                     </div>
+                    <h4>More Details:</h4>
+                    <p><strong>Example Countries:</strong> <span id="detail-countries">Information not available in this version.</span></p>
+                    <p><strong>DST Status:</strong> <span id="detail-dst-status">Loading...</span></p>
+                </div>
             </div>
             <a href="index.html" class="back-link">&larr; Back to All Timezones</a>
         </div>
-
 
         <div class="support-section">
             <h2 class="heading-archivo">Support This Project</h2>
             <p>If you find this tool helpful, please consider supporting its development.</p>
             <p>
-                <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link">Sponsor on GitHub</a> |
-                <a href="YOUR_OTHER_DONATION_URL" class="support-link">Donate</a>
+                <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link button">Sponsor on GitHub</a>
+                <a href="YOUR_OTHER_DONATION_URL" class="support-link button">Donate</a>
             </p>
         </div>
     </div>
 
-    <div id="settings-modal" class="modal hidden">
+    <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
         <div class="modal-content">
-            <span class="close-button" id="settings-close-button">&times;</span>
-            <h3 class="heading-archivo">Settings</h3>
+            <h3 class="heading-archivo" id="settings-modal-title">Settings</h3>
+            <button class="close-button" id="settings-close-button" aria-label="Close Settings Modal">&times;</button>
 
             <div class="modal-body">
-                <div class="tabs-sidebar">
-                    <button class="tab-button active" data-tab="general" aria-controls="tab-general" role="tab" aria-selected="true">
-                         <span class="tab-icon settings-icon-svg"></span>
+                <div class="tabs-sidebar" role="tablist" aria-orientation="vertical">
+                    <button class="tab-button active" data-tab="general" aria-controls="tab-general" role="tab" aria-selected="true" id="tab-button-general">
+                         <span class="tab-icon settings-icon-svg" aria-hidden="true"></span>
                          General
                     </button>
-                    <button class="tab-button" data-tab="themes" aria-controls="tab-themes" role="tab" aria-selected="false">
-                         <span class="tab-icon palette-icon-svg"></span>
-                         Themes
-                    </button>
-                    <button class="tab-button" data-tab="support" aria-controls="tab-support" role="tab" aria-selected="false">
-                         <span class="tab-icon info-icon-svg"></span>
+                    <button class="tab-button" data-tab="support" aria-controls="tab-support" role="tab" aria-selected="false" id="tab-button-support">
+                         <span class="tab-icon info-icon-svg" aria-hidden="true"></span>
                          Support
                     </button>
                 </div>
 
                 <div class="tab-content-area">
-                    <div class="tab-content active" id="tab-general" role="tabpanel" aria-labelledby="tab-button-general">
+                    <div class="tab-content active" id="tab-general" role="tabpanel" aria-labelledby="tab-button-general" aria-hidden="false">
                         <h4>General Settings</h4>
                         <div class="setting-item">
                             <label for="time-format">Time Format:</label>
@@ -107,60 +96,45 @@
                                 <option value="24">24-Hour</option>
                             </select>
                         </div>
-                         <div class="setting-item">
+                        <div class="setting-item">
                             <label for="date-locale">Date Language:</label>
                             <select id="date-locale">
                                 <option value="en-US">English (US)</option>
                                 <option value="de-DE">German (DE)</option>
                                 <option value="fr-FR">French (FR)</option>
-                                 <option value="es-ES">Spanish (ES)</option>
-                                </select>
-                        </div>
-                        </div>
-
-                    <div class="tab-content" id="tab-themes" role="tabpanel" aria-labelledby="tab-button-themes" aria-hidden="true">
-                        <h4>Themes</h4>
-                         <p class="settings-note">Your theme preference is saved locally in your browser.</p>
-                        <div class="setting-item">
-                            <label class="theme-option">
-                                 <input type="radio" name="theme" value="light" checked>
-                                 Light Mode
-                            </label>
-                        </div>
-                         <div class="setting-item">
-                            <label class="theme-option">
-                                 <input type="radio" name="theme" value="dark">
-                                 Dark Mode
-                            </label>
+                                <option value="es-ES">Spanish (ES)</option>
+                            </select>
                         </div>
                         <div class="setting-item">
-                            <label class="theme-option">
-                                 <input type="radio" name="theme" value="blue">
-                                 Blue Theme
-                            </label>
-                        </div>
+                             <label class="theme-option">
+                                 <input type="checkbox" id="dark-mode-toggle">
+                                 Enable Dark Mode
+                             </label>
                          </div>
+                        <p class="setting-description">Choose your preferred time format (12-hour with AM/PM or 24-hour), the language used for displaying dates (like weekdays and months), and toggle Dark Mode.</p>
+                    </div>
 
                     <div class="tab-content" id="tab-support" role="tabpanel" aria-labelledby="tab-button-support" aria-hidden="true">
                         <h4>Support</h4>
                         <p>This project is developed by UNBOUND LABEL.</p>
                         <p>For support or inquiries, please contact: <a href="mailto:NGDE@WEB.DE">NGDE@WEB.DE</a></p>
-                         <div class="support-section settings-support">
-                             <h2 class="heading-archivo">Support This Project</h2>
-                             <p>If you find this tool helpful, please consider supporting its development.</p>
-                             <p>
-                                 <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link">Sponsor on GitHub</a> |
-                                 <a href="YOUR_OTHER_DONATION_URL" class="support-link">Donate</a>
-                             </p>
-                         </div>
-                         <button id="clear-cache-button" class="clear-cache-button">Clear Saved Settings</button>
+                        <div class="support-section settings-support">
+                            <h2 class="heading-archivo">Support This Project</h2>
+                            <p>If you find this tool helpful, please consider supporting its development.</p>
+                            <p>
+                                <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link button">Sponsor on GitHub</a>
+                                <a href="YOUR_OTHER_DONATION_URL" class="support-link button">Donate</a>
+                            </p>
+                        </div>
+                        <button id="clear-cache-button" class="clear-cache-button button">Clear Saved Settings</button>
+                        <p class="setting-description">Clearing saved settings will remove your saved time/date preferences and disable Dark Mode in this browser, resetting them to default.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
     <script src="js/script.js"></script>
+    <script src="js/settings.js"></script>
 </body>
 </html>
