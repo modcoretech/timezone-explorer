@@ -13,12 +13,20 @@
         <h1 class="heading-archivo">Timezone Explorer</h1>
         <p>Explore current time and detailed information for timezones around the world.</p>
 
-        <div id="grid-view">
-            <div class="controls">
+        <div class="controls">
+             <div class="search-container">
                 <label for="timezone-search">Search Timezone:</label>
                 <input type="text" id="timezone-search" placeholder="e.g., London, New York, Asia/Tokyo">
-            </div>
+             </div>
+             <label class="theme-switch" for="theme-switch">
+                Dark Mode
+                <input type="checkbox" id="theme-switch">
+                <span class="slider"></span>
+            </label>
+        </div>
 
+
+        <div id="grid-view">
             <div id="timezones-grid" class="timezones-grid">
                 <div class="loading-message">Loading timezones...</div>
             </div>
