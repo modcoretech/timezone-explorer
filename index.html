@@ -13,16 +13,35 @@
         <h1 class="heading-archivo">Timezone Explorer</h1>
         <p>Explore current time and detailed information for timezones around the world.</p>
 
-        <div class="controls">
-            <label for="timezone-search">Search Timezone:</label>
-            <input type="text" id="timezone-search" placeholder="e.g., London, New York, Asia/Tokyo">
+        <div id="grid-view">
+            <div class="controls">
+                <label for="timezone-search">Search Timezone:</label>
+                <input type="text" id="timezone-search" placeholder="e.g., London, New York, Asia/Tokyo">
+            </div>
+
+            <div id="timezones-grid" class="timezones-grid">
+                <div class="loading-message">Loading timezones...</div>
+            </div>
+
+            <div class="loading-more hidden">Loading more...</div> <div class="end-of-list hidden">End of list</div> </div>
+
+        <div id="detail-view" class="hidden">
+            <div class="detail-card">
+                <h3 id="detail-timezone-name" class="heading-archivo"></h3>
+                 <p><strong>Current Date:</strong> <span id="detail-display-date"></span></p>
+                <p><strong>Current Time:</strong> <span id="detail-display-time"></span></p>
+                <p><strong>UTC Offset:</strong> <span id="detail-display-offset"></span></p>
+                <div class="detail-more-info">
+                     <h4>More Details:</h4>
+                     <p><strong>Example Countries:</strong> <span id="detail-countries">Information not available in this version.</span></p>
+                     <p><strong>DST Status:</strong> <span id="detail-dst-status">Loading...</span></p>
+                     </div>
+            </div>
+            <a href="index.html" class="back-link">&larr; Back to All Timezones</a>
         </div>
 
-        <div id="timezones-grid" class="timezones-grid">
-            <div class="loading-message">Loading timezones...</div>
-        </div>
 
-        <div class="loading-more hidden">Loading more...</div> <div class="end-of-list hidden">End of list</div> <div class="support-section">
+        <div class="support-section">
             <h2 class="heading-archivo">Support This Project</h2>
             <p>If you find this tool helpful, please consider supporting its development.</p>
             <p>
@@ -31,22 +50,6 @@
             </p>
         </div>
     </div>
-
-    <div id="timezone-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h3 id="modal-timezone-name" class="heading-archivo"></h3>
-            <p><strong>Current Date:</strong> <span id="modal-display-date"></span></p>
-            <p><strong>Current Time:</strong> <span id="modal-display-time"></span></p>
-            <p><strong>UTC Offset:</strong> <span id="modal-display-offset"></span></p>
-            <div class="modal-details">
-                 <h4>More Details:</h4>
-                 <p><strong>Example Countries:</strong> <span id="modal-countries">Information not available in this version.</span></p>
-                 <p><strong>DST Status:</strong> <span id="modal-dst-status">Loading...</span></p>
-                 </div>
-        </div>
-    </div>
-
 
     <script src="js/script.js"></script>
 </body>
