@@ -19,13 +19,13 @@
     --setting-input-border: var(--input-border-color); /* Use general input border */
     --setting-input-focus-border: var(--input-focus-border-color); /* Use general input focus border */
     --setting-input-focus-shadow: var(--input-focus-shadow); /* Use general input focus shadow */
-    --settings-description-color: var(--loading-text-color); /* Use loading text color for descriptions */
-    --clear-cache-button-bg: var(--clear-cache-button-bg); /* Inherit from style.css */
-    --clear-cache-button-hover-bg: var(--clear-cache-button-hover-bg); /* Inherit from style.css */
-    --close-icon-color: var(--loading-text-color); /* Color for the close icon */
-    --close-icon-hover-color: var(--heading-color); /* Hover color for the close icon */
+    --switch-bg: #adb5bd; /* Gray for off state */
+    --switch-checked-bg: var(--primary-color); /* Primary color for on state */
+    --switch-circle-bg: #ffffff; /* White circle */
+    --switch-border: #6c757d; /* Darker gray border */
 }
 
+/* Dark Mode Variables (Modal Specific) */
 .dark-mode {
     --modal-overlay-bg: rgba(0, 0, 0, 0.8); /* Darker overlay in dark mode */
     --modal-bg-color: var(--container-bg-color);
@@ -43,440 +43,452 @@
     --setting-input-border: var(--input-border-color);
     --setting-input-focus-border: var(--input-focus-border-color);
     --setting-input-focus-shadow: var(--input-focus-shadow);
-    --settings-description-color: var(--loading-text-color);
-    --clear-cache-button-bg: var(--clear-cache-button-bg);
-    --clear-cache-button-hover-bg: var(--clear-cache-button-hover-bg);
-    --close-icon-color: var(--loading-text-color); /* Close icon color in dark mode */
-    --close-icon-hover-color: var(--heading-color); /* Close icon hover color in dark mode */
+    --switch-bg: #6c757d; /* Darker gray for off state */
+    --switch-checked-bg: var(--primary-color);
+    --switch-circle-bg: #e9ecef; /* Light gray circle */
+    --switch-border: #adb5bd; /* Lighter gray border */
 }
 
 
-/* --- Modal Styles (Settings) --- */
+/* --- Modal Base Styles --- */
 .modal {
     position: fixed;
-    z-index: 100;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    overflow-y: auto; /* Allow modal container to scroll if content exceeds viewport */
     background-color: var(--modal-overlay-bg);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    /* Add backdrop filter for a subtle blur effect */
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-}
-
-/* State when modal is visible */
-.modal:not(.hidden) {
-    opacity: 1;
-    visibility: visible;
+    z-index: 100; /* Ensure modal is on top */
+    backdrop-filter: blur(5px); /* Subtle blur effect */
+    -webkit-backdrop-filter: blur(5px); /* Safari support */
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 .modal-content {
     background-color: var(--modal-bg-color);
     padding: 30px;
-    border-radius: 12px; /* Slightly larger border-radius */
-    box-shadow: 0 15px 30px rgba(0,0,0,0.3); /* More pronounced shadow */
+    border-radius: 12px;
     max-width: 800px;
-    width: 100%;
+    width: 90%;
+    max-height: 90vh; /* Limit height */
+    overflow-y: auto; /* Enable scrolling for content */
     position: relative;
-    text-align: left;
-    max-height: 90vh;
-    overflow: hidden; /* Keep this hidden to manage scrolling in modal-body */
-    display: flex;
-    flex-direction: column;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     border: 1px solid var(--modal-border-color);
-    transform: translateY(-20px); /* Initial transform for animation */
-    opacity: 0; /* Initial opacity for animation */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-
-/* Animation for modal content when visible */
-.modal:not(.hidden) .modal-content {
-    transform: translateY(0);
-    opacity: 1;
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out, background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
 
 .modal-content h3 {
-    font-family: 'Inter', sans-serif; /* Ensure modal title uses Inter */
-    font-size: 2rem;
-    font-weight: 700;
     margin-top: 0;
     margin-bottom: 20px;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 10px;
+    font-size: 1.8rem;
     color: var(--heading-color);
+    border-bottom: 2px solid var(--primary-color); /* Use primary color for heading border */
+    padding-bottom: 10px;
     transition: color 0.3s ease, border-color 0.3s ease;
-    text-align: center;
 }
 
+
+/* Modal Scrollbar Styling (if content overflows) */
+.modal-content::-webkit-scrollbar { width: 10px; }
+.modal-content::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
+.modal-content::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; border: 3px solid var(--scrollbar-track); }
+.modal-content { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
+
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+
+
+/* Close Button */
 .close-button {
-    /* Removed color, font-size, font-weight as they are handled by the icon span */
     position: absolute;
     top: 15px;
     right: 15px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    z-index: 1;
     background: none;
     border: none;
-    padding: 5px;
-    line-height: 1;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: color 0.2s ease, transform 0.2s ease;
     outline: none;
-    display: flex; /* Use flex to center the icon */
-    justify-content: center;
-    align-items: center;
-    width: 32px; /* Set button size */
-    height: 32px;
+    padding: 5px; /* Add padding for easier clicking */
+    line-height: 1; /* Ensure icon sits correctly */
 }
 
-/* Style for the close icon span */
-.close-button .close-icon {
-    display: inline-block;
-    width: 24px; /* Icon size */
+.close-button:hover {
+    color: var(--primary-color);
+    transform: rotate(90deg);
+}
+
+.close-button:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Close Icon (using CSS mask) */
+.close-icon {
+    display: block;
+    width: 24px;
     height: 24px;
     mask-image: url('../icons/close.svg'); /* Path to your close SVG */
     mask-repeat: no-repeat;
     mask-size: contain;
     mask-position: center;
-    background-color: var(--close-icon-color); /* Color the icon */
-    transition: background-color 0.3s ease;
+    background-color: var(--text-color); /* Default color */
+    transition: background-color 0.2s ease;
     -webkit-mask-image: url('../icons/close.svg');
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
     -webkit-mask-position: center;
 }
 
-
 .close-button:hover .close-icon {
-    background-color: var(--close-icon-hover-color); /* Change icon color on hover */
+    background-color: var(--primary-color); /* Change color on button hover */
 }
 
-.close-button:focus-visible {
-    /* Outline for the button itself */
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: 4px;
+.close-button:focus-visible .close-icon {
+     background-color: var(--primary-color); /* Change color on button focus */
 }
 
+
+/* --- Modal Body Layout (Tabs) --- */
 .modal-body {
     display: flex;
-    width: 100%;
-    flex-grow: 1;
-    max-height: calc(90vh - 120px); /* Adjusted max-height to accommodate title, padding, and close button */
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-    padding-right: 15px; /* Added padding to the right for scrollbar space */
+    gap: 30px;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
-/* Modal Body Scrollbar (Webkit) */
-.modal-body::-webkit-scrollbar { width: 10px; }
-.modal-body::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
-.modal-body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; border: 2px solid var(--scrollbar-track); }
-
-
-/* Modal Tabs (Sidebar) */
 .tabs-sidebar {
+    flex: 0 0 200px; /* Fixed width sidebar */
+    border-right: 1px solid var(--tab-sidebar-border-color);
+    padding-right: 20px;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--tab-sidebar-border-color);
-    margin-right: 30px;
-    padding-right: 20px;
-    flex-shrink: 0;
-    width: 180px;
+    gap: 10px;
     transition: border-color 0.3s ease;
-    padding-top: 10px;
 }
 
 .tab-button {
-    background-color: transparent;
+    background: none;
     border: none;
-    padding: 12px 0; /* Increased padding */
-    cursor: pointer;
-    font-size: 1.05rem; /* Slightly larger font */
-    color: var(--tab-button-color);
-    border-left: 4px solid transparent;
-    transition: color 0.3s ease, border-left-color 0.3s ease, background-color 0.3s ease;
-    flex-shrink: 0;
     text-align: left;
-    margin-bottom: 8px; /* Increased margin */
-    display: flex;
+    padding: 12px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--tab-button-color);
+    transition: background-color 0.2s ease, color 0.2s ease;
+    outline: none;
+    display: flex; /* Align icon and text */
     align-items: center;
     gap: 10px;
-    outline: none;
-    font-family: 'Inter', sans-serif;
-    border-radius: 0 4px 4px 0; /* Rounded right corners */
 }
 
-.tab-button:hover:not(.active) {
+.tab-button:hover {
     background-color: var(--tab-button-hover-bg);
 }
 
 .tab-button.active {
     color: var(--tab-button-active-color);
-    border-left-color: var(--tab-button-active-border);
     font-weight: 600;
-    background-color: var(--tab-button-hover-bg); /* Highlight active tab slightly */
+    background-color: var(--tab-button-hover-bg); /* Highlight active tab */
+    border-left: 4px solid var(--tab-button-active-border); /* Indicate active tab */
+    padding-left: 11px; /* Adjust padding due to border */
 }
 
 .tab-button:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
-    /* border-radius is already applied */
+    border-radius: 4px;
 }
 
 
-/* Tab Icons - using CSS mask */
+/* Tab Icons (using CSS mask) */
 .tab-icon {
     display: inline-block;
-    width: 22px; /* Slightly larger icons */
-    height: 22px;
+    width: 24px;
+    height: 24px;
     mask-repeat: no-repeat;
     mask-size: contain;
     mask-position: center;
-    background-color: var(--tab-icon-color);
-    transition: background-color 0.3s ease;
-    -webkit-mask-image: url('../icons/settings.svg'); /* Default to settings icon */
+    background-color: var(--tab-icon-color); /* Default color */
+    transition: background-color 0.2s ease;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
     -webkit-mask-position: center;
 }
 
-/* Specific Icon Masks */
+/* Specific Tab Icon Masks */
+/* Ensure these paths are correct relative to the CSS file location */
 .settings-icon-svg { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
-/* .palette-icon-svg { mask-image: url('../icons/palette.svg'); -webkit-mask-image: url('../icons/palette.svg'); } */ /* Removed as themes tab is gone */
 .info-icon-svg { mask-image: url('../icons/info.svg'); -webkit-mask-image: url('../icons/info.svg'); }
 
 
-.tab-button.active .tab-icon {
-    background-color: var(--tab-icon-active-color);
+.tab-button:hover .tab-icon {
+    background-color: var(--primary-color); /* Change icon color on button hover */
 }
+
+.tab-button.active .tab-icon {
+    background-color: var(--tab-icon-active-color); /* Active icon color */
+}
+
+.tab-button:focus-visible .tab-icon {
+     background-color: var(--primary-color); /* Change icon color on button focus */
+}
+
 
 .tab-content-area {
     flex-grow: 1;
-    padding-right: 10px; /* Added padding for content area */
 }
-
 
 .tab-content {
     display: none;
-    /* Add a subtle fade-in animation */
-    opacity: 0;
-    transform: translateX(10px);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    padding-right: 10px; /* Add some padding on the right */
 }
 
 .tab-content.active {
     display: block;
-    opacity: 1;
-    transform: translateX(0);
 }
 
-/* Settings within Tabs */
+.tab-content h4 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    color: var(--heading-color);
+    transition: color 0.3s ease;
+}
+
 .setting-item {
-    margin-bottom: 25px; /* Increased margin */
-    padding-bottom: 20px; /* Increased padding */
-    border-bottom: 1px solid var(--setting-item-border);
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 15px; /* Increased gap */
-}
-
-.setting-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--setting-item-border);
+    transition: border-bottom-color 0.3s ease;
 }
 
 .setting-item label {
-    font-weight: 600;
-    color: var(--setting-label-color); /* Use setting label color variable */
-    flex-shrink: 0;
-    font-size: 1.05rem; /* Slightly larger label font */
-}
-
-.setting-item select,
-.setting-item input[type="checkbox"] { /* Added checkbox */
-    /* margin-top: 5px; Removed margin-top as gap handles spacing */
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--setting-label-color);
+    margin-right: 20px;
+    flex-shrink: 0; /* Prevent label from shrinking */
+    transition: color 0.3s ease;
 }
 
 .setting-item select {
-    padding: 10px; /* Increased padding */
-    border-radius: 6px; /* Slightly larger border-radius */
-    border: 1px solid var(--setting-input-border); /* Use input border variable */
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--setting-input-border);
     font-size: 1rem;
-    background-color: var(--setting-input-bg); /* Use input background variable */
+    font-family: 'Inter', sans-serif;
+    background-color: var(--setting-input-bg);
     color: var(--text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
     outline: none;
-    flex-grow: 1; /* Allow select to grow */
-    max-width: 250px; /* Limit max width */
-    font-family: 'Inter', sans-serif; /* Ensure Inter font */
+    max-width: 250px; /* Limit select width */
+    width: 100%; /* Allow width to adjust */
 }
 
-.setting-item select:focus-visible {
-     outline: none; /* Remove default outline */
-     border-color: var(--setting-input-focus-border);
-     box-shadow: var(--setting-input-focus-shadow);
+.setting-item select:focus {
+    border-color: var(--setting-input-focus-border);
+    box-shadow: var(--setting-input-focus-shadow);
 }
 
-/* Style for the dark mode toggle checkbox/label */
+/* Toggle Switch Styling (for dark mode) */
 .theme-option {
     display: flex;
     align-items: center;
+    gap: 15px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--setting-label-color);
     cursor: pointer;
-    outline: none;
-    /* Removed margin-right */
+    transition: color 0.3s ease;
 }
 
 .theme-option input[type="checkbox"] {
-    margin-right: 10px; /* Increased margin */
+    /* Hide the default checkbox */
+    appearance: none;
+    -webkit-appearance: none;
+    visibility: hidden; /* Hide the checkbox visually */
+    width: 0; /* Give it 0 width */
+    height: 0; /* Give it 0 height */
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+}
+
+/* Create a custom toggle switch */
+.theme-option input[type="checkbox"] + label {
+    position: relative;
+    display: inline-block;
+    width: 45px; /* Width of the toggle */
+    height: 25px; /* Height of the toggle */
+    background-color: var(--switch-bg);
+    border-radius: 25px; /* Make it rounded */
+    transition: background-color 0.3s ease;
     cursor: pointer;
-    outline: none;
-    width: 18px; /* Set checkbox size */
-    height: 18px;
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0; /* Prevent it from shrinking */
+    border: 1px solid var(--switch-border);
+    box-sizing: border-box; /* Include border in dimensions */
 }
 
-.theme-option:focus-visible {
+/* Style the circle (the knob) */
+.theme-option input[type="checkbox"] + label::after {
+    content: '';
+    position: absolute;
+    top: 3px; /* Adjust position */
+    left: 3px; /* Adjust position */
+    width: 17px; /* Size of the circle */
+    height: 17px; /* Size of the circle */
+    background-color: var(--switch-circle-bg);
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+}
+
+/* Style the toggle when checked */
+.theme-option input[type="checkbox"]:checked + label {
+    background-color: var(--switch-checked-bg);
+    border-color: var(--switch-checked-bg); /* Match border color */
+}
+
+/* Move the circle when checked */
+.theme-option input[type="checkbox"]:checked + label::after {
+    transform: translateX(20px); /* Move circle to the right */
+}
+
+/* Focus style for the toggle (applied to the custom label) */
+.theme-option input[type="checkbox"]:focus-visible + label {
      outline: 2px solid var(--primary-color);
-     outline-offset: 2px;
-     border-radius: 4px;
+     outline-offset: 3px;
+     border-radius: 25px;
 }
 
-
-.settings-note {
-    font-size: 0.95rem; /* Slightly larger font */
-    color: var(--settings-description-color); /* Use description color variable */
-    margin-top: 15px; /* Adjusted margin */
-}
 
 .setting-description {
-    font-size: 0.95rem; /* Slightly larger font */
-    color: var(--settings-description-color); /* Use description color variable */
-    margin-top: -10px;
-    margin-bottom: 20px; /* Increased margin */
-    width: 100%;
+    font-size: 0.95rem;
+    color: #6c757d; /* Gray description text */
+    margin-top: 10px;
+    margin-bottom: 25px;
+    line-height: 1.5;
 }
 
-
-/* Clear cache button styles are in style.css */
-
-
-/* Support section within settings modal */
 .settings-support {
-    margin-top: 40px; /* Increased margin */
-    padding-top: 30px; /* Increased padding */
+    margin-top: 30px;
+    padding-top: 20px;
     border-top: 1px solid var(--border-color);
-    transition: border-color 0.3s ease;
 }
 
 .settings-support h2 {
-    font-size: 1.6rem; /* Slightly larger font */
-    margin-top: 0;
+    font-size: 1.6rem;
     border-bottom: none;
     padding-bottom: 0;
-    font-family: 'Inter', sans-serif; /* Ensure support heading uses Inter */
+    margin-bottom: 15px;
 }
 
 .settings-support p {
-    margin-bottom: 15px; /* Increased spacing */
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+/* Clear Cache Button */
+.clear-cache-button {
+    display: block; /* Make it a block element */
+    margin: 30px auto 15px auto; /* Center it and add vertical margin */
+    background-color: var(--clear-cache-button-bg);
+    color: var(--button-text-color);
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.clear-cache-button:hover {
+    background-color: var(--clear-cache-button-hover-bg);
+    transform: translateY(-3px);
+}
+
+.clear-cache-button:focus-visible {
+     outline: 2px solid var(--clear-cache-button-bg);
+     outline-offset: 2px;
+     border-radius: 8px;
+     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* Red shadow */
 }
 
 
-/* Apply general button styles to support links with the 'button' class */
-/* Styles are in style.css */
 
-
-/* Responsive adjustments for Modal */
+/* --- Responsive adjustments (Modal Specific) --- */
 @media (max-width: 768px) {
-    .modal {
-        padding: 10px; /* Reduced padding */
-    }
-
     .modal-content {
-        padding: 20px;
-        border-radius: 8px; /* Smaller border-radius on mobile */
-        max-width: 95%;
-        max-height: 95vh;
+        padding: 15px;
+        width: 95%;
+        max-height: 95vh; /* Allow more height on smaller screens */
     }
 
     .modal-content h3 {
-        font-size: 1.6rem; /* Smaller title on mobile */
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
     }
 
     .close-button {
-        top: 8px; /* Adjusted position */
-        right: 8px; /* Adjusted position */
-        font-size: 28px; /* Slightly smaller close button */
-        width: 28px; /* Adjusted button size */
-        height: 28px;
+        top: 10px;
+        right: 10px;
+        font-size: 1.5rem;
+        padding: 3px;
     }
 
-    .close-button .close-icon {
-        width: 20px; /* Adjusted icon size */
+    .close-icon {
+        width: 20px;
         height: 20px;
     }
 
-
     .modal-body {
-        flex-direction: column;
-        max-height: calc(95vh - 80px); /* Adjusted max-height */
-        overflow-y: auto;
-        padding-right: 0;
+        flex-direction: column; /* Stack tabs and content */
+        gap: 15px; /* Reduce gap */
     }
 
     .tabs-sidebar {
-        flex-direction: row;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        margin-right: 0;
+        flex-direction: row; /* Arrange tabs horizontally */
+        flex-wrap: wrap; /* Allow tabs to wrap */
+        flex: none; /* Remove fixed width */
+        border-right: none; /* Remove right border */
+        border-bottom: 1px solid var(--tab-sidebar-border-color); /* Add bottom border */
         padding-right: 0;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        overflow-x: auto;
-        width: 100%;
-        justify-content: flex-start; /* Align tabs to the start */
-        padding-top: 0;
-        /* Hide scrollbar on mobile if preferred, but keep scrolling */
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+        padding-bottom: 15px; /* Add padding below tabs */
+        justify-content: center; /* Center tabs */
     }
-
-    /* Hide scrollbar for webkit browsers */
-    .tabs-sidebar::-webkit-scrollbar {
-        display: none;
-    }
-
 
     .tab-button {
-        border-left: none;
-        border-bottom: 2px solid transparent;
-        padding: 10px 15px; /* Increased horizontal padding */
-        justify-content: center;
-        gap: 8px; /* Adjusted gap */
-        margin-bottom: 0;
-        flex-grow: 0; /* Prevent buttons from growing */
-        text-align: center;
+        padding: 8px 12px; /* Adjusted padding for horizontal tabs */
         border-radius: 4px; /* Rounded corners on mobile tabs */
         margin-right: 10px; /* Add space between mobile tabs */
+        border-left: none; /* Remove left border */
+        border-bottom: 2px solid transparent; /* Add bottom border for active state */
+         font-size: 0.9rem;
+         gap: 5px;
+         flex-grow: 1; /* Allow buttons to grow to fill space */
+         justify-content: center; /* Center text/icon in button */
     }
 
      .tab-button.active {
-        border-left-color: transparent;
-        border-bottom-color: var(--tab-button-active-border);
+        border-left-color: transparent; /* Ensure left border is gone */
+        border-bottom-color: var(--tab-button-active-border); /* Active indicator */
+        padding-left: 12px; /* Reset padding */
      }
 
     .tab-content-area {
@@ -488,6 +500,11 @@
     .tab-icon {
         width: 20px; /* Slightly smaller on mobile */
         height: 20px;
+    }
+
+    .tab-content h4 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
     }
 
     .setting-item {
@@ -507,21 +524,52 @@
     .setting-item select {
         width: 100%; /* Full width select on mobile */
         max-width: none; /* Remove max width constraint */
-        padding: 8px; /* Adjusted padding */
     }
 
     .theme-option {
-        margin-bottom: 5px;
+        font-size: 1rem; /* Adjusted font size */
+        gap: 10px;
     }
 
-    .settings-support .support-link.button {
-         margin: 5px 0;
-         width: auto;
-         text-align: center;
+    .theme-option input[type="checkbox"] + label {
+        width: 40px; /* Slightly smaller toggle */
+        height: 22px;
     }
 
-    .settings-note,
+     .theme-option input[type="checkbox"] + label::after {
+        top: 3px; /* Adjust position */
+        left: 3px; /* Adjust position */
+        width: 16px; /* Adjust circle size */
+        height: 16px; /* Adjust circle size */
+     }
+
+    .theme-option input[type="checkbox"]:checked + label::after {
+        transform: translateX(17px); /* Adjust move distance */
+    }
+
+
     .setting-description {
-        font-size: 0.9rem; /* Smaller font size on mobile */
+        font-size: 0.9rem;
+        margin-top: 8px;
+        margin-bottom: 20px;
+    }
+
+    .settings-support {
+        margin-top: 20px;
+        padding-top: 15px;
+    }
+
+    .settings-support h2 {
+        font-size: 1.4rem;
+    }
+
+    .settings-support p {
+        font-size: 0.9rem;
+    }
+
+    .clear-cache-button {
+         padding: 10px 20px;
+         font-size: 0.95rem;
+         margin: 20px auto 10px auto;
     }
 }
