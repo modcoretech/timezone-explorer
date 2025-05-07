@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingMessage = document.querySelector('.loading-message');
     const loadingMoreIndicator = document.querySelector('.loading-more');
     const endOfListIndicator = document.querySelector('.end-of-list');
-    const themeSwitch = document.getElementById('theme-switch'); // Assuming you add a checkbox with this ID
 
     // Detail View Elements
     const detailTimezoneName = document.getElementById('detail-timezone-name');
@@ -19,6 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailDstStatus = document.getElementById('detail-dst-status');
     // Add elements for other detailed info if you add a data source
 
+    // Settings Modal Elements
+    const settingsIcon = document.getElementById('settings-icon');
+    const settingsModal = document.getElementById('settings-modal');
+    const settingsCloseButton = document.getElementById('settings-close-button');
+    const tabButtons = settingsModal.querySelectorAll('.tab-button');
+    const tabContents = settingsModal.querySelectorAll('.tab-content');
+
+    // Settings Form Elements
+    const timeFormatSelect = document.getElementById('time-format');
+    const dateLocaleSelect = document.getElementById('date-locale');
+    const themeRadioButtons = document.querySelectorAll('input[name="theme"]');
+    const clearCacheButton = document.getElementById('clear-cache-button');
+
     // --- State Variables ---
     let allTimezones = []; // Array to store all timezone identifiers
     let filteredTimezones = []; // Timezones matching the current search
@@ -27,16 +39,60 @@ document.addEventListener('DOMContentLoaded', () => {
     let isLoading = false;
     let timeUpdateInterval = null; // To store the interval ID for time updates
 
+    // User Preferences (loaded from localStorage)
+    let userPreferences = {
+        timeFormat: '12', // '12' or '24'
+        dateLocale: 'en-US',
+        theme: 'light' // 'light', 'dark', 'blue', etc.
+    };
+
+    // --- Constants ---
+    const LOCAL_STORAGE_KEY = 'timezoneExplorerPreferences';
+
+
     // --- Utility Functions ---
 
     /**
-     * Formats date, time, offset, and basic DST status for a given timezone.
+     * Loads user preferences from local storage.
+     */
+    function loadPreferences() {
+        const savedPreferences = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedPreferences) {
+            userPreferences = JSON.parse(savedPreferences);
+        }
+    }
+
+    /**
+     * Saves user preferences to local storage.
+     */
+    function savePreferences() {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userPreferences));
+    }
+
+    /**
+     * Applies the current theme preference to the body.
+     */
+    function applyTheme() {
+        document.body.classList.remove('light', 'dark-mode', 'blue-theme'); // Remove existing theme classes
+        document.body.classList.add(`${userPreferences.theme}-theme`); // Add the selected theme class
+
+        // Special handling for default light theme class
+        if (userPreferences.theme === 'light') {
+             document.body.classList.remove('dark-mode', 'blue-theme'); // Ensure other theme classes are removed
+        }
+    }
+
+    /**
+     * Formats date, time, offset, and basic DST status for a given timezone
+     * based on user preferences.
      * @param {string} timezone - The IANA timezone identifier (e.g., 'America/New_York').
      * @returns {{date: string, time: string, offset: string, dstStatus: string}} Formatted timezone information.
      */
     function formatTimezoneDateTime(timezone) {
         try {
             const now = new Date();
+
+            // Date options based on user locale
             const dateOptions = {
                 timeZone: timezone,
                 year: 'numeric',
@@ -44,50 +100,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 day: 'numeric',
                 weekday: 'long'
             };
+
+            // Time options based on user format preference
             const timeOptions = {
                 timeZone: timezone,
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: true // Use 12-hour format with AM/PM
+                hour12: userPreferences.timeFormat === '12' // Use 12-hour format if preferred
             };
+
             const offsetOptions = {
                 timeZone: timezone,
                 timeZoneName: 'shortOffset' // Request short offset name (+HH:MM or -HH:MM)
             };
 
-            const formattedDate = new Intl.DateTimeFormat('en-US', dateOptions).format(now);
-            const formattedTime = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+            const formattedDate = new Intl.DateTimeFormat(userPreferences.dateLocale, dateOptions).format(now);
+            const formattedTime = new Intl.DateTimeFormat(userPreferences.dateLocale, timeOptions).format(now); // Use user locale for time format too
+
 
             // Attempt to get UTC offset string using Intl.DateTimeFormat
-            const dummyDateString = new Intl.DateTimeFormat('en-US', offsetOptions).format(now);
+            const dummyDateString = new Intl.DateTimeFormat('en-US', offsetOptions).format(now); // Use en-US for offset string consistency
             const offsetMatch = dummyDateString.match(/[+-]\d{1,2}(:\d{2})?/);
             const utcOffset = offsetMatch ? offsetMatch[0] : 'N/A';
 
-            // Basic DST status detection (heuristic - may not be 100% accurate for all historical data or complex rules)
-            // Compare offset at a fixed date (Jan 1st) vs now.
+            // Basic DST status detection (heuristic - may not be 100% accurate)
             const jan1st = new Date(now.getFullYear(), 0, 1);
-            const july1st = new Date(now.getFullYear(), 6, 1); // Check July 1st too for southern hemisphere DST
+            const july1st = new Date(now.getFullYear(), 6, 1);
             const janOffsetMatch = jan1st.toLocaleTimeString('en-US', { timeZone: timezone, timeZoneName: 'shortOffset' }).match(/[+-]\d{1,2}(:\d{2})?/);
             const julyOffsetMatch = july1st.toLocaleTimeString('en-US', { timeZone: timezone, timeZoneName: 'shortOffset' }).match(/[+-]\d{1,2}(:\d{2})?/);
             const currentOffsetMatch = now.toLocaleTimeString('en-US', { timeZone: timezone, timeZoneName: 'shortOffset' }).match(/[+-]\d{1,2}(:\d{2})?/);
 
             let dstStatus = 'Unknown';
             if (janOffsetMatch && julyOffsetMatch && currentOffsetMatch) {
-                 if (janOffsetMatch[0] !== julyOffsetMatch[0]) { // If offset changes between Jan and July
+                 if (janOffsetMatch[0] !== julyOffsetMatch[0]) {
                      if (currentOffsetMatch[0] === janOffsetMatch[0]) {
                          dstStatus = 'Not Observing DST';
                      } else if (currentOffsetMatch[0] === julyOffsetMatch[0]) {
                          dstStatus = 'Observing DST';
                      } else {
-                         // This case is less common for standard timezones but possible with complex rules
                          dstStatus = 'Offset varies';
                      }
                  } else {
-                     dstStatus = 'Does not observe DST'; // Offset is the same year-round
+                     dstStatus = 'Does not observe DST';
                  }
             } else {
-                 // If offset detection failed for Jan/July/current
                  dstStatus = 'DST status could not be determined';
             }
 
@@ -179,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
              isLoading = false; // Ensure isLoading is false when done
              return;
         }
+
 
         isLoading = true;
         loadingMoreIndicator.classList.remove('hidden');
@@ -291,41 +349,113 @@ document.addEventListener('DOMContentLoaded', () => {
          timeUpdateInterval = setInterval(updateVisibleCardTimes, 1000); // updateVisibleCardTimes also updates the detail view
     }
 
-    // --- Theme (Dark Mode) Management ---
+    // --- Settings Modal Functions ---
 
     /**
-     * Applies the saved theme preference or detects system preference.
+     * Opens the settings modal.
      */
-    function applyThemePreference() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            if (themeSwitch) themeSwitch.checked = true;
-        } else if (savedTheme === 'light') {
-             document.body.classList.remove('dark-mode');
-             if (themeSwitch) themeSwitch.checked = false;
-        } else {
-            // If no preference saved, check system preference
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.body.classList.add('dark-mode');
-                 if (themeSwitch) themeSwitch.checked = true;
-            } else {
-                 document.body.classList.remove('dark-mode');
-                 if (themeSwitch) themeSwitch.checked = false;
-            }
-        }
+    function openSettingsModal() {
+        settingsModal.classList.remove('hidden');
+         // Populate settings form with current preferences
+         timeFormatSelect.value = userPreferences.timeFormat;
+         dateLocaleSelect.value = userPreferences.dateLocale;
+         themeRadioButtons.forEach(radio => {
+             if (radio.value === userPreferences.theme) {
+                 radio.checked = true;
+             }
+         });
     }
 
     /**
-     * Toggles the dark mode and saves the preference.
+     * Closes the settings modal.
      */
-    function toggleDarkMode() {
-        if (document.body.classList.contains('dark-mode')) {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('theme', 'light');
-        } else {
-            document.body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
+    function closeSettingsModal() {
+        settingsModal.classList.add('hidden');
+    }
+
+    /**
+     * Switches between tabs in the settings modal.
+     * @param {string} tabId - The ID of the tab content to show (e.g., 'general').
+     */
+    function switchTab(tabId) {
+        tabContents.forEach(content => {
+            if (content.id === `tab-${tabId}`) {
+                content.classList.add('active');
+            } else {
+                content.classList.remove('active');
+            }
+        });
+
+        tabButtons.forEach(button => {
+            if (button.dataset.tab === tabId) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+    }
+
+    /**
+     * Handles changes in the settings form and updates preferences.
+     */
+    function handleSettingChange() {
+        // Update time format preference
+        userPreferences.timeFormat = timeFormatSelect.value;
+
+        // Update date locale preference
+        userPreferences.dateLocale = dateLocaleSelect.value;
+
+        // Update theme preference
+        themeRadioButtons.forEach(radio => {
+            if (radio.checked) {
+                userPreferences.theme = radio.value;
+            }
+        });
+
+        savePreferences(); // Save updated preferences
+        applyTheme(); // Apply the new theme
+
+        // Re-render visible times with new preferences
+        updateVisibleCardTimes();
+         // If in grid view, update all currently displayed cards
+         if (!gridView.classList.contains('hidden')) {
+             const cards = timezonesGrid.querySelectorAll('.timezone-card');
+             cards.forEach(card => updateCardTime(card));
+         }
+         // If in detail view, update the detail view
+         if (!detailView.classList.contains('hidden')) {
+              const detailTimezone = detailTimezoneName.textContent;
+              if (detailTimezone && detailTimezone !== 'Loading...') {
+                  const { date, time, offset, dstStatus } = formatTimezoneDateTime(detailTimezone);
+                  detailDisplayDate.textContent = date;
+                  detailDisplayTime.textContent = time;
+                  detailDisplayOffset.textContent = offset;
+                  detailDstStatus.textContent = dstStatus;
+              }
+         }
+    }
+
+    /**
+     * Clears all saved preferences from local storage.
+     */
+    function clearSavedSettings() {
+        if (confirm('Are you sure you want to clear all saved settings? This will reset your theme and time/date preferences.')) {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            // Reset preferences to default
+            userPreferences = {
+                timeFormat: '12',
+                dateLocale: 'en-US',
+                theme: 'light'
+            };
+            applyTheme(); // Apply default theme
+            // Update settings form to reflect defaults
+            timeFormatSelect.value = userPreferences.timeFormat;
+            dateLocaleSelect.value = userPreferences.dateLocale;
+             themeRadioButtons.forEach(radio => {
+                 radio.checked = (radio.value === userPreferences.theme);
+             });
+            updateVisibleCardTimes(); // Update times with default preferences
+            alert('Saved settings cleared.');
         }
     }
 
@@ -354,8 +484,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle infinite scrolling
     const handleScroll = () => {
-        // Only trigger load more if in grid view
-        if (gridView.classList.contains('hidden')) return;
+        // Only trigger load more if in grid view and not in a modal
+        if (gridView.classList.contains('hidden') || !settingsModal.classList.contains('hidden')) return;
 
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
@@ -373,8 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (card) {
             const timezone = card.dataset.timezone;
             if (timezone) {
-                // Navigate to the detail page URL
-                // Using history.pushState for a smoother single-page app feel
+                // Navigate to the detail page URL using history.pushState
                 history.pushState({ timezone: timezone }, '', `?timezone=${encodeURIComponent(timezone)}`);
                 showDetailView(timezone);
             }
@@ -386,13 +515,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const requestedTimezone = urlParams.get('timezone');
 
+        // Check if the requested timezone is valid before showing detail view
         if (requestedTimezone && allTimezones.includes(requestedTimezone)) {
             showDetailView(requestedTimezone);
         } else {
             // If no timezone param or invalid, show grid view
             showGridView();
              // Need to re-populate the grid if it was cleared
-             if (timezonesGrid.children.length === 0) {
+             if (timezonesGrid.children.length === 0 && filteredTimezones.length > 0) {
                  currentPage = 0; // Reset pagination for grid
                  // Re-apply current search filter if any
                  const searchTerm = timezoneSearchInput.value.toLowerCase().trim();
@@ -408,10 +538,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Handle theme switch change
-    if (themeSwitch) {
-        themeSwitch.addEventListener('change', toggleDarkMode);
-    }
+    // Handle settings icon click
+    settingsIcon.addEventListener('click', openSettingsModal);
+
+    // Handle settings modal close button click
+    settingsCloseButton.addEventListener('click', closeSettingsModal);
+
+    // Handle clicking outside the settings modal content to close
+    settingsModal.addEventListener('click', (event) => {
+        if (event.target === settingsModal) {
+            closeSettingsModal();
+        }
+    });
+
+    // Handle settings tab button clicks (using event delegation)
+    settingsModal.addEventListener('click', (event) => {
+        const tabButton = event.target.closest('.tab-button');
+        if (tabButton) {
+            const tabId = tabButton.dataset.tab;
+            if (tabId) {
+                switchTab(tabId);
+            }
+        }
+    });
+
+    // Handle changes in settings form (time format, date locale, theme)
+    timeFormatSelect.addEventListener('change', handleSettingChange);
+    dateLocaleSelect.addEventListener('change', handleSettingChange);
+    themeRadioButtons.forEach(radio => {
+        radio.addEventListener('change', handleSettingChange);
+    });
+
+    // Handle clear cache button click
+    clearCacheButton.addEventListener('click', clearSavedSettings);
 
 
     // --- Initialization ---
@@ -424,21 +583,24 @@ document.addEventListener('DOMContentLoaded', () => {
             // Load all timezones
             allTimezones = Intl.supportedValuesOf('timeZone').sort();
 
+            // Load user preferences
+            loadPreferences();
+
             // Apply saved theme or system preference
-            applyThemePreference();
+            applyTheme();
 
             // Check if a specific timezone is requested in the URL
             const urlParams = new URLSearchParams(window.location.search);
             const requestedTimezone = urlParams.get('timezone');
 
+            // Check if the requested timezone is valid before showing detail view
             if (requestedTimezone && allTimezones.includes(requestedTimezone)) {
                 showDetailView(requestedTimezone);
             } else {
                 // Default to grid view
                 filteredTimezones = [...allTimezones]; // Initially filtered list is all timezones
                 loadingMessage.classList.add('hidden'); // Hide initial loading message
-                showGridView(); // Show the grid view
-                // loadMoreTimezones() is called within showGridView if the grid is empty
+                showGridView(); // Show the grid view and load first batch
             }
 
             // Start the overall time update interval (handles both grid and detail view)
