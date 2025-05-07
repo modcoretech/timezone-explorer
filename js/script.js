@@ -1,6 +1,8 @@
 // js/script.js - Combined Main App Logic and Settings Module
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM fully loaded and parsed.");
+
     // --- DOM Elements ---
     const gridView = document.getElementById('grid-view');
     const detailView = document.getElementById('detail-view');
@@ -34,8 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Settings Modal Elements (Now within script.js scope)
     const settingsModal = document.getElementById('settings-modal');
     const settingsCloseButton = document.getElementById('settings-close-button');
-    const tabButtons = settingsModal.querySelectorAll('.tabs-sidebar .tab-button');
-    const tabContents = settingsModal.querySelectorAll('.tab-content-area .tab-content');
+    const tabButtons = settingsModal ? settingsModal.querySelectorAll('.tabs-sidebar .tab-button') : []; // Check if modal exists
+    const tabContents = settingsModal ? settingsModal.querySelectorAll('.tab-content-area .tab-content') : []; // Check if modal exists
 
     // Settings Form Elements (Now within script.js scope)
     const timeFormatSelect = document.getElementById('time-format');
@@ -63,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const LOCAL_STORAGE_KEY = 'timezoneExplorerPreferences';
 
 
-    console.log("script.js initialized.");
+    console.log("script.js starting execution.");
 
 
     // --- Utility Functions ---
@@ -233,7 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
         isLoading = true;
         loadingMoreIndicator.classList.remove('hidden');
         // Show the loading icon within the message
-        loadingMoreIndicator.querySelector('.loading-icon').style.display = 'inline-block';
+        const loadingMoreIcon = loadingMoreIndicator.querySelector('.loading-icon');
+        if (loadingMoreIcon) loadingMoreIcon.style.display = 'inline-block';
 
 
         const start = currentPage * timezonesPerPage;
@@ -258,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isLoading = false;
             loadingMoreIndicator.classList.add('hidden');
              // Hide the loading icon
-            loadingMoreIndicator.querySelector('.loading-icon').style.display = 'none';
+            if (loadingMoreIcon) loadingMoreIcon.style.display = 'none';
 
 
             // Check if there are more timezones to load
@@ -311,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Shows the grid view and hides the detail view.
      */
     function showGridView() {
+        console.log("Showing grid view.");
         gridView.classList.remove('hidden');
         detailView.classList.add('hidden');
         // Ensure main controls are visible when in grid view
@@ -335,7 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
         endOfListIndicator.classList.add('hidden');
         loadingMessage.classList.remove('hidden'); // Show initial loading message
         // Show the loading icon within the initial message
-        loadingMessage.querySelector('.loading-icon').style.display = 'inline-block';
+        const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
+        if (loadingIconInitial) loadingIconInitial.style.display = 'inline-block';
+
         appendTimezoneCards(); // Load the first batch
 
         // Re-attach scroll listener for infinite scrolling
@@ -347,6 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} timezone - The IANA timezone string to display details for.
      */
     function showDetailView(timezone) {
+        console.log("Showing detail view for:", timezone);
         gridView.classList.add('hidden');
         detailView.classList.remove('hidden');
         // Hide main controls and main settings icon in detail view
@@ -379,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} query - The search string.
      */
     function filterTimezones(query) {
+        console.log("Filtering timezones with query:", query);
         const lowerCaseQuery = query.toLowerCase();
         filteredTimezones = allTimezones.filter(timezone =>
             timezone.toLowerCase().includes(lowerCaseQuery)
@@ -389,7 +397,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPage = 0;
         endOfListIndicator.classList.add('hidden');
          loadingMessage.classList.remove('hidden'); // Show loading message while filtering/re-rendering
-         loadingMessage.querySelector('.loading-icon').style.display = 'inline-block'; // Show icon
+         const loadingIconFilter = loadingMessage.querySelector('.loading-icon');
+         if (loadingIconFilter) loadingIconFilter.style.display = 'inline-block'; // Show icon
         appendTimezoneCards();
     }
 
@@ -413,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stickyNav.classList.add('visible');
             mainSettingsIcon.classList.add('hidden'); // Hide main settings icon when nav is sticky
             // Move search input to nav if not already there
-            if (timezoneSearchInput.parentElement !== navSearchInputContainer && navSearchBar.classList.contains('expanded')) {
+            if (timezoneSearchInput && navSearchInputContainer && timezoneSearchInput.parentElement !== navSearchInputContainer && navSearchBar.classList.contains('expanded')) {
                  navSearchInputContainer.appendChild(timezoneSearchInput);
                  timezoneSearchInput.classList.add('in-nav');
             }
@@ -424,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainSettingsIcon.classList.remove('hidden');
              }
             // Move search input back to main controls if in nav and nav is not sticky
-            if (timezoneSearchInput.parentElement === navSearchInputContainer && !navSearchBar.classList.contains('expanded')) {
+            if (timezoneSearchInput && mainControls && timezoneSearchInput.parentElement === navSearchInputContainer && !navSearchBar.classList.contains('expanded')) {
                  mainControls.querySelector('.search-container').appendChild(timezoneSearchInput);
                  timezoneSearchInput.classList.remove('in-nav');
             }
@@ -508,15 +517,21 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function openSettingsModal() {
         console.log("Opening settings modal.");
+        // Check if modal element exists before trying to open
+        if (!settingsModal) {
+            console.error("Settings modal element not found.");
+            return;
+        }
+
         settingsModal.classList.remove('hidden');
         // Add a class to body to prevent scrolling when modal is open (optional but good UX)
         document.body.classList.add('modal-open');
 
          // Populate settings form with current preferences
-         timeFormatSelect.value = userPreferences.timeFormat;
-         dateLocaleSelect.value = userPreferences.dateLocale;
+         if (timeFormatSelect) timeFormatSelect.value = userPreferences.timeFormat;
+         if (dateLocaleSelect) dateLocaleSelect.value = userPreferences.dateLocale;
          // Set the dark mode toggle state
-         darkModeToggle.checked = userPreferences.isDarkMode;
+         if (darkModeToggle) darkModeToggle.checked = userPreferences.isDarkMode;
          console.log("Modal form populated with preferences:", userPreferences);
 
          // Ensure the first tab ('general') is active when opening the modal
@@ -534,6 +549,11 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function closeSettingsModal() {
         console.log("Closing settings modal.");
+        // Check if modal element exists before trying to close
+        if (!settingsModal) {
+            console.error("Settings modal element not found for closing.");
+            return;
+        }
         settingsModal.classList.add('hidden');
         // Remove the body class that prevents scrolling
         document.body.classList.remove('modal-open');
@@ -548,6 +568,12 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function switchTab(tabId) {
         console.log("Attempting to switch to tab:", tabId);
+        // Check if modal elements exist
+        if (!settingsModal || tabButtons.length === 0 || tabContents.length === 0) {
+             console.warn("Settings modal or tab elements not found for switching tab.");
+             return;
+        }
+
         // Deactivate all tab buttons and content areas first
         tabButtons.forEach(button => {
             button.classList.remove('active');
@@ -578,6 +604,12 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function handleSettingChange() {
         console.log("handleSettingChange called.");
+        // Check if settings elements exist
+        if (!timeFormatSelect || !dateLocaleSelect || !darkModeToggle) {
+             console.warn("Settings form elements not found for handling change.");
+             return;
+        }
+
         // Update time format preference
         userPreferences.timeFormat = timeFormatSelect.value;
 
@@ -601,6 +633,12 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function clearSavedSettings() {
         console.log("Attempting to clear saved settings.");
+         // Check if clear cache button exists
+         if (!clearCacheButton) {
+             console.warn("Clear cache button element not found.");
+             return;
+         }
+
         // Use a simple confirmation
         const confirmed = confirm('Are you sure you want to clear all saved settings? This will reset your time/date preferences and disable Dark Mode.');
 
@@ -617,9 +655,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("Preferences reset to defaults:", userPreferences);
                 applyTheme(); // Apply default theme (light mode)
                 // Update settings form to reflect defaults
-                timeFormatSelect.value = userPreferences.timeFormat;
-                dateLocaleSelect.value = userPreferences.dateLocale;
-                darkModeToggle.checked = userPreferences.isDarkMode; // Update checkbox
+                if (timeFormatSelect) timeFormatSelect.value = userPreferences.timeFormat;
+                if (dateLocaleSelect) dateLocaleSelect.value = userPreferences.dateLocale;
+                if (darkModeToggle) darkModeToggle.checked = userPreferences.isDarkMode; // Update checkbox
                 console.log("Settings form updated to defaults.");
 
                 // Re-render visible times with default preferences
@@ -648,6 +686,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
          // Basic focus trap - prevent tabbing outside the modal
          if (event.key === 'Tab') {
+             // Check if modal exists
+             if (!settingsModal) return;
+
              // Get all focusable elements within the modal
              const focusableElements = settingsModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
              const firstElement = focusableElements[0];
@@ -671,87 +712,159 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Main App Event Listeners ---
 
     // Event listener for the main search input
-    timezoneSearchInput.addEventListener('input', (event) => {
-        filterTimezones(event.target.value);
-    });
+    if (timezoneSearchInput) {
+        timezoneSearchInput.addEventListener('input', (event) => {
+            filterTimezones(event.target.value);
+        });
+         console.log("Timezone search input listener attached.");
+    } else {
+         console.warn("Timezone search input element not found.");
+    }
+
 
     // Event listener for the nav search icon (toggle search bar)
-    navSearchIcon.addEventListener('click', () => {
-        navSearchBar.classList.toggle('expanded');
-        // Move search input between main controls and nav search bar
-        if (navSearchBar.classList.contains('expanded')) {
-            navSearchInputContainer.appendChild(timezoneSearchInput);
-            timezoneSearchInput.classList.add('in-nav');
-            timezoneSearchInput.focus(); // Focus the input when expanded
-        } else {
-             // Only move back if not in detail view (where main controls are hidden)
-             if (gridView.classList.contains('hidden') === false) {
-                mainControls.querySelector('.search-container').appendChild(timezoneSearchInput);
-                timezoneSearchInput.classList.remove('in-nav');
-             }
-        }
-    });
+    if (navSearchIcon && navSearchBar && timezoneSearchInput && mainControls && navSearchInputContainer) {
+        navSearchIcon.addEventListener('click', () => {
+            console.log("Nav search icon clicked.");
+            navSearchBar.classList.toggle('expanded');
+            // Move search input between main controls and nav search bar
+            if (navSearchBar.classList.contains('expanded')) {
+                navSearchInputContainer.appendChild(timezoneSearchInput);
+                timezoneSearchInput.classList.add('in-nav');
+                timezoneSearchInput.focus(); // Focus the input when expanded
+            } else {
+                 // Only move back if not in detail view (where main controls are hidden)
+                 if (gridView && !gridView.classList.contains('hidden')) {
+                    mainControls.querySelector('.search-container').appendChild(timezoneSearchInput);
+                    timezoneSearchInput.classList.remove('in-nav');
+                 }
+            }
+        });
+         console.log("Nav search icon listener attached.");
+    } else {
+         console.warn("Nav search elements not found. Search toggle might not work.");
+    }
+
 
     // Event listener for the main settings icon (open modal)
-    mainSettingsIcon.addEventListener('click', openSettingsModal);
+    if (mainSettingsIcon) {
+        mainSettingsIcon.addEventListener('click', () => {
+            console.log("Main settings icon clicked.");
+            openSettingsModal();
+        });
+         console.log("Main settings icon listener attached.");
+    } else {
+         console.warn("Main settings icon element not found.");
+    }
+
 
     // Event listener for the nav settings icon (open modal)
-    navSettingsIcon.addEventListener('click', openSettingsModal);
+    if (navSettingsIcon) {
+        navSettingsIcon.addEventListener('click', () => {
+             console.log("Nav settings icon clicked.");
+             openSettingsModal();
+         });
+         console.log("Nav settings icon listener attached.");
+    } else {
+         console.warn("Nav settings icon element not found.");
+    }
+
 
     // Add scroll listener for infinite scrolling and sticky nav
     window.addEventListener('scroll', handleScroll);
+    console.log("Window scroll listener attached.");
 
 
     // --- Settings Modal Event Listeners (Integrated) ---
 
     // Handle settings modal close button click
-    settingsCloseButton.addEventListener('click', () => {
-        console.log("Close button clicked.");
-        closeSettingsModal();
-    });
+    if (settingsCloseButton) {
+        settingsCloseButton.addEventListener('click', () => {
+            console.log("Settings close button clicked.");
+            closeSettingsModal();
+        });
+         console.log("Settings close button listener attached.");
+    } else {
+         console.warn("Settings close button element not found.");
+    }
+
 
     // Handle clicking outside the settings modal content to close
-    settingsModal.addEventListener('click', (event) => {
-        // Check if the click target is the modal overlay itself, not the modal-content or its children
-        if (event.target === settingsModal) {
-            console.log("Clicked outside modal content.");
-            closeSettingsModal();
-        }
-    });
+    if (settingsModal) {
+        settingsModal.addEventListener('click', (event) => {
+            // Check if the click target is the modal overlay itself, not the modal-content or its children
+            if (event.target === settingsModal) {
+                console.log("Clicked outside modal content.");
+                closeSettingsModal();
+            }
+        });
+         console.log("Settings modal overlay click listener attached.");
+    } else {
+         console.warn("Settings modal element not found for overlay click listener.");
+    }
+
 
     // Handle settings tab button clicks (using event delegation)
-    // Attach the listener to the tabs-sidebar for better delegation
-    settingsModal.querySelector('.tabs-sidebar').addEventListener('click', (event) => {
-        const tabButton = event.target.closest('.tab-button');
-        if (tabButton) {
-            const tabId = tabButton.dataset.tab;
-            if (tabId) {
-                console.log("Tab button clicked:", tabId);
-                switchTab(tabId);
+    const tabsSidebar = settingsModal ? settingsModal.querySelector('.tabs-sidebar') : null;
+    if (tabsSidebar) {
+        tabsSidebar.addEventListener('click', (event) => {
+            const tabButton = event.target.closest('.tab-button');
+            if (tabButton) {
+                const tabId = tabButton.dataset.tab;
+                if (tabId) {
+                    console.log("Tab button clicked:", tabId);
+                    switchTab(tabId);
+                }
             }
-        }
-    });
+        });
+         console.log("Settings tabs sidebar click listener attached.");
+    } else {
+         console.warn("Settings tabs sidebar element not found. Tab switching might not work.");
+    }
+
 
     // Handle changes in settings form (time format, date locale, dark mode toggle)
-    // Attach listeners directly to the elements
-    timeFormatSelect.addEventListener('change', () => {
-        console.log("Time format select changed.");
-        handleSettingChange();
-    });
-    dateLocaleSelect.addEventListener('change', () => {
-        console.log("Date locale select changed.");
-        handleSettingChange();
-    });
-    darkModeToggle.addEventListener('change', () => {
-        console.log("Dark mode toggle changed.");
-        handleSettingChange();
-    });
+    if (timeFormatSelect) {
+        timeFormatSelect.addEventListener('change', () => {
+            console.log("Time format select changed.");
+            handleSettingChange();
+        });
+         console.log("Time format select listener attached.");
+    } else {
+         console.warn("Time format select element not found.");
+    }
+
+    if (dateLocaleSelect) {
+        dateLocaleSelect.addEventListener('change', () => {
+            console.log("Date locale select changed.");
+            handleSettingChange();
+        });
+         console.log("Date locale select listener attached.");
+    } else {
+         console.warn("Date locale select element not found.");
+    }
+
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('change', () => {
+            console.log("Dark mode toggle changed.");
+            handleSettingChange();
+        });
+         console.log("Dark mode toggle listener attached.");
+    } else {
+         console.warn("Dark mode toggle element not found.");
+    }
+
 
     // Handle clear cache button click
-    clearCacheButton.addEventListener('click', () => {
-        console.log("Clear cache button clicked.");
-        clearSavedSettings();
-    });
+    if (clearCacheButton) {
+        clearCacheButton.addEventListener('click', () => {
+            console.log("Clear cache button clicked.");
+            clearSavedSettings();
+        });
+         console.log("Clear cache button listener attached.");
+    } else {
+         console.warn("Clear cache button element not found.");
+    }
 
 
     // --- Initialization ---
@@ -786,7 +899,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     filteredTimezones = [...allTimezones]; // Initially filtered list is all timezones
                     loadingMessage.classList.remove('hidden'); // Show initial loading message
                     // Show the loading icon within the initial message
-                    loadingMessage.querySelector('.loading-icon').style.display = 'inline-block';
+                    const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
+                    if (loadingIconInitial) loadingIconInitial.style.display = 'inline-block';
                     // The appendTimezoneCards function will hide the initial message when it starts loading
                     showGridView(); // Show the grid view and load first batch
                 }
@@ -800,7 +914,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("Error fetching timezones:", error);
                  loadingMessage.textContent = "Could not load timezones.";
                  // Hide the loading icon if loading failed
-                 loadingMessage.querySelector('.loading-icon').style.display = 'none';
+                 const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
+                 if (loadingIconInitial) loadingIconInitial.style.display = 'none';
                  gridView.classList.remove('hidden'); // Ensure grid view is visible to show the message
                  detailView.classList.add('hidden');
                  // Hide loading indicators as we can't load timezones
@@ -816,7 +931,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingMessage.textContent = "Your browser does not fully support timezone listing.";
             console.error("Intl.supportedValuesOf is not supported in this browser.");
              // Hide the loading icon if not supported
-             loadingMessage.querySelector('.loading-icon').style.display = 'none';
+             const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
+             if (loadingIconInitial) loadingIconInitial.style.display = 'none';
              gridView.classList.remove('hidden'); // Ensure grid view is visible to show the message
              detailView.classList.add('hidden');
              // Hide loading indicators as we can't load timezones
