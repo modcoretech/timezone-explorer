@@ -1,155 +1,224 @@
 /* css/style.css */
 
+/* CSS Variables for Theming */
+:root {
+    --background-color: #f4f7f6;
+    --container-bg-color: #ffffff;
+    --text-color: #374151;
+    --heading-color: #1f2937;
+    --primary-color: #4f46e5;
+    --secondary-color: #eef2ff;
+    --border-color: #e5e7eb;
+    --card-bg-color: #ffffff;
+    --card-border-color: #e5e7eb;
+    --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+    --card-hover-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+    --input-border-color: #d1d5db;
+    --input-focus-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+    --support-bg-color: #10b981;
+    --support-hover-bg-color: #059669;
+    --link-color: #3b82f6;
+    --link-hover-color: #2563eb;
+    --loading-text-color: #6b7280;
+    --detail-card-bg: #eef2ff;
+    --detail-card-border: #a5b4fc;
+}
+
+/* Dark Mode Variables */
+.dark-mode {
+    --background-color: #1a202c;
+    --container-bg-color: #2d3748;
+    --text-color: #e2e8f0;
+    --heading-color: #f7fafc;
+    --primary-color: #a78bfa; /* Lighter primary for dark mode */
+    --secondary-color: #4a5568;
+    --border-color: #4a5568;
+    --card-bg-color: #2d3748;
+    --card-border-color: #4a5568;
+    --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    --card-hover-shadow: 0 12px 20px rgba(0, 0, 0, 0.6);
+    --input-border-color: #4a5568;
+    --input-focus-shadow: 0 0 0 4px rgba(167, 139, 250, 0.3);
+    --support-bg-color: #047857;
+    --support-hover-bg-color: #065f46;
+    --link-color: #90cdf4;
+    --link-hover-color: #63b3ed;
+    --loading-text-color: #a0aec0;
+    --detail-card-bg: #4a5568;
+    --detail-card-border: #667eea;
+}
+
+
 body {
-    font-family: 'Inter', sans-serif; /* Use Inter for body text */
-    background-color: #f4f7f6;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
     display: flex;
     justify-content: center;
     min-height: 100vh;
     padding: 20px;
     margin: 0;
     line-height: 1.6;
-    color: #374151;
-    box-sizing: border-box; /* Ensure padding is included */
+    color: var(--text-color);
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
 }
 
 .heading-archivo {
-    font-family: 'Archivo', sans-serif; /* Use Archivo for headings */
+    font-family: 'Archivo', sans-serif;
 }
 
 .container {
-    background-color: #ffffff;
+    background-color: var(--container-bg-color);
     padding: 40px;
-    border-radius: 16px; /* More rounded corners */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Stronger, more modern shadow */
-    max-width: 1400px; /* Increased max width */
+    border-radius: 16px;
+    box-shadow: var(--card-shadow); /* Use card shadow variable */
+    max-width: 1400px;
     width: 100%;
     text-align: center;
     box-sizing: border-box;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth theme transition */
 }
 
 h1 {
-    font-size: 3rem; /* Larger h1 */
+    font-size: 3rem;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #1f2937;
+    color: var(--heading-color);
+    transition: color 0.3s ease; /* Smooth theme transition */
 }
 
 h2 {
-    font-size: 2rem; /* Larger h2 */
+    font-size: 2rem;
     font-weight: 600;
-    color: #4f46e5;
-    margin-top: 40px; /* More space above h2 */
+    color: var(--primary-color);
+    margin-top: 40px;
     margin-bottom: 20px;
-    border-bottom: 3px solid #eef2ff; /* Thicker border */
+    border-bottom: 3px solid var(--secondary-color);
     padding-bottom: 15px;
+    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth theme transition */
 }
 
 h3 {
-    font-size: 1.5rem; /* Larger h3 */
+    font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 15px;
-    color: #4f46e5;
-    border-bottom: 1px solid #c4b5fd;
+    color: var(--primary-color); /* Use primary color for card/detail headings */
+    border-bottom: 1px solid var(--secondary-color); /* Use secondary color for border */
     padding-bottom: 10px;
+    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth theme transition */
 }
 
 h4 {
-    font-size: 1.2rem; /* Larger h4 */
+    font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 10px;
-    color: #1f2937;
+    color: var(--heading-color);
+    transition: color 0.3s ease; /* Smooth theme transition */
 }
 
 p {
-    font-size: 1.1rem; /* Slightly larger paragraph font */
+    font-size: 1.1rem;
     margin-bottom: 15px;
+    color: var(--text-color);
+    transition: color 0.3s ease; /* Smooth theme transition */
+}
+
+strong {
+    color: var(--heading-color); /* Use heading color for strong text */
+    transition: color 0.3s ease; /* Smooth theme transition */
 }
 
 .controls {
-    margin-bottom: 40px; /* More space below controls */
+    margin-bottom: 40px;
     text-align: left;
 }
 
 .controls label {
     display: block;
-    font-size: 1.2rem; /* Larger label font */
+    font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 10px;
-    color: #1f2937;
+    color: var(--heading-color);
+    transition: color 0.3s ease; /* Smooth theme transition */
 }
 
 #timezone-search {
-    padding: 14px; /* More padding */
+    padding: 14px;
     border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-size: 1.1rem; /* Larger input font */
+    border: 1px solid var(--input-border-color);
+    font-size: 1.1rem;
     width: 100%;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Add transition */
+    background-color: var(--container-bg-color); /* Match container background */
+    color: var(--text-color); /* Match text color */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
 }
 
 #timezone-search:focus {
     outline: none;
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2); /* Larger shadow on focus */
+    border-color: var(--primary-color);
+    box-shadow: var(--input-focus-shadow);
 }
 
 /* Grid Layout */
 .timezones-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Wider min column width */
-    gap: 30px; /* More space between grid items */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Slightly wider cards */
+    gap: 30px;
     margin-top: 30px;
+    padding: 0 10px; /* Add horizontal padding to prevent cards from touching container edges */
+    box-sizing: border-box;
 }
 
 .timezone-card {
-    background-color: #ffffff; /* White background for cards */
-    padding: 25px; /* More padding */
-    border-radius: 12px; /* More rounded corners */
-    border: 1px solid #e5e7eb; /* Solid border */
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+    background-color: var(--card-bg-color);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid var(--card-border-color);
+    box-shadow: var(--card-shadow);
     text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
+    /* Removed height: 100% to allow content to dictate height and prevent overflow issues */
     cursor: pointer;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.3s ease; /* Smooth theme transition */
+    overflow: hidden; /* Hide overflowing content if any */
+    word-wrap: break-word; /* Break long words */
 }
 
 .timezone-card:hover {
-    transform: translateY(-8px); /* More pronounced lift on hover */
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12); /* Stronger shadow on hover */
-    border-color: #4f46e5; /* Highlight border on hover */
+    transform: translateY(-8px);
+    box-shadow: var(--card-hover-shadow);
+    border-color: var(--primary-color);
 }
 
 .timezone-card h3 {
-    font-size: 1.35rem; /* Slightly larger card heading */
+    font-size: 1.35rem;
     font-weight: 600;
     margin-bottom: 12px;
-    color: #1f2937; /* Darker color for card heading */
-    border-bottom: none; /* Remove border from card heading */
+    color: var(--heading-color); /* Use heading color for card title */
+    border-bottom: none;
     padding-bottom: 0;
+    word-wrap: break-word; /* Ensure long timezone names wrap */
 }
 
 .timezone-card p {
-    margin-bottom: 6px; /* Reduced margin for paragraphs in cards */
+    margin-bottom: 6px;
     font-size: 1rem;
     line-height: 1.4;
+    word-wrap: break-word; /* Ensure long text wraps */
 }
 
-.timezone-card strong {
-    color: #1f2937;
-}
 
 .loading-message, .loading-more, .end-of-list {
     grid-column: 1 / -1;
     text-align: center;
-    font-size: 1.3rem; /* Larger loading text */
-    color: #6b7280;
-    padding: 30px; /* More padding */
+    font-size: 1.3rem;
+    color: var(--loading-text-color);
+    padding: 30px;
+    transition: color 0.3s ease; /* Smooth theme transition */
 }
 
 .loading-more, .end-of-list {
@@ -167,18 +236,21 @@ p {
 }
 
 .detail-card {
-    background-color: #eef2ff;
-    padding: 30px; /* More padding */
+    background-color: var(--detail-card-bg);
+    padding: 30px;
     border-radius: 12px;
-    border: 1px dashed #a5b4fc;
-    margin-bottom: 30px; /* Space below detail card */
+    border: 1px dashed var(--detail-card-border);
+    margin-bottom: 30px;
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth theme transition */
 }
 
 .detail-card h3 {
-    font-size: 2rem; /* Larger detail heading */
+    font-size: 2rem;
     margin-bottom: 20px;
-    border-bottom: 2px solid #c4b5fd; /* Stronger border */
+    border-bottom: 2px solid var(--primary-color); /* Use primary color for detail heading border */
     padding-bottom: 10px;
+    color: var(--heading-color); /* Use heading color for detail title */
+    transition: color 0.3s ease, border-color 0.3s ease; /* Smooth theme transition */
 }
 
 .detail-card p {
@@ -189,43 +261,47 @@ p {
 .detail-more-info {
     margin-top: 25px;
     padding-top: 20px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--border-color);
+    transition: border-color 0.3s ease; /* Smooth theme transition */
 }
 
 .detail-more-info h4 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
+     color: var(--heading-color); /* Use heading color for detail info heading */
+     transition: color 0.3s ease; /* Smooth theme transition */
 }
+
 
 .back-link {
     display: inline-block;
     margin-top: 20px;
-    color: #3b82f6;
+    color: var(--link-color);
     text-decoration: none;
     font-size: 1.1rem;
     transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 .back-link:hover {
-    color: #2563eb;
+    color: var(--link-hover-color);
     text-decoration: underline;
 }
 
 
 /* Support Section */
 .support-section {
-    margin-top: 60px; /* More space above support section */
+    margin-top: 60px;
     padding-top: 40px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--border-color);
+    transition: border-color 0.3s ease; /* Smooth theme transition */
 }
 
 .support-section h2 {
-    font-size: 1.8rem; /* Slightly larger support heading */
+    font-size: 1.8rem;
     font-weight: 600;
-    color: #1f2937;
+    color: var(--heading-color);
     margin-bottom: 20px;
-    border-bottom: none; /* Remove border */
+    border-bottom: none;
     padding-bottom: 0;
+    transition: color 0.3s ease; /* Smooth theme transition */
 }
 
 .support-section p {
@@ -234,19 +310,38 @@ p {
 
 .support-link {
     display: inline-block;
-    background-color: #10b981;
-    color: white;
-    padding: 12px 25px; /* More padding */
+    background-color: var(--support-bg-color);
+    color: white; /* Text color remains white for contrast */
+    padding: 12px 25px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 0 15px; /* More space between links */
+    margin: 0 15px;
 }
 
 .support-link:hover {
-    background-color: #059669;
-    transform: translateY(-3px); /* Lift button on hover */
+    background-color: var(--support-hover-bg-color);
+    transform: translateY(-3px);
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accessibility: Focus States */
+*:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 4px; /* Add border radius to outline */
 }
 
 /* Responsive adjustments */
