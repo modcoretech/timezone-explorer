@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Settings Form Elements (Now within script.js scope)
     const timeFormatSelect = document.getElementById('time-format');
-    const dateLocaleSelect = document.getElementById('date-locale'); // Renamed label in HTML, but ID remains
+    const dateLocaleSelect = document.getElementById('date-locale'); // Corresponds to Date Display Format
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const clearCacheButton = document.getElementById('clear-cache-button');
 
@@ -58,11 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let userPreferences = {
         timeFormat: '12', // '12' or '24'
         dateLocale: 'en-US', // Corresponds to Date Display Format
-        isDarkMode: false // Simplified to a boolean
+        isDarkMode: false, // Simplified to a boolean
+        favoriteTimezones: [] // Array to store favorited timezone strings
     };
 
     // --- Constants ---
     const LOCAL_STORAGE_KEY = 'timezoneExplorerPreferences';
+    const SKELETON_COUNT = 6; // Number of skeleton cards to show initially
 
 
     console.log("script.js starting execution.");
@@ -197,6 +199,41 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'DST Status N/A'; // Fallback
     }
 
+    /**
+     * Calculates the time difference between a timezone and the user's local time.
+     * @param {string} timezone - The IANA timezone string.
+     * @returns {string} - Formatted time difference (e.g., "+2h", "-5h 30m", "Same").
+     */
+    function getTimeDifference(timezone) {
+        try {
+            const now = new Date();
+            const localOffsetMinutes = now.getTimezoneOffset(); // Local offset in minutes
+            const targetOffsetMinutes = - (new Date().toLocaleString('en', { timeZoneName: 'shortOffset', timeZone: timezone }).match(/UTC([+-]\d+)/)?.[1] * 60 || 0); // Target offset in minutes
+
+            const diffMinutes = targetOffsetMinutes - localOffsetMinutes;
+
+            if (diffMinutes === 0) {
+                return 'Same Time';
+            }
+
+            const sign = diffMinutes > 0 ? '+' : '-';
+            const absDiffMinutes = Math.abs(diffMinutes);
+            const hours = Math.floor(absDiffMinutes / 60);
+            const minutes = absDiffMinutes % 60;
+
+            let diffString = `${sign}${hours}h`;
+            if (minutes > 0) {
+                diffString += ` ${minutes}m`;
+            }
+
+            return diffString;
+
+        } catch (error) {
+            console.error("Error calculating time difference for timezone", timezone, ":", error);
+            return 'Time Diff N/A';
+        }
+    }
+
 
     /**
      * Creates a timezone card element.
@@ -208,21 +245,44 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.add('timezone-card');
         card.dataset.timezone = timezone; // Store timezone string in data attribute
 
+        // Check if this timezone is a favorite
+        const isFavorite = userPreferences.favoriteTimezones.includes(timezone);
+        if (isFavorite) {
+            card.classList.add('favorite');
+        }
+
         const now = new Date(); // Get current local time
         // Pass the timezone string to formatDateTime
         const { formattedDate, formattedTime } = formatDateTime(now, timezone, userPreferences.timeFormat, userPreferences.dateLocale);
         const offset = getUtcOffset(timezone);
+        const timeDifference = getTimeDifference(timezone);
 
         card.innerHTML = `
             <h3>${timezone.replace(/_/g, ' ')}</h3>
             <p><strong>Current Date:</strong> <span class="display-date">${formattedDate}</span></p>
             <p><strong>Current Time:</strong> <span class="display-time">${formattedTime}</span></p>
             <p><strong>UTC Offset:</strong> <span class="display-offset">${offset}</span></p>
+            <div class="time-difference ${timeDifference === 'Same Time' ? 'same' : (timeDifference.startsWith('+') ? 'ahead' : 'behind')}">${timeDifference}</div>
+            <span class="favorite-icon ${isFavorite ? 'active' : ''}" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}" role="button" tabindex="0"></span>
         `;
 
-        card.addEventListener('click', () => {
-            showDetailView(timezone);
+        // Add click listener to the card (excluding the favorite icon)
+        card.addEventListener('click', (event) => {
+             // Prevent card click if the favorite icon was clicked
+             if (!event.target.classList.contains('favorite-icon')) {
+                showDetailView(timezone);
+             }
         });
+
+        // Add click listener to the favorite icon
+        const favoriteIcon = card.querySelector('.favorite-icon');
+        if (favoriteIcon) {
+            favoriteIcon.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent card click event from firing
+                toggleFavorite(timezone, favoriteIcon, card);
+            });
+        }
+
 
         return card;
     }
@@ -292,6 +352,15 @@ document.addEventListener('DOMContentLoaded', () => {
             card.querySelector('.display-date').textContent = formattedDate;
             card.querySelector('.display-time').textContent = formattedTime;
             // Offset is static, no need to update here
+            // Update time difference
+            const timeDifferenceElement = card.querySelector('.time-difference');
+            if (timeDifferenceElement) {
+                const timeDifference = getTimeDifference(timezone);
+                timeDifferenceElement.textContent = timeDifference;
+                // Update class for styling
+                timeDifferenceElement.classList.remove('same', 'ahead', 'behind');
+                timeDifferenceElement.classList.add(timeDifference === 'Same Time' ? 'same' : (timeDifference.startsWith('+') ? 'ahead' : 'behind'));
+            }
         });
 
         // Update detail view if visible
@@ -328,13 +397,27 @@ document.addEventListener('DOMContentLoaded', () => {
          // Hide nav search bar when switching back to grid view from detail
          navSearchBar.classList.remove('expanded');
          // Move search input back to main controls
-         if (timezoneSearchInput.parentElement === navSearchInputContainer) {
+         if (timezoneSearchInput && mainControls && navSearchInputContainer && timezoneSearchInput.parentElement === navSearchInputContainer) {
              mainControls.querySelector('.search-container').appendChild(timezoneSearchInput);
              timezoneSearchInput.classList.remove('in-nav');
          }
 
         // Reset and load the first batch of timezones
         timezonesGrid.innerHTML = ''; // Clear existing cards
+
+        // Add skeleton loaders before fetching
+        for (let i = 0; i < SKELETON_COUNT; i++) {
+             const skeletonCard = document.createElement('div');
+             skeletonCard.classList.add('skeleton-card');
+             skeletonCard.innerHTML = `
+                 <div class="skeleton-line skeleton-line-lg"></div>
+                 <div class="skeleton-line"></div>
+                 <div class="skeleton-line"></div>
+                 <div class="skeleton-line skeleton-line-sm"></div>
+             `;
+             timezonesGrid.appendChild(skeletonCard);
+        }
+
         currentPage = 0;
         endOfListIndicator.classList.add('hidden');
         loadingMessage.classList.remove('hidden'); // Show initial loading message
@@ -342,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
         if (loadingIconInitial) loadingIconInitial.style.display = 'inline-block';
 
+        // The appendTimezoneCards function will hide the initial message when it starts loading
         appendTimezoneCards(); // Load the first batch
 
         // Re-attach scroll listener for infinite scrolling
@@ -396,9 +480,25 @@ document.addEventListener('DOMContentLoaded', () => {
         timezonesGrid.innerHTML = '';
         currentPage = 0;
         endOfListIndicator.classList.add('hidden');
+
+        // Add skeleton loaders while filtering/re-rendering
+        for (let i = 0; i < SKELETON_COUNT; i++) {
+             const skeletonCard = document.createElement('div');
+             skeletonCard.classList.add('skeleton-card');
+             skeletonCard.innerHTML = `
+                 <div class="skeleton-line skeleton-line-lg"></div>
+                 <div class="skeleton-line"></div>
+                 <div class="skeleton-line"></div>
+                 <div class="skeleton-line skeleton-line-sm"></div>
+             `;
+             timezonesGrid.appendChild(skeletonCard);
+        }
+
          loadingMessage.classList.remove('hidden'); // Show loading message while filtering/re-rendering
          const loadingIconFilter = loadingMessage.querySelector('.loading-icon');
          if (loadingIconFilter) loadingIconFilter.style.display = 'inline-block'; // Show icon
+
+        // The appendTimezoneCards function will hide the loading message and replace skeletons
         appendTimezoneCards();
     }
 
@@ -433,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainSettingsIcon.classList.remove('hidden');
              }
             // Move search input back to main controls if in nav and nav is not sticky
-            if (timezoneSearchInput && mainControls && timezoneSearchInput.parentElement === navSearchInputContainer && !navSearchBar.classList.contains('expanded')) {
+            if (timezoneSearchInput && mainControls && navSearchInputContainer && timezoneSearchInput.parentElement === navSearchInputContainer && !navSearchBar.classList.contains('expanded')) {
                  mainControls.querySelector('.search-container').appendChild(timezoneSearchInput);
                  timezoneSearchInput.classList.remove('in-nav');
             }
@@ -457,6 +557,9 @@ document.addEventListener('DOMContentLoaded', () => {
                  userPreferences.timeFormat = ['12', '24'].includes(parsedPreferences.timeFormat) ? parsedPreferences.timeFormat : '12';
                  userPreferences.dateLocale = (typeof parsedPreferences.dateLocale === 'string' && parsedPreferences.dateLocale.length >= 2) ? parsedPreferences.dateLocale : 'en-US';
                  userPreferences.isDarkMode = typeof parsedPreferences.isDarkMode === 'boolean' ? parsedPreferences.isDarkMode : false;
+                 // Load favorites, ensuring it's an array
+                 userPreferences.favoriteTimezones = Array.isArray(parsedPreferences.favoriteTimezones) ? parsedPreferences.favoriteTimezones : [];
+
                  console.log("Successfully loaded and validated preferences:", userPreferences);
 
             } catch (e) {
@@ -465,7 +568,8 @@ document.addEventListener('DOMContentLoaded', () => {
                  userPreferences = {
                      timeFormat: '12',
                      dateLocale: 'en-US',
-                     isDarkMode: false
+                     isDarkMode: false,
+                     favoriteTimezones: []
                  };
                  // Clear invalid data from local storage
                  localStorage.removeItem(LOCAL_STORAGE_KEY);
@@ -640,7 +744,7 @@ document.addEventListener('DOMContentLoaded', () => {
          }
 
         // Use a simple confirmation
-        const confirmed = confirm('Are you sure you want to clear all saved settings? This will reset your time/date preferences and disable Dark Mode.');
+        const confirmed = confirm('Are you sure you want to clear all saved settings? This will reset your time/date preferences, disable Dark Mode, and clear favorites.');
 
         if (confirmed) {
             try {
@@ -650,7 +754,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 userPreferences = {
                     timeFormat: '12',
                     dateLocale: 'en-US',
-                    isDarkMode: false
+                    isDarkMode: false,
+                    favoriteTimezones: [] // Clear favorites here
                 };
                 console.log("Preferences reset to defaults:", userPreferences);
                 applyTheme(); // Apply default theme (light mode)
@@ -663,6 +768,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Re-render visible times with default preferences
                 updateVisibleCardTimes();
 
+                // Re-render the grid to reflect cleared favorites
+                filterTimezones(timezoneSearchInput ? timezoneSearchInput.value : '');
+
+
                 console.log('Saved settings cleared successfully.');
                 // Optionally, display a temporary message on the UI
             } catch (e) {
@@ -672,6 +781,37 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             console.log("Clear settings cancelled by user.");
         }
+    }
+
+
+    // --- Favorites Functions ---
+
+    /**
+     * Toggles the favorite status of a timezone.
+     * @param {string} timezone - The timezone string.
+     * @param {HTMLElement} iconElement - The favorite icon element.
+     * @param {HTMLElement} cardElement - The timezone card element.
+     */
+    function toggleFavorite(timezone, iconElement, cardElement) {
+        const index = userPreferences.favoriteTimezones.indexOf(timezone);
+        if (index > -1) {
+            // Timezone is already a favorite, remove it
+            userPreferences.favoriteTimezones.splice(index, 1);
+            iconElement.classList.remove('active');
+            cardElement.classList.remove('favorite');
+            iconElement.setAttribute('aria-label', 'Add to favorites');
+            console.log(`Removed ${timezone} from favorites.`);
+        } else {
+            // Timezone is not a favorite, add it
+            userPreferences.favoriteTimezones.push(timezone);
+            iconElement.classList.add('active');
+            cardElement.classList.add('favorite');
+            iconElement.setAttribute('aria-label', 'Remove from favorites');
+            console.log(`Added ${timezone} to favorites.`);
+        }
+        savePreferences(); // Save updated favorites to local storage
+        // Re-render the grid to potentially show favorites first (if that feature is added later)
+        // For now, just ensure the icon/card class is updated.
     }
 
 
@@ -897,11 +1037,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     // Default to grid view - DO NOT open modal on load
                     filteredTimezones = [...allTimezones]; // Initially filtered list is all timezones
-                    loadingMessage.classList.remove('hidden'); // Show initial loading message
-                    // Show the loading icon within the initial message
-                    const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
-                    if (loadingIconInitial) loadingIconInitial.style.display = 'inline-block';
-                    // The appendTimezoneCards function will hide the initial message when it starts loading
+                    // The showGridView function now handles initial loading message and skeletons
                     showGridView(); // Show the grid view and load first batch
                 }
 
