@@ -247,21 +247,21 @@
     mask-position: center;
     background-color: var(--tab-icon-color);
     transition: background-color 0.3s ease;
+    -webkit-mask-image: url('../icons/settings.svg'); /* Default to settings icon */
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
     -webkit-mask-position: center;
 }
 
-.tab-button.active .tab-icon {
-    background-color: var(--tab-icon-active-color);
-}
-
 /* Specific Icon Masks */
-/* Ensure these paths are correct relative to the CSS file location */
 .settings-icon-svg { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
 /* .palette-icon-svg { mask-image: url('../icons/palette.svg'); -webkit-mask-image: url('../icons/palette.svg'); } */ /* Removed as themes tab is gone */
 .info-icon-svg { mask-image: url('../icons/info.svg'); -webkit-mask-image: url('../icons/info.svg'); }
 
+
+.tab-button.active .tab-icon {
+    background-color: var(--tab-icon-active-color);
+}
 
 .tab-content-area {
     flex-grow: 1;
