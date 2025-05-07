@@ -6,11 +6,10 @@
     <title>Timezone Explorer</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600&display=swap" rel="stylesheet">
-</head>
+    </head>
 <body>
     <div class="container">
-        <h1 class="heading-archivo">Timezone Explorer</h1>
+        <h1>Timezone Explorer</h1>
         <p>Explore current time and detailed information for timezones around the world.</p>
 
         <div class="settings-icon" id="settings-icon" aria-label="Open Settings" role="button" tabindex="0">
@@ -34,7 +33,7 @@
 
         <div id="detail-view" class="hidden">
             <div class="detail-card">
-                <h3 id="detail-timezone-name" class="heading-archivo"></h3>
+                <h3 id="detail-timezone-name"></h3>
                  <p><strong>Current Date:</strong> <span id="detail-display-date"></span></p>
                 <p><strong>Current Time:</strong> <span id="detail-display-time"></span></p>
                 <p><strong>UTC Offset:</strong> <span id="detail-display-offset"></span></p>
@@ -49,7 +48,7 @@
 
 
         <div class="support-section">
-            <h2 class="heading-archivo">Support This Project</h2>
+            <h2>Support This Project</h2>
             <p>If you find this tool helpful, please consider supporting its development.</p>
             <p>
                 <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link">Sponsor on GitHub</a> |
@@ -61,70 +60,81 @@
     <div id="settings-modal" class="modal hidden">
         <div class="modal-content">
             <span class="close-button" id="settings-close-button">&times;</span>
-            <h3 class="heading-archivo">Settings</h3>
-
-            <div class="tabs">
-                <button class="tab-button active" data-tab="general">General Settings</button>
-                <button class="tab-button" data-tab="themes">Themes</button>
-                <button class="tab-button" data-tab="support">Support</button>
-            </div>
-
-            <div class="tab-content active" id="tab-general">
-                <h4>General Settings</h4>
-                <div class="setting-item">
-                    <label for="time-format">Time Format:</label>
-                    <select id="time-format">
-                        <option value="12">12-Hour (AM/PM)</option>
-                        <option value="24">24-Hour</option>
-                    </select>
-                </div>
-                 <div class="setting-item">
-                    <label for="date-locale">Date Language:</label>
-                    <select id="date-locale">
-                        <option value="en-US">English (US)</option>
-                        <option value="de-DE">German (DE)</option>
-                        <option value="fr-FR">French (FR)</option>
-                         <option value="es-ES">Spanish (ES)</option>
-                        </select>
-                </div>
+            <h3 class="heading-archivo">Settings</h3> <div class="modal-body">
+                <div class="tabs-sidebar">
+                    <button class="tab-button active" data-tab="general">
+                         <span class="tab-icon settings-icon-svg"></span>
+                         General
+                    </button>
+                    <button class="tab-button" data-tab="themes">
+                         <span class="tab-icon palette-icon-svg"></span>
+                         Themes
+                    </button>
+                    <button class="tab-button" data-tab="support">
+                         <span class="tab-icon info-icon-svg"></span>
+                         Support
+                    </button>
                 </div>
 
-            <div class="tab-content" id="tab-themes">
-                <h4>Themes</h4>
-                <div class="setting-item">
-                    <label class="theme-option">
-                         <input type="radio" name="theme" value="light" checked>
-                         Light Mode
-                    </label>
-                </div>
-                 <div class="setting-item">
-                    <label class="theme-option">
-                         <input type="radio" name="theme" value="dark">
-                         Dark Mode
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label class="theme-option">
-                         <input type="radio" name="theme" value="blue">
-                         Blue Theme
-                    </label>
-                </div>
-                 <p class="settings-note">Your theme preference is saved locally in your browser.</p>
-            </div>
+                <div class="tab-content-area">
+                    <div class="tab-content active" id="tab-general">
+                        <h4>General Settings</h4>
+                        <div class="setting-item">
+                            <label for="time-format">Time Format:</label>
+                            <select id="time-format">
+                                <option value="12">12-Hour (AM/PM)</option>
+                                <option value="24">24-Hour</option>
+                            </select>
+                        </div>
+                         <div class="setting-item">
+                            <label for="date-locale">Date Language:</label>
+                            <select id="date-locale">
+                                <option value="en-US">English (US)</option>
+                                <option value="de-DE">German (DE)</option>
+                                <option value="fr-FR">French (FR)</option>
+                                 <option value="es-ES">Spanish (ES)</option>
+                                </select>
+                        </div>
+                        </div>
 
-            <div class="tab-content" id="tab-support">
-                <h4>Support</h4>
-                <p>This project is developed by UNBOUND LABEL.</p>
-                <p>For support or inquiries, please contact: <a href="mailto:NGDE@WEB.DE">NGDE@WEB.DE</a></p>
-                 <div class="support-section settings-support">
-                     <h2 class="heading-archivo">Support This Project</h2>
-                     <p>If you find this tool helpful, please consider supporting its development.</p>
-                     <p>
-                         <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link">Sponsor on GitHub</a> |
-                         <a href="YOUR_OTHER_DONATION_URL" class="support-link">Donate</a>
-                     </p>
-                 </div>
-                 <button id="clear-cache-button" class="clear-cache-button">Clear Saved Settings</button>
+                    <div class="tab-content" id="tab-themes">
+                        <h4>Themes</h4>
+                         <p class="settings-note">Your theme preference is saved locally in your browser.</p>
+                        <div class="setting-item">
+                            <label class="theme-option">
+                                 <input type="radio" name="theme" value="light" checked>
+                                 Light Mode
+                            </label>
+                        </div>
+                         <div class="setting-item">
+                            <label class="theme-option">
+                                 <input type="radio" name="theme" value="dark">
+                                 Dark Mode
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label class="theme-option">
+                                 <input type="radio" name="theme" value="blue">
+                                 Blue Theme
+                            </label>
+                        </div>
+                         </div>
+
+                    <div class="tab-content" id="tab-support">
+                        <h4>Support</h4>
+                        <p>This project is developed by UNBOUND LABEL.</p>
+                        <p>For support or inquiries, please contact: <a href="mailto:NGDE@WEB.DE">NGDE@WEB.DE</a></p>
+                         <div class="support-section settings-support">
+                             <h2>Support This Project</h2>
+                             <p>If you find this tool helpful, please consider supporting its development.</p>
+                             <p>
+                                 <a href="YOUR_GITHUB_SPONSOR_URL" class="support-link">Sponsor on GitHub</a> |
+                                 <a href="YOUR_OTHER_DONATION_URL" class="support-link">Donate</a>
+                             </p>
+                         </div>
+                         <button id="clear-cache-button" class="clear-cache-button">Clear Saved Settings</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
