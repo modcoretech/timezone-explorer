@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add elements for other detailed info if you add a data source
 
     // Settings Modal Elements
-    const settingsIcon = document.getElementById('settings-icon');
+    const settingsIcon = document.getElementById('settings-icon'); // Now targets the div
     const settingsModal = document.getElementById('settings-modal');
     const settingsCloseButton = document.getElementById('settings-close-button');
     const tabButtons = settingsModal.querySelectorAll('.tab-button');
@@ -58,7 +58,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadPreferences() {
         const savedPreferences = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (savedPreferences) {
-            userPreferences = JSON.parse(savedPreferences);
+            try {
+                 userPreferences = JSON.parse(savedPreferences);
+                 // Validate loaded preferences or apply defaults if invalid/missing
+                 if (!['12', '24'].includes(userPreferences.timeFormat)) userPreferences.timeFormat = '12';
+                 // Basic validation for locale - could be more robust
+                 if (typeof userPreferences.dateLocale !== 'string' || userPreferences.dateLocale.length < 2) userPreferences.dateLocale = 'en-US';
+                 // Basic validation for theme - could be more robust if themes are dynamic
+                 if (typeof userPreferences.theme !== 'string' || userPreferences.theme.length === 0) userPreferences.theme = 'light';
+
+            } catch (e) {
+                 console.error("Error parsing saved preferences:", e);
+                 // Reset to default if parsing fails
+                 userPreferences = {
+                     timeFormat: '12',
+                     dateLocale: 'en-US',
+                     theme: 'light'
+                 };
+                 // Clear invalid data from local storage
+                 localStorage.removeItem(LOCAL_STORAGE_KEY);
+            }
         }
     }
 
@@ -66,20 +85,34 @@ document.addEventListener('DOMContentLoaded', () => {
      * Saves user preferences to local storage.
      */
     function savePreferences() {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userPreferences));
+        try {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(userPreferences));
+        } catch (e) {
+            console.error("Error saving preferences to local storage:", e);
+            alert("Could not save preferences. Local storage might be disabled or full.");
+        }
     }
 
     /**
      * Applies the current theme preference to the body.
      */
     function applyTheme() {
-        document.body.classList.remove('light', 'dark-mode', 'blue-theme'); // Remove existing theme classes
-        document.body.classList.add(`${userPreferences.theme}-theme`); // Add the selected theme class
+        // Remove all potential theme classes first
+        document.body.classList.forEach(className => {
+            if (className.endsWith('-theme') || className === 'dark-mode') {
+                document.body.classList.remove(className);
+            }
+        });
 
-        // Special handling for default light theme class
-        if (userPreferences.theme === 'light') {
-             document.body.classList.remove('dark-mode', 'blue-theme'); // Ensure other theme classes are removed
+        // Apply the selected theme class
+        if (userPreferences.theme !== 'light') { // 'light' theme has no specific class
+             document.body.classList.add(`${userPreferences.theme}-theme`);
         }
+
+         // Special handling for 'dark-mode' class if needed for specific CSS rules
+         if (userPreferences.theme === 'dark') {
+             document.body.classList.add('dark-mode');
+         }
     }
 
     /**
@@ -115,8 +148,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeZoneName: 'shortOffset' // Request short offset name (+HH:MM or -HH:MM)
             };
 
-            const formattedDate = new Intl.DateTimeFormat(userPreferences.dateLocale, dateOptions).format(now);
-            const formattedTime = new Intl.DateTimeFormat(userPreferences.dateLocale, timeOptions).format(now); // Use user locale for time format too
+            // Use Intl.DateTimeFormat with error handling
+            let formattedDate = 'N/A';
+            try {
+                 formattedDate = new Intl.DateTimeFormat(userPreferences.dateLocale, dateOptions).format(now);
+            } catch (e) {
+                 console.warn(`Could not format date for locale ${userPreferences.dateLocale}:`, e);
+                 formattedDate = new Intl.DateTimeFormat('en-US', dateOptions).format(now); // Fallback to English
+            }
+
+             let formattedTime = 'N/A';
+             try {
+                 formattedTime = new Intl.DateTimeFormat(userPreferences.dateLocale, timeOptions).format(now); // Use user locale for time format too
+             } catch (e) {
+                 console.warn(`Could not format time for locale ${userPreferences.dateLocale}:`, e);
+                 formattedTime = new Intl.DateTimeFormat('en-US', timeOptions).format(now); // Fallback to English
+             }
 
 
             // Attempt to get UTC offset string using Intl.DateTimeFormat
@@ -364,6 +411,8 @@ document.addEventListener('DOMContentLoaded', () => {
                  radio.checked = true;
              }
          });
+         // Ensure the first tab is active when opening the modal
+         switchTab('general');
     }
 
     /**
