@@ -5,10 +5,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridView = document.getElementById('grid-view');
     const detailView = document.getElementById('detail-view');
     const timezonesGrid = document.getElementById('timezones-grid');
-    const timezoneSearchInput = document.getElementById('timezone-search');
     const loadingMessage = document.querySelector('.loading-message');
     const loadingMoreIndicator = document.querySelector('.loading-more');
     const endOfListIndicator = document.querySelector('.end-of-list');
+
+    // Main Search Input (Single element, moved between containers)
+    const timezoneSearchInput = document.getElementById('timezone-search');
+    const mainControls = document.getElementById('main-controls'); // Original container
+    const navSearchInputContainer = document.getElementById('nav-search-input-container'); // Nav container
+
+    // Sticky Nav Elements
+    const stickyNav = document.getElementById('sticky-nav');
+    const navSearchIcon = document.getElementById('nav-search-icon');
+    const navSearchBar = document.getElementById('nav-search-bar');
+    const navSettingsIcon = document.getElementById('nav-settings-icon'); // Settings icon in nav
+
+    // Main Settings Icon (Hidden when nav is visible)
+    const mainSettingsIcon = document.getElementById('main-settings-icon');
+
 
     // Detail View Elements
     const detailTimezoneName = document.getElementById('detail-timezone-name');
@@ -19,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add elements for other detailed info if you add a data source
 
     // Settings Modal Elements
-    const settingsIcon = document.getElementById('settings-icon'); // Now targets the div
     const settingsModal = document.getElementById('settings-modal');
     const settingsCloseButton = document.getElementById('settings-close-button');
     const tabButtons = settingsModal.querySelectorAll('.tab-button');
@@ -38,6 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 0;
     let isLoading = false;
     let timeUpdateInterval = null; // To store the interval ID for time updates
+    let lastScrollTop = 0; // To track scroll direction
+    let isNavSearchExpanded = false; // State of the nav search bar
 
     // User Preferences (loaded from localStorage)
     let userPreferences = {
@@ -48,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Constants ---
     const LOCAL_STORAGE_KEY = 'timezoneExplorerPreferences';
+    const SCROLL_THRESHOLD = 100; // Scroll distance before showing/hiding nav
 
 
     // --- Utility Functions ---
@@ -326,6 +342,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Filters the timezone list based on the current search input value.
+     */
+    function filterTimezones() {
+        const searchTerm = timezoneSearchInput.value.toLowerCase().trim();
+        currentPage = 0; // Reset pagination
+        timezonesGrid.innerHTML = ''; // Clear current grid
+        endOfListIndicator.classList.add('hidden'); // Hide end of list message
+        loadingMessage.classList.add('hidden'); // Hide initial message
+
+        if (searchTerm.length > 0) {
+             filteredTimezones = allTimezones.filter(tz =>
+                tz.toLowerCase().includes(searchTerm)
+            );
+        } else {
+            // If search is cleared, reset to show initial batch of all timezones
+            filteredTimezones = [...allTimezones]; // Copy all timezones
+        }
+
+        loadMoreTimezones(); // Load the first batch of filtered results
+    }
+
+
     // --- View Management ---
 
     /**
@@ -398,6 +437,61 @@ document.addEventListener('DOMContentLoaded', () => {
          timeUpdateInterval = setInterval(updateVisibleCardTimes, 1000); // updateVisibleCardTimes also updates the detail view
     }
 
+    // --- Sticky Nav Functions ---
+
+    /**
+     * Shows the sticky navigation bar.
+     */
+    function showStickyNav() {
+         stickyNav.classList.add('visible');
+         mainControls.classList.add('hidden'); // Hide main search controls
+         mainSettingsIcon.classList.add('hidden'); // Hide main settings icon
+
+         // Move the search input to the nav bar
+         if (!navSearchInputContainer.contains(timezoneSearchInput)) {
+             navSearchInputContainer.appendChild(timezoneSearchInput);
+             // Ensure the input is visible and styled correctly in the nav
+             timezoneSearchInput.classList.add('in-nav');
+         }
+    }
+
+    /**
+     * Hides the sticky navigation bar.
+     */
+    function hideStickyNav() {
+        stickyNav.classList.remove('visible');
+        mainControls.classList.remove('hidden'); // Show main search controls
+        mainSettingsIcon.classList.remove('hidden'); // Show main settings icon
+
+        // Collapse the nav search bar if it was expanded
+        navSearchBar.classList.remove('expanded');
+        isNavSearchExpanded = false;
+
+         // Move the search input back to the main controls
+         if (mainControls.contains(mainControls.querySelector('.search-container'))) { // Check if the container exists
+             mainControls.querySelector('.search-container').appendChild(timezoneSearchInput);
+              // Remove nav styling from input
+             timezoneSearchInput.classList.remove('in-nav');
+         }
+    }
+
+    /**
+     * Toggles the expanded state of the navigation search bar.
+     */
+    function toggleNavSearchBar() {
+        isNavSearchExpanded = !isNavSearchExpanded;
+        if (isNavSearchExpanded) {
+            navSearchBar.classList.add('expanded');
+            // Focus the search input after animation (slight delay)
+            setTimeout(() => timezoneSearchInput.focus(), 300);
+        } else {
+            navSearchBar.classList.remove('expanded');
+             // Optional: Blur the input when collapsing if needed
+             // timezoneSearchInput.blur();
+        }
+    }
+
+
     // --- Settings Modal Functions ---
 
     /**
@@ -418,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // Add event listener for Escape key when modal is open
          document.addEventListener('keydown', handleModalKeyDown);
           // Trap focus inside the modal (basic)
-          settingsModal.focus();
+          settingsModal.focus(); // Focus the modal container
     }
 
     /**
@@ -530,32 +624,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Handlers ---
 
-    // Handle search input
-    timezoneSearchInput.addEventListener('input', (event) => {
-        const searchTerm = event.target.value.toLowerCase().trim(); // Trim whitespace
-        currentPage = 0; // Reset pagination
-        timezonesGrid.innerHTML = ''; // Clear current grid
-        endOfListIndicator.classList.add('hidden'); // Hide end of list message
-        loadingMessage.classList.add('hidden'); // Hide initial message
+    // Handle search input (attached to the single input element)
+    timezoneSearchInput.addEventListener('input', filterTimezones);
 
-        if (searchTerm.length > 0) {
-             filteredTimezones = allTimezones.filter(tz =>
-                tz.toLowerCase().includes(searchTerm)
-            );
-        } else {
-            // If search is cleared, reset to show initial batch of all timezones
-            filteredTimezones = [...allTimezones]; // Copy all timezones
+
+    // Handle infinite scrolling and sticky nav visibility
+    const handleScroll = () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Show/hide sticky nav based on scroll direction and position
+        if (scrollTop > lastScrollTop && scrollTop > SCROLL_THRESHOLD) {
+            // Scrolling down past threshold
+            // stickyNav.classList.remove('visible'); // Hide on scroll down
+             // Let's keep it visible on scroll down past threshold for easier access
+             showStickyNav();
+        } else if (scrollTop < lastScrollTop && scrollTop > SCROLL_THRESHOLD) {
+             // Scrolling up past threshold
+             showStickyNav();
+        } else if (scrollTop <= SCROLL_THRESHOLD) {
+            // At or near the top
+            hideStickyNav();
         }
 
-        loadMoreTimezones(); // Load the first batch of filtered results
-    });
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
 
-    // Handle infinite scrolling
-    const handleScroll = () => {
         // Only trigger load more if in grid view and not in a modal
         if (gridView.classList.contains('hidden') || !settingsModal.classList.contains('hidden')) return;
 
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        const { scrollHeight, clientHeight } = document.documentElement;
 
         // Check if user is near the bottom of the page (e.g., within 400px - increased threshold)
         if (scrollTop + clientHeight >= scrollHeight - 400 && !isLoading) {
@@ -593,28 +689,42 @@ document.addEventListener('DOMContentLoaded', () => {
              if (timezonesGrid.children.length === 0 && filteredTimezones.length > 0) {
                  currentPage = 0; // Reset pagination for grid
                  // Re-apply current search filter if any
-                 const searchTerm = timezoneSearchInput.value.toLowerCase().trim();
-                 if (searchTerm.length > 0) {
-                      filteredTimezones = allTimezones.filter(tz =>
-                         tz.toLowerCase().includes(searchTerm)
-                     );
-                 } else {
-                      filteredTimezones = [...allTimezones];
-                 }
-                 loadMoreTimezones();
+                 filterTimezones(); // Use the filter function to re-populate based on current input
              }
         }
     });
 
-    // Handle settings icon click
-    settingsIcon.addEventListener('click', openSettingsModal);
-     // Allow settings icon to be opened by Enter or Space key when focused
-     settingsIcon.addEventListener('keydown', (event) => {
+    // Handle nav search icon click
+    navSearchIcon.addEventListener('click', toggleNavSearchBar);
+     // Allow nav search icon to be toggled by Enter or Space key when focused
+     navSearchIcon.addEventListener('keydown', (event) => {
+         if (event.key === 'Enter' || event.key === ' ') {
+             event.preventDefault(); // Prevent default scroll/click
+             toggleNavSearchBar();
+         }
+     });
+
+
+    // Handle main settings icon click
+    mainSettingsIcon.addEventListener('click', openSettingsModal);
+     // Allow main settings icon to be opened by Enter or Space key when focused
+     mainSettingsIcon.addEventListener('keydown', (event) => {
          if (event.key === 'Enter' || event.key === ' ') {
              event.preventDefault(); // Prevent default scroll/click
              openSettingsModal();
          }
      });
+
+     // Handle nav settings icon click (if you decide to add it back)
+     // if (navSettingsIcon) {
+     //     navSettingsIcon.addEventListener('click', openSettingsModal);
+     //      navSettingsIcon.addEventListener('keydown', (event) => {
+     //          if (event.key === 'Enter' || event.key === ' ') {
+     //              event.preventDefault();
+     //              openSettingsModal();
+     //          }
+     //      });
+     // }
 
 
     // Handle settings modal close button click
@@ -720,6 +830,9 @@ document.addEventListener('DOMContentLoaded', () => {
              loadingMoreIndicator.classList.add('hidden');
              endOfListIndicator.classList.add('hidden');
         }
+
+        // Initial check for sticky nav visibility (in case page loads scrolled)
+        handleScroll();
     }
 
     initialize(); // Start the application
