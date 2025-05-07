@@ -24,6 +24,16 @@
     --detail-card-border: #a5b4fc; /* Medium Purple */
     --scrollbar-thumb: #c1c1c1; /* Default scrollbar */
     --scrollbar-track: #f1f1f1; /* Default scrollbar track */
+    --modal-bg-color: #ffffff;
+    --modal-border-color: #e5e7eb;
+    --tab-button-color: #6b7280;
+    --tab-button-hover-bg: #f3f4f6;
+    --tab-button-active-color: var(--primary-color);
+    --tab-button-active-border: var(--primary-color);
+    --setting-item-border: #e5e7eb;
+    --clear-cache-button-bg: #ef4444; /* Red */
+    --clear-cache-button-hover-bg: #dc2626; /* Darker Red */
+    --settings-icon-color: #374151; /* Match text color */
 }
 
 /* Dark Mode Variables */
@@ -50,7 +60,54 @@
     --detail-card-border: #667eea;
     --scrollbar-thumb: #555; /* Darker scrollbar */
     --scrollbar-track: #333; /* Darker scrollbar track */
+    --modal-bg-color: #2d3748;
+    --modal-border-color: #4a5568;
+    --tab-button-color: #a0aec0;
+    --tab-button-hover-bg: #4a5568;
+    --tab-button-active-color: var(--primary-color);
+    --tab-button-active-border: var(--primary-color);
+    --setting-item-border: #4a5568;
+     --clear-cache-button-bg: #b91c1c; /* Darker Red */
+    --clear-cache-button-hover-bg: #991b1b; /* Even Darker Red */
+    --settings-icon-color: #e2e8f0; /* Match text color */
 }
+
+/* Blue Theme Variables */
+.blue-theme {
+    --background-color: #e0f2f7; /* Light Blue */
+    --container-bg-color: #ffffff;
+    --text-color: #1f2937;
+    --heading-color: #0b2f5b; /* Dark Blue */
+    --primary-color: #0284c7; /* Cyan Blue */
+    --secondary-color: #bfdbfe; /* Lighter Cyan Blue */
+    --border-color: #d1d5db;
+    --card-bg-color: #ffffff;
+    --card-border-color: #d1d5db;
+    --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+    --card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    --input-border-color: #9ca3af;
+    --input-focus-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2);
+    --support-bg-color: #059669;
+    --support-hover-bg-color: #047857;
+    --link-color: #0369a1;
+    --link-hover-color: #075985;
+    --loading-text-color: #4b5563;
+    --detail-card-bg: #bfdbfe;
+    --detail-card-border: #60a5fa;
+    --scrollbar-thumb: #93c5fd;
+    --scrollbar-track: #e0f2f7;
+    --modal-bg-color: #ffffff;
+    --modal-border-color: #d1d5db;
+    --tab-button-color: #4b5563;
+    --tab-button-hover-bg: #e0f2f7;
+    --tab-button-active-color: var(--primary-color);
+    --tab-button-active-border: var(--primary-color);
+    --setting-item-border: #d1d5db;
+    --clear-cache-button-bg: #ef4444;
+    --clear-cache-button-hover-bg: #dc2626;
+    --settings-icon-color: #1f2937;
+}
+
 
 /* Basic Reset and Body Styles */
 body {
@@ -99,7 +156,7 @@ body {
     background-color: var(--container-bg-color);
     padding: 40px;
     border-radius: 16px;
-    box-shadow: var(--card-shadow);
+    box-shadow: var(--card-shadow); /* Use card shadow variable */
     max-width: 1400px;
     width: 100%;
     text-align: center;
@@ -156,18 +213,37 @@ strong {
     transition: color 0.3s ease;
 }
 
+/* Settings Icon */
+.settings-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    fill: var(--settings-icon-color); /* Use CSS variable for color */
+    transition: fill 0.3s ease, transform 0.2s ease;
+    z-index: 10; /* Ensure icon is above other content */
+}
+
+.settings-icon:hover {
+    transform: rotate(45deg); /* Rotate on hover */
+    fill: var(--primary-color); /* Change color on hover */
+}
+
+
 .controls {
     margin-bottom: 40px;
     text-align: left;
-    display: flex; /* Use flexbox for controls */
-    gap: 20px; /* Space between search and potential future controls */
-    flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
-    align-items: flex-end; /* Align items to the bottom */
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: flex-end;
 }
 
 .controls .search-container {
-    flex-grow: 1; /* Allow search bar to take available space */
-    min-width: 250px; /* Minimum width for search */
+    flex-grow: 1;
+    min-width: 250px;
 }
 
 
@@ -199,51 +275,6 @@ strong {
     box-shadow: var(--input-focus-shadow);
 }
 
-/* Dark Mode Toggle */
-.theme-switch {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 1rem;
-    color: var(--text-color);
-    transition: color 0.3s ease;
-    margin-bottom: 10px; /* Align with search label */
-}
-
-.theme-switch input[type="checkbox"] {
-    display: none; /* Hide the default checkbox */
-}
-
-.theme-switch .slider {
-    position: relative;
-    width: 40px;
-    height: 20px;
-    background-color: #ccc;
-    border-radius: 20px;
-    transition: background-color 0.4s;
-    margin-left: 10px;
-}
-
-.theme-switch input:checked + .slider {
-    background-color: var(--primary-color);
-}
-
-.theme-switch .slider:before {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 2px;
-    bottom: 2px;
-    background-color: white;
-    border-radius: 50%;
-    transition: transform 0.4s;
-}
-
-.theme-switch input:checked + .slider:before {
-    transform: translateX(20px);
-}
-
 /* Grid Layout */
 .timezones-grid {
     display: grid;
@@ -265,15 +296,16 @@ strong {
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
-    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.3s ease; /* Removed transform */
+    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.3s ease;
     overflow: hidden;
     word-wrap: break-word;
-    height: auto; /* Ensure height adapts to content */
+    overflow-wrap: break-word; /* Modern alternative */
+    height: auto;
 }
 
 .timezone-card:hover {
     box-shadow: var(--card-hover-shadow);
-    border-color: var(--primary-color); /* Only border color change on hover */
+    border-color: var(--primary-color);
 }
 
 .timezone-card h3 {
@@ -284,7 +316,7 @@ strong {
     border-bottom: none;
     padding-bottom: 0;
     word-wrap: break-word;
-    overflow-wrap: break-word; /* Modern alternative to word-wrap */
+    overflow-wrap: break-word;
 }
 
 .timezone-card p {
@@ -296,8 +328,8 @@ strong {
 }
 
 .timezone-card p strong {
-    display: inline-block; /* Prevent strong from breaking word wrap */
-    margin-right: 5px; /* Small space after strong */
+    display: inline-block;
+    margin-right: 5px;
 }
 
 
@@ -435,6 +467,191 @@ strong {
   border-radius: 4px;
 }
 
+/* Modal Styles (for Settings) */
+.modal {
+    position: fixed;
+    z-index: 100; /* High z-index to be on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6); /* Semi-transparent black background */
+    display: flex; /* Use flexbox to center modal content */
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Add padding to prevent content touching edges on small screens */
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background-color: var(--modal-bg-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    max-width: 600px; /* Max width for modal */
+    width: 100%;
+    position: relative; /* Needed for close button positioning */
+    text-align: left;
+    max-height: 90vh; /* Limit modal height */
+    overflow-y: auto; /* Add scroll if content overflows */
+    transition: background-color 0.3s ease;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    color: var(--heading-color);
+}
+
+.close-button {
+    color: var(--loading-text-color); /* Use a neutral color */
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--heading-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Modal Tabs */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    overflow-x: auto; /* Allow tabs to scroll if they overflow */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+}
+
+.tab-button {
+    background-color: transparent;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--tab-button-color);
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s ease, border-bottom-color 0.3s ease, background-color 0.3s ease;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+}
+
+.tab-button:hover:not(.active) {
+    background-color: var(--tab-button-hover-bg);
+}
+
+.tab-button.active {
+    color: var(--tab-button-active-color);
+    border-bottom-color: var(--tab-button-active-border);
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none; /* Hide tab content by default */
+}
+
+.tab-content.active {
+    display: block; /* Show active tab content */
+}
+
+/* Settings within Tabs */
+.setting-item {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--setting-item-border);
+    display: flex; /* Use flexbox for setting items */
+    align-items: center;
+    flex-wrap: wrap; /* Allow items to wrap */
+}
+
+.setting-item label {
+    font-weight: 600;
+    margin-right: 15px;
+    color: var(--text-color);
+    flex-shrink: 0; /* Prevent label from shrinking */
+}
+
+.setting-item select,
+.setting-item input[type="radio"] {
+    margin-top: 5px; /* Add some space on top for wrapped items */
+}
+
+.setting-item select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--input-border-color);
+    font-size: 1rem;
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.theme-option {
+    display: flex;
+    align-items: center;
+    margin-right: 20px; /* Space between theme options */
+    cursor: pointer;
+}
+
+.theme-option input[type="radio"] {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.settings-note {
+    font-size: 0.9rem;
+    color: var(--loading-text-color);
+    margin-top: 10px;
+}
+
+.clear-cache-button {
+    display: block; /* Make button a block element */
+    width: auto; /* Auto width */
+    margin: 20px auto 0 auto; /* Center button and add space above */
+    padding: 10px 20px;
+    background-color: var(--clear-cache-button-bg);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.clear-cache-button:hover {
+    background-color: var(--clear-cache-button-hover-bg);
+}
+
+/* Support section within settings modal */
+.settings-support {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.settings-support h2 {
+    font-size: 1.5rem; /* Smaller heading in modal support */
+    margin-top: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.settings-support .support-link {
+    padding: 8px 15px; /* Smaller padding for links in modal */
+    font-size: 0.95rem;
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .container {
@@ -480,5 +697,55 @@ strong {
     .support-link {
         display: block;
         margin: 10px auto;
+    }
+
+    .settings-icon {
+        top: 10px;
+        right: 10px;
+        width: 25px;
+        height: 25px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-content h3 {
+        font-size: 1.8rem;
+    }
+
+    .close-button {
+        top: 5px;
+        right: 10px;
+        font-size: 24px;
+    }
+
+    .tabs {
+        flex-wrap: wrap; /* Allow tabs to wrap on small screens */
+        border-bottom: none; /* Remove bottom border if wrapped */
+    }
+
+    .tab-button {
+        border-bottom: 1px solid var(--border-color); /* Add border to wrapped buttons */
+        margin-bottom: 5px;
+    }
+
+    .tab-button.active {
+        border-bottom-color: var(--tab-button-active-border);
+    }
+
+    .setting-item {
+        flex-direction: column; /* Stack setting items vertically */
+        align-items: flex-start;
+    }
+
+    .setting-item label {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+
+    .theme-option {
+        margin-right: 10px;
+        margin-bottom: 5px;
     }
 }
