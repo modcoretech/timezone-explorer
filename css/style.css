@@ -39,6 +39,8 @@
 
     /* Loading & Messages */
     --loading-text-color: #6c757d; /* Medium Gray */
+    --loading-icon-color: var(--loading-text-color); /* Color for loading icon */
+
 
     /* Detail View */
     --detail-card-bg: #e9ecef; /* Light Gray */
@@ -100,6 +102,7 @@
     --clear-cache-button-hover-bg: #bd2130;
 
     --loading-text-color: #adb5bd;
+    --loading-icon-color: var(--loading-text-color); /* Loading icon color in dark mode */
 
     --detail-card-bg: #495057;
     --detail-card-border: #6c757d;
@@ -121,8 +124,6 @@
     --nav-search-input-border: var(--border-color);
     --nav-search-input-focus-border: var(--primary-color);
 }
-
-/* Removed Blue Theme Variables */
 
 
 /* --- Base Styles --- */
@@ -153,15 +154,12 @@ body { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scro
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', sans-serif; /* Ensure all headings use Inter */
     color: var(--heading-color);
     transition: color 0.3s ease;
 }
 
-/* Keep Archivo for main h1 and modal title for a distinct look */
-.heading-archivo {
-    font-family: 'Archivo', sans-serif;
-}
+/* Removed .heading-archivo styles */
 
 h1 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
 h2 { font-size: 2rem; font-weight: 600; margin-top: 40px; margin-bottom: 20px; border-bottom: 3px solid var(--secondary-color); padding-bottom: 15px; transition: color 0.3s ease, border-color 0.3s ease; }
@@ -316,6 +314,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     font-weight: 700;
     color: var(--nav-text-color);
     transition: color 0.3s ease;
+    font-family: 'Inter', sans-serif; /* Ensure nav title uses Inter */
 }
 
 .nav-icons {
@@ -449,11 +448,39 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     color: var(--loading-text-color);
     padding: 30px;
     transition: color 0.3s ease;
+    display: flex; /* Use flexbox to align icon and text */
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
 }
 
 .loading-more, .end-of-list {
     margin-top: 20px;
 }
+
+/* Loading Icon Style */
+.loading-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    mask-image: url('../icons/loading.svg'); /* Path to your loading SVG */
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    background-color: var(--loading-icon-color); /* Color the icon */
+    -webkit-mask-image: url('../icons/loading.svg');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+    /* Add a simple spin animation */
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 
 .hidden {
     display: none !important;
@@ -535,6 +562,7 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     border-bottom: none;
     padding-bottom: 0;
     transition: color 0.3s ease;
+    font-family: 'Inter', sans-serif; /* Ensure support heading uses Inter */
 }
 
 .support-section p {
