@@ -1,121 +1,163 @@
 /* css/style.css */
 
-/* CSS Variables for Theming */
+/* --- CSS Variables for Theming --- */
 :root {
-    --background-color: #f4f7f6;
-    --container-bg-color: #ffffff;
-    --text-color: #374151;
-    --heading-color: #1f2937;
-    --primary-color: #4f46e5; /* Purple */
-    --secondary-color: #eef2ff; /* Light Purple */
-    --border-color: #e5e7eb; /* Light Gray */
+    /* General */
+    --background-color: #f8f9fa; /* Very Light Gray */
+    --container-bg-color: #ffffff; /* White */
+    --text-color: #343a40; /* Dark Gray */
+    --heading-color: #212529; /* Very Dark Gray */
+    --primary-color: #007bff; /* Bright Blue */
+    --secondary-color: #e9ecef; /* Light Gray */
+    --border-color: #dee2e6; /* Lighter Gray */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle Shadow */
+
+    /* Cards */
     --card-bg-color: #ffffff;
-    --card-border-color: #e5e7eb;
-    --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
-    --card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    --input-border-color: #d1d5db;
-    --input-focus-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
-    --support-bg-color: #10b981; /* Green */
-    --support-hover-bg-color: #059669; /* Darker Green */
-    --link-color: #3b82f6; /* Blue */
-    --link-hover-color: #2563eb; /* Darker Blue */
-    --loading-text-color: #6b7280; /* Gray */
-    --detail-card-bg: #eef2ff; /* Light Purple */
-    --detail-card-border: #a5b4fc; /* Medium Purple */
-    --scrollbar-thumb: #c1c1c1; /* Default scrollbar */
-    --scrollbar-track: #f1f1f1; /* Default scrollbar track */
+    --card-border-color: #e9ecef;
+    --card-shadow: 0 4px 8px var(--shadow-color);
+    --card-hover-shadow: 0 8px 16px var(--shadow-color);
+    --card-hover-border-color: var(--primary-color);
+
+    /* Forms */
+    --input-border-color: #ced4da;
+    --input-focus-border-color: var(--primary-color);
+    --input-focus-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+
+    /* Buttons & Links */
+    --support-bg-color: #28a745; /* Green */
+    --support-hover-bg-color: #218838; /* Darker Green */
+    --link-color: var(--primary-color);
+    --link-hover-color: #0056b3; /* Darker Blue */
+    --clear-cache-button-bg: #dc3545; /* Red */
+    --clear-cache-button-hover-bg: #c82333; /* Darker Red */
+
+    /* Loading & Messages */
+    --loading-text-color: #6c757d; /* Medium Gray */
+
+    /* Modal */
+    --modal-overlay-bg: rgba(0, 0, 0, 0.7); /* Darker Overlay */
     --modal-bg-color: #ffffff;
-    --modal-border-color: #e5e7eb;
-    --tab-button-color: #6b7280;
-    --tab-button-hover-bg: #f3f4f6;
+    --modal-border-color: #dee2e6;
+
+    /* Tabs */
+    --tab-sidebar-border-color: #dee2e6;
+    --tab-button-color: #6c757d;
+    --tab-button-hover-bg: #e9ecef;
     --tab-button-active-color: var(--primary-color);
     --tab-button-active-border: var(--primary-color);
-    --setting-item-border: #e5e7eb;
-    --clear-cache-button-bg: #ef4444; /* Red */
-    --clear-cache-button-hover-bg: #dc2626; /* Darker Red */
-    --settings-icon-color: #374151; /* Match text color */
-    --tab-icon-color: #6b7280; /* Default tab icon color */
-    --tab-icon-active-color: var(--primary-color); /* Active tab icon color */
+    --tab-icon-color: #6c757d;
+    --tab-icon-active-color: var(--primary-color);
+
+     /* Settings Specific */
+    --setting-item-border: #e9ecef;
+
+    /* Icons */
+    --settings-icon-color: var(--text-color); /* Match text color by default */
+
+    /* Scrollbar */
+    --scrollbar-thumb: #adb5bd; /* Gray */
+    --scrollbar-track: #f8f9fa; /* Very Light Gray */
 }
 
 /* Dark Mode Variables */
 .dark-mode {
-    --background-color: #1a202c;
-    --container-bg-color: #2d3748;
-    --text-color: #e2e8f0;
-    --heading-color: #f7fafc;
-    --primary-color: #a78bfa;
-    --secondary-color: #4a5568;
-    --border-color: #4a5568;
-    --card-bg-color: #2d3748;
-    --card-border-color: #4a5568;
-    --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-    --card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
-    --input-border-color: #4a5568;
-    --input-focus-shadow: 0 0 0 4px rgba(167, 139, 250, 0.3);
-    --support-bg-color: #047857;
-    --support-hover-bg-color: #065f46;
-    --link-color: #90cdf4;
-    --link-hover-color: #63b3ed;
-    --loading-text-color: #a0aec0;
-    --detail-card-bg: #4a5568;
-    --detail-card-border: #667eea;
-    --scrollbar-thumb: #555;
-    --scrollbar-track: #333;
-    --modal-bg-color: #2d3748;
-    --modal-border-color: #4a5568;
-    --tab-button-color: #a0aec0;
-    --tab-button-hover-bg: #4a5568;
+    --background-color: #212529;
+    --container-bg-color: #343a40;
+    --text-color: #e9ecef;
+    --heading-color: #f8f9fa;
+    --primary-color: #00aaff; /* Lighter Blue for Dark Mode */
+    --secondary-color: #495057;
+    --border-color: #495057;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+
+    --card-bg-color: #343a40;
+    --card-border-color: #495057;
+    --card-shadow: 0 4px 8px var(--shadow-color);
+    --card-hover-shadow: 0 8px 16px var(--shadow-color);
+    --card-hover-border-color: var(--primary-color);
+
+    --input-border-color: #495057;
+    --input-focus-border-color: var(--primary-color);
+    --input-focus-shadow: 0 0 0 0.2rem rgba(0, 170, 255, 0.25);
+
+    --support-bg-color: #1e7e34;
+    --support-hover-bg-color: #1c7430;
+    --link-color: var(--primary-color);
+    --link-hover-color: #0077cc;
+
+    --loading-text-color: #adb5bd;
+
+    --modal-overlay-bg: rgba(0, 0, 0, 0.85);
+    --modal-bg-color: #343a40;
+    --modal-border-color: #495057;
+
+    --tab-sidebar-border-color: #495057;
+    --tab-button-color: #adb5bd;
+    --tab-button-hover-bg: #495057;
     --tab-button-active-color: var(--primary-color);
     --tab-button-active-border: var(--primary-color);
-    --setting-item-border: #4a5568;
-    --clear-cache-button-bg: #b91c1c;
-    --clear-cache-button-hover-bg: #991b1b;
-    --settings-icon-color: #e2e8f0;
-    --tab-icon-color: #a0aec0;
+    --tab-icon-color: #adb5bd;
     --tab-icon-active-color: var(--primary-color);
+
+    --setting-item-border: #495057;
+
+    --settings-icon-color: var(--text-color); /* Match text color */
+
+    --scrollbar-thumb: #495057;
+    --scrollbar-track: #343a40;
 }
 
 /* Blue Theme Variables */
 .blue-theme {
-    --background-color: #e0f2f7;
+    --background-color: #e0f7fa; /* Very Light Cyan */
     --container-bg-color: #ffffff;
-    --text-color: #1f2937;
-    --heading-color: #0b2f5b;
-    --primary-color: #0284c7;
-    --secondary-color: #bfdbfe;
-    --border-color: #d1d5db;
+    --text-color: #003f5c; /* Dark Blue */
+    --heading-color: #002a4d; /* Very Dark Blue */
+    --primary-color: #0077b6; /* Ocean Blue */
+    --secondary-color: #b3e5fc; /* Light Cyan */
+    --border-color: #b0bec5; /* Blue Gray */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+
     --card-bg-color: #ffffff;
-    --card-border-color: #d1d5db;
-    --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
-    --card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    --input-border-color: #9ca3af;
-    --input-focus-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2);
-    --support-bg-color: #059669;
-    --support-hover-bg-color: #047857;
-    --link-color: #0369a1;
-    --link-hover-color: #075985;
-    --loading-text-color: #4b5563;
-    --detail-card-bg: #bfdbfe;
-    --detail-card-border: #60a5fa;
-    --scrollbar-thumb: #93c5fd;
-    --scrollbar-track: #e0f2f7;
+    --card-border-color: #b3e5fc;
+    --card-shadow: 0 4px 8px var(--shadow-color);
+    --card-hover-shadow: 0 8px 16px var(--shadow-color);
+    --card-hover-border-color: var(--primary-color);
+
+    --input-border-color: #90a4ae;
+    --input-focus-border-color: var(--primary-color);
+    --input-focus-shadow: 0 0 0 0.2rem rgba(0, 119, 182, 0.25);
+
+    --support-bg-color: #00bfa5; /* Teal */
+    --support-hover-bg-color: #00a18a; /* Darker Teal */
+    --link-color: var(--primary-color);
+    --link-hover-color: #005f99;
+
+    --loading-text-color: #546e7a;
+
+    --modal-overlay-bg: rgba(0, 0, 0, 0.6);
     --modal-bg-color: #ffffff;
-    --modal-border-color: #d1d5db;
-    --tab-button-color: #4b5563;
-    --tab-button-hover-bg: #e0f2f7;
+    --modal-border-color: #b0bec5;
+
+    --tab-sidebar-border-color: #b0bec5;
+    --tab-button-color: #546e7a;
+    --tab-button-hover-bg: #e0f7fa;
     --tab-button-active-color: var(--primary-color);
     --tab-button-active-border: var(--primary-color);
-    --setting-item-border: #d1d5db;
-    --clear-cache-button-bg: #ef4444;
-    --clear-cache-button-hover-bg: #dc2626;
-    --settings-icon-color: #1f2937;
-    --tab-icon-color: #4b5563;
+    --tab-icon-color: #546e7a;
     --tab-icon-active-color: var(--primary-color);
+
+    --setting-item-border: #b0bec5;
+
+    --settings-icon-color: var(--text-color);
+
+    --scrollbar-thumb: #81d4fa;
+    --scrollbar-track: #e0f7fa;
 }
 
 
-/* Basic Reset and Body Styles */
+/* --- Base Styles --- */
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background-color);
@@ -127,36 +169,24 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     box-sizing: border-box;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
-    overflow-y: scroll; /* Always show scrollbar to prevent layout shifts */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-y: scroll;
+    -webkit-font-smoothing: antialiased; /* Improve font rendering */
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar Styling (for modern browsers) */
-body::-webkit-scrollbar {
-  width: 12px;
-}
-
-body::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-  border-radius: 10px;
-}
-
-body::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb);
-  border-radius: 10px;
-  border: 3px solid var(--scrollbar-track); /* Add border for better visibility */
-}
-
-/* Scrollbar Styling (for Firefox) */
-body {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-}
+/* Scrollbar Styling */
+body::-webkit-scrollbar { width: 12px; }
+body::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
+body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; border: 3px solid var(--scrollbar-track); }
+body { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
 
 
-/* Apply Inter to all headings except the main h1 and modal title */
+/* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', sans-serif;
+    color: var(--heading-color);
+    transition: color 0.3s ease;
 }
 
 /* Keep Archivo for main h1 and modal title for a distinct look */
@@ -164,70 +194,29 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Archivo', sans-serif;
 }
 
+h1 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
+h2 { font-size: 2rem; font-weight: 600; margin-top: 40px; margin-bottom: 20px; border-bottom: 3px solid var(--secondary-color); padding-bottom: 15px; transition: color 0.3s ease, border-color 0.3s ease; }
+h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 15px; color: var(--primary-color); border-bottom: 1px solid var(--secondary-color); padding-bottom: 10px; transition: color 0.3s ease, border-color 0.3s ease; }
+h4 { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+
+p { font-size: 1.1rem; margin-bottom: 15px; color: var(--text-color); transition: color 0.3s ease; }
+strong { color: var(--heading-color); transition: color 0.3s ease; }
 
 .container {
     background-color: var(--container-bg-color);
     padding: 40px;
     border-radius: 16px;
-    box-shadow: var(--card-shadow); /* Use card shadow variable */
+    box-shadow: var(--card-shadow);
     max-width: 1400px;
     width: 100%;
     text-align: center;
     box-sizing: border-box;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    position: relative; /* Needed for absolute positioning of settings icon */
+    position: relative;
+    overflow: hidden; /* Prevent any potential overflow from absolute positioning */
 }
 
-h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: var(--heading-color);
-    transition: color 0.3s ease;
-}
-
-h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-top: 40px;
-    margin-bottom: 20px;
-    border-bottom: 3px solid var(--secondary-color);
-    padding-bottom: 15px;
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: var(--primary-color);
-    border-bottom: 1px solid var(--secondary-color);
-    padding-bottom: 10px;
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-h4 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: var(--heading-color);
-    transition: color 0.3s ease;
-}
-
-p {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    color: var(--text-color);
-    transition: color 0.3s ease;
-}
-
-strong {
-    color: var(--heading-color);
-    transition: color 0.3s ease;
-}
-
-/* Settings Icon */
+/* --- Settings Icon --- */
 .settings-icon {
     position: absolute;
     top: 20px;
@@ -243,26 +232,28 @@ strong {
     /* Control the color using background-color */
     background-color: var(--settings-icon-color);
     transition: background-color 0.3s ease, transform 0.2s ease;
-    z-index: 10; /* Ensure icon is above other content */
+    z-index: 10;
     -webkit-mask-image: url('../icons/settings.svg'); /* Vendor prefix for Safari */
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-size: contain;
     -webkit-mask-position: center;
+    outline: none; /* Remove default outline */
 }
 
 .settings-icon:hover {
-    transform: rotate(45deg); /* Rotate on hover */
-    background-color: var(--primary-color); /* Change color on hover */
+    transform: rotate(45deg);
+    background-color: var(--primary-color);
 }
 
 .settings-icon:focus-visible {
      outline: 2px solid var(--primary-color);
      outline-offset: 2px;
      border-radius: 4px;
-     background-color: var(--primary-color); /* Also change color on focus */
+     background-color: var(--primary-color);
 }
 
 
+/* --- Controls (Search) --- */
 .controls {
     margin-bottom: 40px;
     text-align: left;
@@ -276,7 +267,6 @@ strong {
     flex-grow: 1;
     min-width: 250px;
 }
-
 
 .controls label {
     display: block;
@@ -306,7 +296,7 @@ strong {
     box-shadow: var(--input-focus-shadow);
 }
 
-/* Grid Layout */
+/* --- Grid Layout --- */
 .timezones-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -330,7 +320,7 @@ strong {
     transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.3s ease;
     overflow: hidden;
     word-wrap: break-word;
-    overflow-wrap: break-word; /* Modern alternative */
+    overflow-wrap: break-word;
     height: auto;
 }
 
@@ -378,10 +368,10 @@ strong {
 }
 
 .hidden {
-    display: none;
+    display: none !important; /* Use !important to ensure it overrides flex/grid */
 }
 
-/* Detail Page View */
+/* --- Detail Page View --- */
 #detail-view {
     margin-top: 30px;
     text-align: left;
@@ -440,7 +430,7 @@ strong {
 }
 
 
-/* Support Section */
+/* --- Support Section --- */
 .support-section {
     margin-top: 60px;
     padding-top: 40px;
@@ -479,7 +469,7 @@ strong {
     transform: translateY(-3px);
 }
 
-/* Accessibility: Reduced Motion */
+/* --- Accessibility --- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -491,14 +481,13 @@ strong {
   }
 }
 
-/* Accessibility: Focus States */
 *:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Modal Styles (for Settings) */
+/* --- Modal Styles (Settings) --- */
 .modal {
     position: fixed;
     z-index: 100;
@@ -507,12 +496,20 @@ strong {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.6);
+    background-color: var(--modal-overlay-bg); /* Use variable for overlay color */
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
+    opacity: 0; /* Start hidden */
+    visibility: hidden; /* Hide from screen readers when closed */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
 }
 
 .modal-content {
@@ -520,14 +517,15 @@ strong {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    max-width: 800px; /* Increased max width for side tabs */
+    max-width: 800px;
     width: 100%;
     position: relative;
     text-align: left;
     max-height: 90vh;
-    overflow: hidden; /* Manage overflow with modal-body */
-    display: flex; /* Use flexbox for modal body layout */
+    overflow: hidden;
+    display: flex;
     transition: background-color 0.3s ease;
+    border: 1px solid var(--modal-border-color); /* Add modal border */
 }
 
 .modal-content h3 {
@@ -547,50 +545,67 @@ strong {
     right: 20px;
     cursor: pointer;
     transition: color 0.3s ease;
-    z-index: 1; /* Ensure close button is clickable */
+    z-index: 1;
+    background: none; /* Remove default button background */
+    border: none; /* Remove default button border */
+    padding: 5px; /* Add padding for easier clicking */
+    line-height: 1; /* Adjust line height */
+    outline: none; /* Remove default outline */
 }
 
 .close-button:hover,
-.close-button:focus {
+.close-button:focus-visible {
     color: var(--heading-color);
     text-decoration: none;
     cursor: pointer;
+    outline: 2px solid var(--heading-color); /* Add focus outline */
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 .modal-body {
     display: flex;
     width: 100%;
-    max-height: calc(90vh - 60px); /* Adjust height considering padding and title */
-    overflow-y: auto; /* Add scroll to the modal body */
+    max-height: calc(90vh - 60px);
+    overflow-y: auto;
+    scrollbar-width: thin; /* Firefox scrollbar */
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); /* Firefox scrollbar */
 }
+
+/* Modal Body Scrollbar (Webkit) */
+.modal-body::-webkit-scrollbar { width: 10px; }
+.modal-body::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
+.modal-body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; border: 2px solid var(--scrollbar-track); }
+
 
 /* Modal Tabs (Sidebar) */
 .tabs-sidebar {
     display: flex;
-    flex-direction: column; /* Stack tabs vertically */
-    border-right: 1px solid var(--border-color); /* Separator line */
-    margin-right: 30px; /* Space between tabs and content */
+    flex-direction: column;
+    border-right: 1px solid var(--tab-sidebar-border-color);
+    margin-right: 30px;
     padding-right: 20px;
-    flex-shrink: 0; /* Prevent sidebar from shrinking */
-    width: 180px; /* Fixed width for sidebar */
+    flex-shrink: 0;
+    width: 180px;
+    transition: border-color 0.3s ease;
 }
 
 .tab-button {
     background-color: transparent;
     border: none;
-    padding: 10px 0; /* Adjust padding for vertical tabs */
+    padding: 10px 0;
     cursor: pointer;
     font-size: 1rem;
     color: var(--tab-button-color);
-    border-bottom: none; /* Remove bottom border */
-    border-left: 4px solid transparent; /* Indicator on the left */
+    border-left: 4px solid transparent;
     transition: color 0.3s ease, border-left-color 0.3s ease, background-color 0.3s ease;
     flex-shrink: 0;
-    text-align: left; /* Align text left */
-    margin-bottom: 5px; /* Space between buttons */
-    display: flex; /* Use flexbox for icon and text */
+    text-align: left;
+    margin-bottom: 5px;
+    display: flex;
     align-items: center;
-    gap: 10px; /* Space between icon and text */
+    gap: 10px;
+    outline: none; /* Remove default outline */
 }
 
 .tab-button:hover:not(.active) {
@@ -602,6 +617,13 @@ strong {
     border-left-color: var(--tab-button-active-border);
     font-weight: 600;
 }
+
+.tab-button:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
 
 /* Tab Icons */
 .tab-icon {
@@ -623,35 +645,25 @@ strong {
 }
 
 /* Specific Icon Masks */
-.settings-icon-svg {
-    mask-image: url('../icons/settings.svg');
-    -webkit-mask-image: url('../icons/settings.svg');
-}
-
-.palette-icon-svg {
-    mask-image: url('../icons/palette.svg');
-    -webkit-mask-image: url('../icons/palette.svg');
-}
-
-.info-icon-svg {
-    mask-image: url('../icons/info.svg');
-    -webkit-mask-image: url('../icons/info.svg');
-}
+.settings-icon-svg { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
+.palette-icon-svg { mask-image: url('../icons/palette.svg'); -webkit-mask-image: url('../icons/palette.svg'); }
+.info-icon-svg { mask-image: url('../icons/info.svg'); -webkit-mask-image: url('../icons/info.svg'); }
 
 
 .tab-content-area {
-    flex-grow: 1; /* Allow content area to take remaining space */
-    overflow-y: auto; /* Add scroll to content area if needed */
-    padding-right: 10px; /* Add some padding for scrollbar */
+    flex-grow: 1;
+    /* Removed overflow-y: auto; here, let modal-body handle it */
+    padding-right: 10px; /* Add some padding for scrollbar spacing */
 }
 
 
 .tab-content {
-    display: none; /* Hide tab content by default */
+    display: none;
+    /* Removed overflow-y: auto; from here */
 }
 
 .tab-content.active {
-    display: block; /* Show active tab content */
+    display: block;
 }
 
 /* Settings within Tabs */
@@ -690,19 +702,36 @@ strong {
     background-color: var(--container-bg-color);
     color: var(--text-color);
     transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    outline: none; /* Remove default outline */
 }
+
+.setting-item select:focus-visible {
+     outline: 2px solid var(--primary-color);
+     outline-offset: 2px;
+     border-radius: 4px;
+}
+
 
 .theme-option {
     display: flex;
     align-items: center;
     margin-right: 20px;
     cursor: pointer;
+    outline: none; /* Remove default outline */
 }
 
 .theme-option input[type="radio"] {
     margin-right: 8px;
     cursor: pointer;
+    outline: none; /* Remove default outline */
 }
+
+.theme-option:focus-visible {
+     outline: 2px solid var(--primary-color);
+     outline-offset: 2px;
+     border-radius: 4px;
+}
+
 
 .settings-note {
     font-size: 0.9rem;
@@ -723,11 +752,18 @@ strong {
     font-size: 1rem;
     font-weight: 600;
     transition: background-color 0.3s ease;
+    outline: none; /* Remove default outline */
 }
 
 .clear-cache-button:hover {
     background-color: var(--clear-cache-button-hover-bg);
 }
+.clear-cache-button:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
 
 /* Support section within settings modal */
 .settings-support {
@@ -746,6 +782,12 @@ strong {
 .settings-support .support-link {
     padding: 8px 15px;
     font-size: 0.95rem;
+    outline: none; /* Remove default outline */
+}
+.settings-support .support-link:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 
@@ -807,21 +849,12 @@ strong {
         padding: 20px;
         flex-direction: column; /* Stack modal body vertically */
         max-width: 95%; /* Allow modal to be wider on small screens */
-    }
-
-    .modal-content h3 {
-        font-size: 1.8rem;
-    }
-
-    .close-button {
-        top: 5px;
-        right: 10px;
-        font-size: 24px;
+        max-height: 95vh; /* Adjust max height */
     }
 
     .modal-body {
         flex-direction: column; /* Stack modal body vertically */
-        max-height: calc(90vh - 50px); /* Adjust height for smaller title area */
+        max-height: calc(95vh - 50px); /* Adjust height for smaller title area */
         overflow-y: auto; /* Ensure scrolling works */
     }
 
@@ -853,6 +886,7 @@ strong {
      }
 
     .tab-content-area {
+        flex-grow: 1;
         padding-right: 0; /* Remove padding */
     }
 
@@ -873,3 +907,4 @@ strong {
         margin-bottom: 5px;
     }
 }
+
