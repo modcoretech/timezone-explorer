@@ -17,8 +17,8 @@
     --setting-label-color: var(--heading-color); /* Use heading color for labels */
     --setting-input-bg: var(--container-bg-color); /* Use container bg for inputs */
     --setting-input-border: var(--input-border-color); /* Use general input border */
-    --setting-input-focus-border: var(--input-focus-border-color); /* Use general input focus border */
-    --setting-input-focus-shadow: var(--input-focus-shadow); /* Use general input focus shadow */
+    --setting-input-focus-border: var(--setting-input-focus-border); /* Use general input focus border */
+    --setting-input-focus-shadow: var(--setting-input-focus-shadow); /* Use general input focus shadow */
     --switch-bg: #adb5bd; /* Gray for off state */
     --switch-checked-bg: var(--primary-color); /* Primary color for on state */
     --switch-circle-bg: #ffffff; /* White circle */
@@ -64,7 +64,7 @@
     z-index: 100; /* Ensure modal is on top */
     backdrop-filter: blur(5px); /* Subtle blur effect */
     -webkit-backdrop-filter: blur(5px); /* Safari support */
-    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+    /* REMOVED: transition: background-color 0.3s ease, backdrop-filter 0.3s ease; */
 }
 
 .modal-content {
@@ -78,7 +78,7 @@
     position: relative;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     border: 1px solid var(--modal-border-color);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    /* REMOVED: transition: background-color 0.3s ease, border-color 0.3s ease; */
 }
 
 .modal-content h3 {
@@ -88,7 +88,7 @@
     color: var(--heading-color);
     border-bottom: 2px solid var(--primary-color); /* Use primary color for heading border */
     padding-bottom: 10px;
-    transition: color 0.3s ease, border-color 0.3s ease;
+    /* REMOVED: transition: color 0.3s ease, border-color 0.3s ease; */
 }
 
 
@@ -161,18 +161,21 @@ body.modal-open {
 /* --- Modal Body Layout (Tabs) --- */
 .modal-body {
     display: flex;
-    gap: 30px;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    /* gap: 30px; Kept as gap is useful */
+    flex-wrap: nowrap; /* Prevent wrapping on smaller screens to force side-by-side */
+    flex-direction: row; /* Explicitly set to row */
+    gap: 30px; /* Added gap back */
 }
 
 .tabs-sidebar {
-    flex: 0 0 200px; /* Fixed width sidebar */
+    /* Adjust flex-basis to give the sidebar a minimum width but allow content area to shrink */
+    flex: 0 0 200px; /* Keep fixed width sidebar for larger screens */
     border-right: 1px solid var(--tab-sidebar-border-color);
     padding-right: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Ensure tabs are vertical within the sidebar */
     gap: 10px;
-    transition: border-color 0.3s ease;
+    /* REMOVED: transition: border-color 0.3s ease; */
 }
 
 .tab-button {
@@ -246,12 +249,13 @@ body.modal-open {
 
 
 .tab-content-area {
-    flex-grow: 1;
+    flex-grow: 1; /* Allow content area to take remaining space */
+    padding-right: 10px; /* Add some padding on the right */
+    min-width: 0; /* Allow content to shrink below its ideal width */
 }
 
 .tab-content {
     display: none;
-    padding-right: 10px; /* Add some padding on the right */
 }
 
 .tab-content.active {
@@ -263,7 +267,7 @@ body.modal-open {
     margin-bottom: 20px;
     font-size: 1.4rem;
     color: var(--heading-color);
-    transition: color 0.3s ease;
+    /* REMOVED: transition: color 0.3s ease; */
 }
 
 .setting-item {
@@ -273,7 +277,7 @@ body.modal-open {
     margin-bottom: 25px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--setting-item-border);
-    transition: border-bottom-color 0.3s ease;
+    /* REMOVED: transition: border-bottom-color 0.3s ease; */
 }
 
 .setting-item label {
@@ -282,7 +286,7 @@ body.modal-open {
     color: var(--setting-label-color);
     margin-right: 20px;
     flex-shrink: 0; /* Prevent label from shrinking */
-    transition: color 0.3s ease;
+    /* REMOVED: transition: color 0.3s ease; */
 }
 
 .setting-item select {
@@ -293,7 +297,7 @@ body.modal-open {
     font-family: 'Inter', sans-serif;
     background-color: var(--setting-input-bg);
     color: var(--text-color);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    /* REMOVED: transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease; */
     outline: none;
     max-width: 250px; /* Limit select width */
     width: 100%; /* Allow width to adjust */
@@ -313,7 +317,7 @@ body.modal-open {
     font-weight: 500;
     color: var(--setting-label-color);
     cursor: pointer;
-    transition: color 0.3s ease;
+    /* REMOVED: transition: color 0.3s ease; */
 }
 
 .theme-option input[type="checkbox"] {
@@ -335,7 +339,7 @@ body.modal-open {
     height: 25px; /* Height of the toggle */
     background-color: var(--switch-bg);
     border-radius: 25px; /* Make it rounded */
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease; /* Keep this transition for color change */
     cursor: pointer;
     flex-shrink: 0; /* Prevent it from shrinking */
     border: 1px solid var(--switch-border);
@@ -352,7 +356,7 @@ body.modal-open {
     height: 17px; /* Size of the circle */
     background-color: var(--switch-circle-bg);
     border-radius: 50%;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease; /* Keep this transition for knob movement */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Subtle shadow */
 }
 
@@ -411,7 +415,7 @@ body.modal-open {
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Keep these transitions */
     border: none;
     cursor: pointer;
     outline: none;
@@ -458,48 +462,48 @@ body.modal-open {
     }
 
     .modal-body {
-        flex-direction: column; /* Stack tabs and content */
-        gap: 15px; /* Reduce gap */
+        /* Prevent column direction on small screens */
+        flex-direction: row;
+        /* Re-adjust gap and flex properties for side-by-side on small screens */
+        gap: 15px; /* Reduced gap */
     }
 
     .tabs-sidebar {
-        flex-direction: row; /* Arrange tabs horizontally */
-        flex-wrap: wrap; /* Allow tabs to wrap */
-        flex: none; /* Remove fixed width */
-        border-right: none; /* Remove right border */
-        border-bottom: 1px solid var(--tab-sidebar-border-color); /* Add bottom border */
-        padding-right: 0;
-        padding-bottom: 15px; /* Add padding below tabs */
-        justify-content: center; /* Center tabs */
+        /* Ensure vertical direction for tabs within sidebar */
+        flex-direction: column;
+        /* Adjust flex-basis for the sidebar on small screens */
+        flex: 0 0 120px; /* Give sidebar a smaller fixed width on mobile */
+        border-right: 1px solid var(--tab-sidebar-border-color);
+        padding-right: 10px; /* Adjusted padding */
+         gap: 5px; /* Adjusted gap between tabs */
     }
 
     .tab-button {
-        padding: 8px 12px; /* Adjusted padding for horizontal tabs */
-        border-radius: 4px; /* Rounded corners on mobile tabs */
-        margin-right: 10px; /* Add space between mobile tabs */
-        border-left: none; /* Remove left border */
-        border-bottom: 2px solid transparent; /* Add bottom border for active state */
-         font-size: 0.9rem;
-         gap: 5px;
-         flex-grow: 1; /* Allow buttons to grow to fill space */
-         justify-content: center; /* Center text/icon in button */
+        padding: 8px 10px; /* Adjusted padding */
+         font-size: 0.8rem; /* Smaller font size */
+         gap: 5px; /* Smaller gap for icon and text */
+         justify-content: flex-start; /* Align text/icon to the start */
+         border-left: 4px solid transparent; /* Keep border for active state */
+         border-bottom: none; /* Remove bottom border */
     }
 
      .tab-button.active {
-        border-left-color: transparent; /* Ensure left border is gone */
-        border-bottom-color: var(--tab-button-active-border); /* Active indicator */
-        padding-left: 12px; /* Reset padding */
+        border-left-color: var(--tab-button-active-border); /* Active indicator */
+        border-bottom-color: transparent; /* Ensure bottom border is gone */
+        padding-left: 6px; /* Adjust padding due to border */
      }
 
+
     .tab-content-area {
-        flex-grow: 1;
+        flex-grow: 1; /* Allow content area to take remaining space */
+        min-width: 0; /* Allow content to shrink */
         padding-right: 0;
     }
 
     /* Target div/span tab icons */
     .tab-icon {
-        width: 20px; /* Slightly smaller on mobile */
-        height: 20px;
+        width: 18px; /* Smaller icon size */
+        height: 18px;
     }
 
     .tab-content h4 {
@@ -508,45 +512,42 @@ body.modal-open {
     }
 
     .setting-item {
-        flex-direction: column;
+        flex-direction: column; /* Keep stacking setting items within content */
         align-items: flex-start;
-        gap: 8px; /* Adjusted gap */
-        margin-bottom: 20px; /* Adjusted margin */
-        padding-bottom: 15px; /* Adjusted padding */
+        gap: 8px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
     }
 
     .setting-item label {
-        margin-right: 0;
-        margin-bottom: 0;
-        font-size: 1rem; /* Adjusted font size */
+        font-size: 1rem;
     }
 
     .setting-item select {
-        width: 100%; /* Full width select on mobile */
-        max-width: none; /* Remove max width constraint */
+        width: 100%;
+        max-width: none;
     }
 
     .theme-option {
-        font-size: 1rem; /* Adjusted font size */
+        font-size: 1rem;
         gap: 10px;
     }
 
     .theme-option input[type="checkbox"] + label {
-        width: 40px; /* Slightly smaller toggle */
+        width: 40px;
         height: 22px;
     }
 
      .theme-option input[type="checkbox"] + label::after {
-        top: 3px; /* Adjust position */
-        left: 3px; /* Adjust position */
-        width: 16px; /* Adjust circle size */
-        height: 16px; /* Adjust circle size */
+        top: 3px;
+        left: 3px;
+        width: 16px;
+        height: 16px;
      }
 
     .theme-option input[type="checkbox"]:checked + label::after {
-        transform: translateX(17px); /* Adjust move distance */
+        transform: translateX(17px);
     }
-
 
     .setting-description {
         font-size: 0.9rem;
