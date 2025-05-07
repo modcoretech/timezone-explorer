@@ -1,0 +1,417 @@
+/* css/settings.css */
+
+/* --- CSS Variables for Theming (Modal Specific) --- */
+/* Note: General theme variables are in style.css */
+:root {
+    --modal-overlay-bg: rgba(0, 0, 0, 0.5);
+    --modal-bg-color: var(--container-bg-color); /* Use container bg */
+    --modal-border-color: var(--border-color); /* Use general border */
+    --tab-sidebar-border-color: var(--border-color); /* Use general border */
+    --tab-button-color: var(--text-color); /* Use general text */
+    --tab-button-hover-bg: var(--secondary-color); /* Use secondary color */
+    --tab-button-active-color: var(--primary-color); /* Use primary color */
+    --tab-button-active-border: var(--primary-color); /* Use primary color */
+    --tab-icon-color: var(--text-color); /* Use general text for icons */
+    --tab-icon-active-color: var(--primary-color); /* Use primary color for active icons */
+    --setting-item-border: var(--border-color); /* Use general border */
+    /* Clear cache button variables are in style.css */
+}
+
+.dark-mode {
+    --modal-overlay-bg: rgba(0, 0, 0, 0.7);
+    --modal-bg-color: var(--container-bg-color);
+    --modal-border-color: var(--border-color);
+    --tab-sidebar-border-color: var(--border-color);
+    --tab-button-color: var(--text-color);
+    --tab-button-hover-bg: var(--secondary-color);
+    --tab-button-active-color: var(--primary-color);
+    --tab-button-active-border: var(--primary-color);
+    --tab-icon-color: var(--text-color);
+    --tab-icon-active-color: var(--primary-color);
+    --setting-item-border: var(--border-color);
+}
+
+/* Removed .blue-theme modal specific variables */
+
+
+/* --- Modal Styles (Settings) --- */
+.modal {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--modal-overlay-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--modal-bg-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    max-width: 800px;
+    width: 100%;
+    position: relative;
+    text-align: left;
+    max-height: 90vh;
+    overflow: hidden; /* Use overflow: hidden to allow modal-body to scroll */
+    display: flex;
+    flex-direction: column; /* Stack title and body vertically */
+    transition: background-color 0.3s ease;
+    border: 1px solid var(--modal-border-color);
+}
+
+.modal-content h3 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    color: var(--heading-color);
+    transition: color 0.3s ease, border-color 0.3s ease;
+    text-align: center;
+}
+
+.close-button {
+    color: var(--loading-text-color); /* Use a neutral color that works in both themes */
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 1;
+    background: none;
+    border: none;
+    padding: 5px;
+    line-height: 1;
+    outline: none;
+}
+
+.close-button:hover,
+.close-button:focus-visible {
+    color: var(--heading-color); /* Hover color based on theme */
+    text-decoration: none;
+    cursor: pointer;
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.modal-body {
+    display: flex;
+    width: 100%;
+    flex-grow: 1; /* Allow modal body to take available height */
+    /* Adjusted max-height to account for title, padding, and potential border */
+    max-height: calc(90vh - 100px);
+    overflow-y: auto; /* Enable scrolling for the body content */
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Modal Body Scrollbar (Webkit) */
+.modal-body::-webkit-scrollbar { width: 10px; }
+.modal-body::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
+.modal-body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; border: 2px solid var(--scrollbar-track); }
+
+
+/* Modal Tabs (Sidebar) */
+.tabs-sidebar {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--tab-sidebar-border-color);
+    margin-right: 30px;
+    padding-right: 20px;
+    flex-shrink: 0;
+    width: 180px;
+    transition: border-color 0.3s ease;
+    padding-top: 10px;
+}
+
+.tab-button {
+    background-color: transparent;
+    border: none;
+    padding: 10px 0;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--tab-button-color);
+    border-left: 4px solid transparent;
+    transition: color 0.3s ease, border-left-color 0.3s ease, background-color 0.3s ease;
+    flex-shrink: 0;
+    text-align: left;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.tab-button:hover:not(.active) {
+    background-color: var(--tab-button-hover-bg);
+}
+
+.tab-button.active {
+    color: var(--tab-button-active-color);
+    border-left-color: var(--tab-button-active-border);
+    font-weight: 600;
+}
+
+.tab-button:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+
+/* Tab Icons - using CSS mask */
+.tab-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    /* Use background-color to color the mask */
+    background-color: var(--tab-icon-color);
+    transition: background-color 0.3s ease;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+}
+
+.tab-button.active .tab-icon {
+    background-color: var(--tab-icon-active-color); /* Change background-color for active tab icon */
+}
+
+/* Specific Icon Masks */
+/* Ensure these paths are correct relative to the CSS file location */
+.settings-icon-svg { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
+.palette-icon-svg { mask-image: url('../icons/palette.svg'); -webkit-mask-image: url('../icons/palette.svg'); } /* Keep if needed for other purposes, but not for themes tab */
+.info-icon-svg { mask-image: url('../icons/info.svg'); -webkit-mask-image: url('../icons/info.svg'); }
+
+
+.tab-content-area {
+    flex-grow: 1;
+    padding-right: 10px;
+}
+
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Settings within Tabs */
+.setting-item {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--setting-item-border);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.setting-item label {
+    font-weight: 600;
+    color: var(--text-color);
+    flex-shrink: 0;
+}
+
+.setting-item select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--input-border-color);
+    font-size: 1rem;
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
+    transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+}
+
+.setting-item select:focus-visible {
+     outline: 2px solid var(--primary-color);
+     outline-offset: 2px;
+     border-radius: 4px;
+}
+
+/* Style for the dark mode toggle checkbox/label */
+.theme-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    /* Removed margin-right */
+}
+
+.theme-option input[type="checkbox"] { /* Changed from radio to checkbox */
+    margin-right: 8px;
+    cursor: pointer;
+    outline: none;
+}
+
+.theme-option:focus-visible {
+     outline: 2px solid var(--primary-color);
+     outline-offset: 2px;
+     border-radius: 4px;
+}
+
+
+.settings-note {
+    font-size: 0.9rem;
+    color: var(--loading-text-color);
+    margin-top: 10px;
+}
+
+.setting-description {
+    font-size: 0.9rem;
+    color: var(--loading-text-color);
+    margin-top: -10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+
+/* Clear cache button styles are in style.css */
+
+
+/* Support section within settings modal */
+.settings-support {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
+}
+
+.settings-support h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.settings-support p {
+    margin-bottom: 10px;
+}
+
+
+/* Apply general button styles to support links with the 'button' class */
+/* Styles are in style.css */
+
+
+/* Responsive adjustments for Modal */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 20px;
+        flex-direction: column;
+        max-width: 95%;
+        max-height: 95vh;
+    }
+
+    .modal-content h3 {
+        font-size: 1.8rem;
+    }
+
+    .close-button {
+        top: 5px;
+        right: 10px;
+        font-size: 24px;
+    }
+
+    .modal-body {
+        flex-direction: column;
+        max-height: calc(95vh - 50px);
+        overflow-y: auto;
+    }
+
+    .tabs-sidebar {
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        margin-right: 0;
+        padding-right: 0;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        overflow-x: auto;
+        width: 100%;
+        justify-content: space-around; /* Distribute space between tabs */
+        padding-top: 0;
+    }
+
+    .tab-button {
+        border-left: none;
+        border-bottom: 2px solid transparent; /* Use bottom border for active state on mobile */
+        padding: 10px 5px;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 0;
+        flex-grow: 1; /* Allow buttons to grow and fill space */
+        text-align: center; /* Center text on mobile */
+    }
+
+     .tab-button.active {
+        border-left-color: transparent; /* Remove left border on mobile */
+        border-bottom-color: var(--tab-button-active-border); /* Use bottom border */
+     }
+
+    .tab-content-area {
+        flex-grow: 1;
+        padding-right: 0;
+    }
+
+    /* Target div/span tab icons */
+    .tab-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .setting-item label {
+        margin-right: 0;
+        margin-bottom: 0;
+    }
+
+    .theme-option {
+        /* No margin-right needed on mobile */
+        margin-bottom: 5px;
+    }
+
+    .settings-support .support-link.button {
+         margin: 5px 0;
+         width: auto;
+         text-align: center;
+    }
+}
