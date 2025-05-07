@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 0; // Current page for infinite scrolling
     let isLoading = false; // To prevent multiple loads
     let timeUpdateInterval = null; // Interval for updating times
+    let isInitialLoad = true; // Flag for the very first load
+
 
     // --- Settings State (Now within script.js scope) ---
     let userPreferences = {
@@ -113,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /**
-     * Gets the UTC offset for a given timezone.
+     * Gets the UTC offset for a given timezone for display.
      * @param {string} timezone - The IANA timezone string.
      * @returns {string} - The UTC offset string (e.g., "UTC-05:00").
      */
@@ -131,17 +133,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
              if (timeZoneNamePart) {
                  let offset = timeZoneNamePart.value;
-                 // Clean up common formats like GMT-5 to UTC-05:00
+                 // Clean up common formats like GMT-5 to UTC-05:00 if possible
                  if (offset.startsWith('GMT')) {
                      offset = offset.replace('GMT', 'UTC');
-                     // Add leading zero if needed (e.g., UTC-5 becomes UTC-05)
-                     if (/UTC[+-]\d$/.test(offset)) {
-                         offset = offset.replace(/([+-])(\d)$/, '$10$2');
-                     }
-                     // Add ':00' if only hour is present (e.g., UTC-05 becomes UTC-05:00)
-                     if (/UTC[+-]\d{2}$/.test(offset)) {
-                         offset += ':00';
-                     }
+                 }
+                 // Add leading zero if needed (e.g., UTC-5 becomes UTC-05)
+                 if (/UTC[+-]\d$/.test(offset)) {
+                     offset = offset.replace(/([+-])(\d)$/, '$10$2');
+                 }
+                 // Add ':00' if only hour is present (e.g., UTC-05 becomes UTC-05:00)
+                 if (/UTC[+-]\d{2}$/.test(offset) && !/UTC[+-]\d{2}:\d{2}$/.test(offset)) {
+                     offset += ':00';
                  }
                   return offset;
              } else {
@@ -199,41 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'DST Status N/A'; // Fallback
     }
 
-    /**
-     * Calculates the time difference between a timezone and the user's local time.
-     * @param {string} timezone - The IANA timezone string.
-     * @returns {string} - Formatted time difference (e.g., "+2h", "-5h 30m", "Same").
-     */
-    function getTimeDifference(timezone) {
-        try {
-            const now = new Date();
-            const localOffsetMinutes = now.getTimezoneOffset(); // Local offset in minutes
-            const targetOffsetMinutes = - (new Date().toLocaleString('en', { timeZoneName: 'shortOffset', timeZone: timezone }).match(/UTC([+-]\d+)/)?.[1] * 60 || 0); // Target offset in minutes
-
-            const diffMinutes = targetOffsetMinutes - localOffsetMinutes;
-
-            if (diffMinutes === 0) {
-                return 'Same Time';
-            }
-
-            const sign = diffMinutes > 0 ? '+' : '-';
-            const absDiffMinutes = Math.abs(diffMinutes);
-            const hours = Math.floor(absDiffMinutes / 60);
-            const minutes = absDiffMinutes % 60;
-
-            let diffString = `${sign}${hours}h`;
-            if (minutes > 0) {
-                diffString += ` ${minutes}m`;
-            }
-
-            return diffString;
-
-        } catch (error) {
-            console.error("Error calculating time difference for timezone", timezone, ":", error);
-            return 'Time Diff N/A';
-        }
-    }
-
 
     /**
      * Creates a timezone card element.
@@ -254,15 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date(); // Get current local time
         // Pass the timezone string to formatDateTime
         const { formattedDate, formattedTime } = formatDateTime(now, timezone, userPreferences.timeFormat, userPreferences.dateLocale);
-        const offset = getUtcOffset(timezone);
-        const timeDifference = getTimeDifference(timezone);
+        const offset = getUtcOffset(timezone); // Use getUtcOffset for display string
 
         card.innerHTML = `
             <h3>${timezone.replace(/_/g, ' ')}</h3>
             <p><strong>Current Date:</strong> <span class="display-date">${formattedDate}</span></p>
             <p><strong>Current Time:</strong> <span class="display-time">${formattedTime}</span></p>
             <p><strong>UTC Offset:</strong> <span class="display-offset">${offset}</span></p>
-            <div class="time-difference ${timeDifference === 'Same Time' ? 'same' : (timeDifference.startsWith('+') ? 'ahead' : 'behind')}">${timeDifference}</div>
             <span class="favorite-icon ${isFavorite ? 'active' : ''}" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}" role="button" tabindex="0"></span>
         `;
 
@@ -294,9 +259,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isLoading) return;
         isLoading = true;
         loadingMoreIndicator.classList.remove('hidden');
+        endOfListIndicator.classList.add('hidden'); // Hide end of list when loading more
+
         // Show the loading icon within the message
         const loadingMoreIcon = loadingMoreIndicator.querySelector('.loading-icon');
         if (loadingMoreIcon) loadingMoreIcon.style.display = 'inline-block';
+
+        // Remove any existing skeleton cards before appending actual cards
+        const skeletonCards = timezonesGrid.querySelectorAll('.skeleton-card');
+        skeletonCards.forEach(skeleton => skeleton.remove());
 
 
         const start = currentPage * timezonesPerPage;
@@ -305,10 +276,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (timezonesToLoad.length === 0) {
             loadingMoreIndicator.classList.add('hidden');
-            endOfListIndicator.classList.remove('hidden');
+            // Only show end of list if there were timezones to potentially display
+            // Or if it's the very first load and there are no timezones at all
+            if (filteredTimezones.length > 0 || (currentPage === 0 && allTimezones.length === 0)) {
+                 endOfListIndicator.classList.remove('hidden');
+                 endOfListIndicator.textContent = "End of list"; // Reset text
+            } else if (currentPage === 0 && timezoneSearchInput.value !== '' && filteredTimezones.length === 0) {
+                 // If no results found for a search on the first page
+                 endOfListIndicator.classList.remove('hidden');
+                 endOfListIndicator.textContent = "No timezones found matching your search.";
+            }
             isLoading = false;
             return;
+        } else if (timezoneSearchInput.value !== '' && currentPage === 0) {
+             // If results found for a search, and this is the first page,
+             // hide the "No timezones found" message if it was showing from a previous search.
+             endOfListIndicator.classList.add('hidden');
+             endOfListIndicator.textContent = "End of list"; // Reset text
         }
+
 
         // Use a small delay to simulate loading and allow UI to update
         setTimeout(() => {
@@ -327,8 +313,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Check if there are more timezones to load
             if (currentPage * timezonesPerPage >= filteredTimezones.length) {
                  endOfListIndicator.classList.remove('hidden');
+                 endOfListIndicator.textContent = "End of list"; // Reset text
             } else {
                  endOfListIndicator.classList.add('hidden');
+                 endOfListIndicator.textContent = "End of list"; // Reset text
             }
 
              // Update times on newly added cards immediately
@@ -349,18 +337,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const timezone = card.dataset.timezone;
             // Pass the current Date object and timezone string to formatDateTime
             const { formattedDate, formattedTime } = formatDateTime(now, timezone, userPreferences.timeFormat, userPreferences.dateLocale);
-            card.querySelector('.display-date').textContent = formattedDate;
-            card.querySelector('.display-time').textContent = formattedTime;
+            const dateElement = card.querySelector('.display-date');
+            const timeElement = card.querySelector('.display-time');
+             if (dateElement) dateElement.textContent = formattedDate;
+             if (timeElement) timeElement.textContent = formattedTime;
+
             // Offset is static, no need to update here
-            // Update time difference
-            const timeDifferenceElement = card.querySelector('.time-difference');
-            if (timeDifferenceElement) {
-                const timeDifference = getTimeDifference(timezone);
-                timeDifferenceElement.textContent = timeDifference;
-                // Update class for styling
-                timeDifferenceElement.classList.remove('same', 'ahead', 'behind');
-                timeDifferenceElement.classList.add(timeDifference === 'Same Time' ? 'same' : (timeDifference.startsWith('+') ? 'ahead' : 'behind'));
-            }
+            // Removed time difference update logic
         });
 
         // Update detail view if visible
@@ -369,8 +352,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (timezone) {
                  // Pass the current Date object and timezone string to formatDateTime
                 const { formattedDate, formattedTime } = formatDateTime(now, timezone, userPreferences.timeFormat, userPreferences.dateLocale);
-                detailDisplayDate.textContent = formattedDate;
-                detailDisplayTime.textContent = formattedTime;
+                 if (detailDisplayDate) detailDisplayDate.textContent = formattedDate;
+                 if (detailDisplayTime) detailDisplayTime.textContent = formattedTime;
                 // Offset and DST status are static, no need to update here
             }
         }
@@ -420,12 +403,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentPage = 0;
         endOfListIndicator.classList.add('hidden');
-        loadingMessage.classList.remove('hidden'); // Show initial loading message
-        // Show the loading icon within the initial message
-        const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
-        if (loadingIconInitial) loadingIconInitial.style.display = 'inline-block';
+        loadingMoreIndicator.classList.add('hidden'); // Hide loading more initially
 
-        // The appendTimezoneCards function will hide the initial message when it starts loading
+        // Show initial loading message only on the very first load or when explicitly refreshing the grid
+        if (isInitialLoad || timezonesGrid.children.length === 0) {
+             loadingMessage.classList.remove('hidden'); // Show initial loading message
+             const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
+             if (loadingIconInitial) loadingIconInitial.style.display = 'inline-block';
+        } else {
+             loadingMessage.classList.add('hidden');
+        }
+        isInitialLoad = false; // Not the initial load anymore
+
+
+        // Initialize filteredTimezones from allTimezones and sort (including favorites)
+        filteredTimezones = [...allTimezones];
+        filteredTimezones.sort((a, b) => {
+            const aIsFavorite = userPreferences.favoriteTimezones.includes(a);
+            const bIsFavorite = userPreferences.favoriteTimezones.includes(b);
+
+            if (aIsFavorite && !bIsFavorite) {
+                return -1; // a comes before b
+            } else if (!aIsFavorite && bIsFavorite) {
+                return 1; // b comes before a
+            }
+            // If both are favorites or neither are, sort alphabetically
+            return a.localeCompare(b);
+        });
+
+
+        // The appendTimezoneCards function will hide the initial message and replace skeletons
         appendTimezoneCards(); // Load the first batch
 
         // Re-attach scroll listener for infinite scrolling
@@ -443,20 +450,25 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide main controls and main settings icon in detail view
         mainControls.classList.add('hidden');
         mainSettingsIcon.classList.add('hidden');
+         // Hide all loading/end messages in detail view
+        loadingMessage.classList.add('hidden');
+        loadingMoreIndicator.classList.add('hidden');
+        endOfListIndicator.classList.add('hidden');
+
 
         // Remove infinite scroll listener when in detail view
         window.removeEventListener('scroll', handleScroll);
 
         // Populate detail view
-        detailTimezoneName.textContent = timezone.replace(/_/g, ' ');
-        detailTimezoneName.dataset.timezone = timezone; // Store timezone for updates
+        if (detailTimezoneName) detailTimezoneName.textContent = timezone.replace(/_/g, ' ');
+        if (detailTimezoneName) detailTimezoneName.dataset.timezone = timezone; // Store timezone for updates
         const now = new Date(); // Get current local time
         // Pass the current Date object and timezone string to formatDateTime
         const { formattedDate, formattedTime } = formatDateTime(now, timezone, userPreferences.timeFormat, userPreferences.dateLocale);
-        detailDisplayDate.textContent = formattedDate;
-        detailDisplayTime.textContent = formattedTime;
-        detailDisplayOffset.textContent = getUtcOffset(timezone);
-        detailDstStatus.textContent = getDstStatus(timezone); // Populate DST status
+        if (detailDisplayDate) detailDisplayDate.textContent = formattedDate;
+        if (detailDisplayTime) detailDisplayTime.textContent = formattedTime;
+        if (detailDisplayOffset) detailDisplayOffset.textContent = getUtcOffset(timezone); // Use getUtcOffset for display
+        if (detailDstStatus) detailDstStatus.textContent = getDstStatus(timezone); // Populate DST status
 
         // Update the time in the detail view every second
         // The main timeUpdateInterval already handles this if detailView is visible
@@ -476,12 +488,34 @@ document.addEventListener('DOMContentLoaded', () => {
             timezone.toLowerCase().includes(lowerCaseQuery)
         );
 
+        // Sort filtered timezones: favorites first
+        filteredTimezones.sort((a, b) => {
+            const aIsFavorite = userPreferences.favoriteTimezones.includes(a);
+            const bIsFavorite = userPreferences.favoriteTimezones.includes(b);
+
+            if (aIsFavorite && !bIsFavorite) {
+                return -1; // a comes before b
+            } else if (!aIsFavorite && bIsFavorite) {
+                return 1; // b comes before a
+            }
+            // If both are favorites or neither are, sort alphabetically
+            return a.localeCompare(b);
+        });
+
+
         // Reset and re-render the grid with filtered results
         timezonesGrid.innerHTML = '';
         currentPage = 0;
         endOfListIndicator.classList.add('hidden');
+        loadingMoreIndicator.classList.add('hidden'); // Hide loading more during filter
 
-        // Add skeleton loaders while filtering/re-rendering
+        // Show initial loading message while filtering/re-rendering
+        loadingMessage.classList.remove('hidden');
+         const loadingIconFilter = loadingMessage.querySelector('.loading-icon');
+         if (loadingIconFilter) loadingIconFilter.style.display = 'inline-block'; // Show icon
+
+
+        // Add skeleton loaders while filtering/re-rendering (before append)
         for (let i = 0; i < SKELETON_COUNT; i++) {
              const skeletonCard = document.createElement('div');
              skeletonCard.classList.add('skeleton-card');
@@ -494,11 +528,9 @@ document.addEventListener('DOMContentLoaded', () => {
              timezonesGrid.appendChild(skeletonCard);
         }
 
-         loadingMessage.classList.remove('hidden'); // Show loading message while filtering/re-rendering
-         const loadingIconFilter = loadingMessage.querySelector('.loading-icon');
-         if (loadingIconFilter) loadingIconFilter.style.display = 'inline-block'; // Show icon
 
         // The appendTimezoneCards function will hide the loading message and replace skeletons
+        // Append the first batch of filtered timezones
         appendTimezoneCards();
     }
 
@@ -510,18 +542,22 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function handleScroll() {
         // Infinite Scrolling Logic
-        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-        if (scrollTop + clientHeight >= scrollHeight - 100 && !isLoading && gridView.classList.contains('hidden') === false) {
-            // Load more timezones if scrolled near the bottom and not already loading
-            appendTimezoneCards();
+        // Only trigger if in grid view and not already loading
+        if (gridView.classList.contains('hidden') === false && !isLoading) {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+             // Load more timezones if scrolled near the bottom (within 300px)
+            if (scrollTop + clientHeight >= scrollHeight - 300) {
+                appendTimezoneCards();
+            }
         }
+
 
         // Sticky Navigation Logic
         const scrollTopThreshold = 50; // Pixels scrolled before nav becomes sticky
-        if (scrollTop > scrollTopThreshold) {
+        if (window.scrollY > scrollTopThreshold) {
             stickyNav.classList.add('visible');
             mainSettingsIcon.classList.add('hidden'); // Hide main settings icon when nav is sticky
-            // Move search input to nav if not already there
+            // Move search input to nav if not already there and nav search is expanded
             if (timezoneSearchInput && navSearchInputContainer && timezoneSearchInput.parentElement !== navSearchInputContainer && navSearchBar.classList.contains('expanded')) {
                  navSearchInputContainer.appendChild(timezoneSearchInput);
                  timezoneSearchInput.classList.add('in-nav');
@@ -532,8 +568,8 @@ document.addEventListener('DOMContentLoaded', () => {
              if (gridView.classList.contains('hidden') === false) {
                 mainSettingsIcon.classList.remove('hidden');
              }
-            // Move search input back to main controls if in nav and nav is not sticky
-            if (timezoneSearchInput && mainControls && navSearchInputContainer && timezoneSearchInput.parentElement === navSearchInputContainer && !navSearchBar.classList.contains('expanded')) {
+            // Move search input back to main controls if in nav, nav is not sticky, and in grid view
+            if (timezoneSearchInput && mainControls && navSearchInputContainer && timezoneSearchInput.parentElement === navSearchInputContainer && !navSearchBar.classList.contains('expanded') && gridView.classList.contains('hidden') === false) {
                  mainControls.querySelector('.search-container').appendChild(timezoneSearchInput);
                  timezoneSearchInput.classList.remove('in-nav');
             }
@@ -768,7 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Re-render visible times with default preferences
                 updateVisibleCardTimes();
 
-                // Re-render the grid to reflect cleared favorites
+                // Re-filter and re-render the grid to reflect cleared favorites (maintains current search query)
                 filterTimezones(timezoneSearchInput ? timezoneSearchInput.value : '');
 
 
@@ -810,7 +846,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Added ${timezone} to favorites.`);
         }
         savePreferences(); // Save updated favorites to local storage
-        // Re-render the grid to potentially show favorites first (if that feature is added later)
+        // Re-filter and re-render the grid to show favorites first (if that feature is added later)
         // For now, just ensure the icon/card class is updated.
     }
 
@@ -1024,7 +1060,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof Intl.supportedValuesOf === 'function') {
             try {
                 allTimezones = Intl.supportedValuesOf('timeZone');
-                // Sort timezones alphabetically for easier browsing
+                // Sort timezones alphabetically for easier Browse
                 allTimezones.sort();
                 console.log(`Found ${allTimezones.length} timezones.`);
 
@@ -1035,7 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (requestedTimezone && allTimezones.includes(requestedTimezone)) {
                     showDetailView(requestedTimezone);
                 } else {
-                    // Default to grid view - DO NOT open modal on load
+                    // Default to grid view
                     filteredTimezones = [...allTimezones]; // Initially filtered list is all timezones
                     // The showGridView function now handles initial loading message and skeletons
                     showGridView(); // Show the grid view and load first batch
@@ -1048,15 +1084,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (error) {
                 console.error("Error fetching timezones:", error);
-                 loadingMessage.textContent = "Could not load timezones.";
+                 if (loadingMessage) loadingMessage.textContent = "Could not load timezones.";
                  // Hide the loading icon if loading failed
-                 const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
+                 const loadingIconInitial = loadingMessage ? loadingMessage.querySelector('.loading-icon') : null;
                  if (loadingIconInitial) loadingIconInitial.style.display = 'none';
-                 gridView.classList.remove('hidden'); // Ensure grid view is visible to show the message
-                 detailView.classList.add('hidden');
-                 // Hide loading indicators as we can't load timezones
-                 loadingMoreIndicator.classList.add('hidden');
-                 endOfListIndicator.classList.add('hidden');
+                 if (gridView) gridView.classList.remove('hidden'); // Ensure grid view is visible to show the message
+                 if (detailView) detailView.classList.add('hidden');
+                 // Hide other indicators
+                 if (loadingMoreIndicator) loadingMoreIndicator.classList.add('hidden');
+                 if (endOfListIndicator) endOfListIndicator.classList.add('hidden');
             }
 
             // Initial check for sticky nav visibility (in case page loads scrolled)
@@ -1064,16 +1100,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else {
             // Handle browsers that don't support Intl.supportedValuesOf
-            loadingMessage.textContent = "Your browser does not fully support timezone listing.";
+            if (loadingMessage) loadingMessage.textContent = "Your browser does not fully support timezone listing.";
             console.error("Intl.supportedValuesOf is not supported in this browser.");
              // Hide the loading icon if not supported
-             const loadingIconInitial = loadingMessage.querySelector('.loading-icon');
+             const loadingIconInitial = loadingMessage ? loadingMessage.querySelector('.loading-icon') : null;
              if (loadingIconInitial) loadingIconInitial.style.display = 'none';
-             gridView.classList.remove('hidden'); // Ensure grid view is visible to show the message
-             detailView.classList.add('hidden');
-             // Hide loading indicators as we can't load timezones
-             loadingMoreIndicator.classList.add('hidden');
-             endOfListIndicator.classList.add('hidden');
+             if (gridView) gridView.classList.remove('hidden'); // Ensure grid view is visible to show the message
+             if (detailView) detailView.classList.add('hidden');
+              // Hide other indicators
+             if (loadingMoreIndicator) loadingMoreIndicator.classList.add('hidden');
+             if (endOfListIndicator) endOfListIndicator.classList.add('hidden');
         }
          console.log("script.js initialization complete.");
     }
