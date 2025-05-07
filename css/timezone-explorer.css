@@ -1,0 +1,105 @@
+/* css/timezone-explorer.css */
+
+body {
+    font-family: 'Archivo', sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0; /* Remove default body margin */
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px; /* Increased padding */
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+    max-width: 700px; /* Increased max width */
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem; /* Larger heading */
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #374151;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.timezone-list {
+    margin-top: 30px;
+    text-align: left; /* Align list left */
+}
+
+.timezone-list h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #4f46e5;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eef2ff; /* Add a subtle separator */
+    padding-bottom: 10px;
+}
+
+.timezone-list ul {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    margin: 0;
+}
+
+.timezone-list li {
+    margin-bottom: 12px;
+}
+
+.timezone-list a {
+    text-decoration: none; /* Remove underline */
+    color: #3b82f6; /* Link color */
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.timezone-list a:hover {
+    color: #2563eb; /* Darker color on hover */
+    text-decoration: underline; /* Add underline on hover */
+}
+
+.support-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #e5e7eb; /* Separator for support section */
+}
+
+.support-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 15px;
+}
+
+.support-section p {
+    margin-bottom: 15px;
+}
+
+.support-link {
+    display: inline-block;
+    background-color: #10b981; /* Green color for support */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    margin: 0 10px; /* Space between links */
+}
+
+.support-link:hover {
+    background-color: #059669; /* Darker green on hover */
+}
