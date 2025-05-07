@@ -1,0 +1,210 @@
+/* css/about.css */
+
+/* Ensure the container behaves as expected */
+.about-container {
+    text-align: left; /* Align content to the left */
+}
+
+/* Style for the local timezone details card */
+.timezone-details-card {
+    background-color: var(--detail-card-bg); /* Reuse detail card background */
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px dashed var(--detail-card-border); /* Reuse detail card border */
+    margin-bottom: 40px; /* Add space below the card */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.timezone-details-card h3 {
+     font-size: 1.8rem;
+     font-family: 'Inter', sans-serif;
+     margin-top: 0;
+     margin-bottom: 20px;
+     border-bottom: 2px solid var(--primary-color);
+     padding-bottom: 10px;
+     color: var(--heading-color);
+     transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.timezone-details-card p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.timezone-details-card p strong {
+    display: inline-block;
+    margin-right: 5px;
+    min-width: 120px; /* Give labels a minimum width for alignment */
+}
+
+
+/* Style for the "About Me" section */
+.about-me-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color); /* Separator line */
+    transition: border-top-color 0.3s ease;
+}
+
+.about-me-section h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-top: 0; /* Remove default h2 top margin */
+    margin-bottom: 20px;
+    border-bottom: none; /* Remove default h2 border */
+    padding-bottom: 0; /* Remove default h2 padding */
+    transition: color 0.3s ease;
+}
+
+.about-me-section p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.about-links {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px; /* Space between buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap */
+}
+
+.about-links .button {
+    /* Reuse general button styles from style.css */
+}
+
+.credits-heading {
+    margin-top: 30px; /* Space above the credits heading */
+}
+
+/* --- Styles for the License Accordion --- */
+.license-accordion {
+    margin-top: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners on content */
+    background-color: var(--secondary-color); /* Light background for distinction */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.license-accordion .accordion-header {
+    background-color: var(--secondary-color); /* Header background */
+    color: var(--heading-color); /* Header text color */
+    cursor: pointer;
+    padding: 15px 20px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: flex; /* Align text and icon */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.license-accordion .accordion-header:hover,
+.license-accordion .accordion-header:focus-visible {
+    background-color: var(--border-color); /* Highlight on hover/focus */
+}
+
+.license-accordion .accordion-header .accordion-icon {
+     display: inline-block;
+     width: 20px;
+     height: 20px;
+     /* Use a plus/minus or arrow icon */
+     mask-image: url('../icons/plus.svg'); /* Path to your plus icon */
+     mask-repeat: no-repeat;
+     mask-size: contain;
+     background-color: var(--heading-color); /* Icon color */
+     transition: transform 0.3s ease, background-color 0.2s ease;
+     -webkit-mask-image: url('../icons/plus.svg');
+     -webkit-mask-repeat: no-repeat;
+     -webkit-mask-size: contain;
+}
+
+/* Style for the icon when accordion is open */
+.license-accordion .accordion-header[aria-expanded="true"] .accordion-icon {
+     transform: rotate(45deg); /* Rotate for a 'close' or 'minus' effect */
+     mask-image: url('../icons/plus.svg'); /* Still using plus, just rotated */
+     -webkit-mask-image: url('../icons/plus.svg');
+}
+
+
+.license-accordion .accordion-content {
+    background-color: var(--container-bg-color); /* Content background */
+    padding: 0 20px; /* Initial padding */
+    max-height: 0; /* Initially hidden */
+    overflow: hidden; /* Hide overflow */
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out; /* Animate height and padding */
+    border-top: 1px solid var(--border-color); /* Separator above content */
+}
+
+.license-accordion .accordion-content.expanded {
+    max-height: 500px; /* Sufficient height to show content (adjust as needed) */
+    padding: 20px; /* Expanded padding */
+     border-top-color: transparent; /* Remove border when expanded */
+}
+
+/* Style for the <pre> tag inside accordion */
+.license-accordion .accordion-content pre {
+    white-space: pre-wrap; /* Wrap long lines */
+    word-wrap: break-word;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    margin: 0; /* Remove default pre margin */
+}
+
+
+/* Responsive adjustments for about page */
+@media (max-width: 768px) {
+     .timezone-details-card {
+        padding: 20px;
+     }
+     .timezone-details-card h3 {
+         font-size: 1.4rem;
+         padding-bottom: 8px;
+         margin-bottom: 15px;
+     }
+     .timezone-details-card p {
+         font-size: 1rem;
+     }
+     .timezone-details-card p strong {
+         min-width: 90px; /* Adjust min-width for labels on smaller screens */
+     }
+
+     .about-me-section h2 {
+         font-size: 1.5rem;
+         margin-bottom: 15px;
+         padding-top: 20px; /* Adjusted padding */
+     }
+     .about-me-section p {
+         font-size: 0.95rem;
+     }
+      .about-links {
+          gap: 10px; /* Reduce gap between buttons on mobile */
+          justify-content: center; /* Center buttons on mobile */
+      }
+       .about-links .button {
+            padding: 10px 15px; /* Adjusted button padding */
+             font-size: 0.9rem;
+       }
+
+    /* Accordion adjustments for mobile */
+    .license-accordion .accordion-header {
+        font-size: 1rem;
+        padding: 12px 15px;
+    }
+     .license-accordion .accordion-header .accordion-icon {
+         width: 18px;
+         height: 18px;
+     }
+    .license-accordion .accordion-content.expanded {
+         padding: 15px; /* Adjusted padding */
+    }
+     .license-accordion .accordion-content pre {
+         font-size: 0.85rem;
+     }
+}
