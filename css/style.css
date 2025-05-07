@@ -12,7 +12,7 @@
     --card-bg-color: #ffffff;
     --card-border-color: #e5e7eb;
     --card-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
-    --card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Slightly reduced hover shadow */
+    --card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     --input-border-color: #d1d5db;
     --input-focus-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
     --support-bg-color: #10b981; /* Green */
@@ -34,16 +34,18 @@
     --clear-cache-button-bg: #ef4444; /* Red */
     --clear-cache-button-hover-bg: #dc2626; /* Darker Red */
     --settings-icon-color: #374151; /* Match text color */
+    --tab-icon-color: #6b7280; /* Default tab icon color */
+    --tab-icon-active-color: var(--primary-color); /* Active tab icon color */
 }
 
 /* Dark Mode Variables */
 .dark-mode {
-    --background-color: #1a202c; /* Dark Blue-Gray */
-    --container-bg-color: #2d3748; /* Slightly Lighter Dark Blue-Gray */
-    --text-color: #e2e8f0; /* Light Gray */
-    --heading-color: #f7fafc; /* Off White */
-    --primary-color: #a78bfa; /* Lighter Purple for dark mode */
-    --secondary-color: #4a5568; /* Dark Grayish Blue */
+    --background-color: #1a202c;
+    --container-bg-color: #2d3748;
+    --text-color: #e2e8f0;
+    --heading-color: #f7fafc;
+    --primary-color: #a78bfa;
+    --secondary-color: #4a5568;
     --border-color: #4a5568;
     --card-bg-color: #2d3748;
     --card-border-color: #4a5568;
@@ -58,8 +60,8 @@
     --loading-text-color: #a0aec0;
     --detail-card-bg: #4a5568;
     --detail-card-border: #667eea;
-    --scrollbar-thumb: #555; /* Darker scrollbar */
-    --scrollbar-track: #333; /* Darker scrollbar track */
+    --scrollbar-thumb: #555;
+    --scrollbar-track: #333;
     --modal-bg-color: #2d3748;
     --modal-border-color: #4a5568;
     --tab-button-color: #a0aec0;
@@ -67,19 +69,21 @@
     --tab-button-active-color: var(--primary-color);
     --tab-button-active-border: var(--primary-color);
     --setting-item-border: #4a5568;
-     --clear-cache-button-bg: #b91c1c; /* Darker Red */
-    --clear-cache-button-hover-bg: #991b1b; /* Even Darker Red */
-    --settings-icon-color: #e2e8f0; /* Match text color */
+    --clear-cache-button-bg: #b91c1c;
+    --clear-cache-button-hover-bg: #991b1b;
+    --settings-icon-color: #e2e8f0;
+    --tab-icon-color: #a0aec0;
+    --tab-icon-active-color: var(--primary-color);
 }
 
 /* Blue Theme Variables */
 .blue-theme {
-    --background-color: #e0f2f7; /* Light Blue */
+    --background-color: #e0f2f7;
     --container-bg-color: #ffffff;
     --text-color: #1f2937;
-    --heading-color: #0b2f5b; /* Dark Blue */
-    --primary-color: #0284c7; /* Cyan Blue */
-    --secondary-color: #bfdbfe; /* Lighter Cyan Blue */
+    --heading-color: #0b2f5b;
+    --primary-color: #0284c7;
+    --secondary-color: #bfdbfe;
     --border-color: #d1d5db;
     --card-bg-color: #ffffff;
     --card-border-color: #d1d5db;
@@ -106,6 +110,8 @@
     --clear-cache-button-bg: #ef4444;
     --clear-cache-button-hover-bg: #dc2626;
     --settings-icon-color: #1f2937;
+    --tab-icon-color: #4b5563;
+    --tab-icon-active-color: var(--primary-color);
 }
 
 
@@ -148,9 +154,16 @@ body {
 }
 
 
+/* Apply Inter to all headings except the main h1 and modal title */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Keep Archivo for main h1 and modal title for a distinct look */
 .heading-archivo {
     font-family: 'Archivo', sans-serif;
 }
+
 
 .container {
     background-color: var(--container-bg-color);
@@ -162,6 +175,7 @@ body {
     text-align: center;
     box-sizing: border-box;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* Needed for absolute positioning of settings icon */
 }
 
 h1 {
@@ -487,17 +501,17 @@ strong {
 /* Modal Styles (for Settings) */
 .modal {
     position: fixed;
-    z-index: 100; /* High z-index to be on top */
+    z-index: 100;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.6); /* Semi-transparent black background */
-    display: flex; /* Use flexbox to center modal content */
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px; /* Add padding to prevent content touching edges on small screens */
+    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -506,12 +520,13 @@ strong {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    max-width: 600px; /* Max width for modal */
+    max-width: 800px; /* Increased max width for side tabs */
     width: 100%;
-    position: relative; /* Needed for close button positioning */
+    position: relative;
     text-align: left;
-    max-height: 90vh; /* Limit modal height */
-    overflow-y: auto; /* Add scroll if content overflows */
+    max-height: 90vh;
+    overflow: hidden; /* Manage overflow with modal-body */
+    display: flex; /* Use flexbox for modal body layout */
     transition: background-color 0.3s ease;
 }
 
@@ -524,7 +539,7 @@ strong {
 }
 
 .close-button {
-    color: var(--loading-text-color); /* Use a neutral color */
+    color: var(--loading-text-color);
     font-size: 28px;
     font-weight: bold;
     position: absolute;
@@ -532,6 +547,7 @@ strong {
     right: 20px;
     cursor: pointer;
     transition: color 0.3s ease;
+    z-index: 1; /* Ensure close button is clickable */
 }
 
 .close-button:hover,
@@ -541,25 +557,40 @@ strong {
     cursor: pointer;
 }
 
-/* Modal Tabs */
-.tabs {
+.modal-body {
     display: flex;
-    border-bottom: 1px solid var(--border-color);
-    margin-bottom: 20px;
-    overflow-x: auto; /* Allow tabs to scroll if they overflow */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+    width: 100%;
+    max-height: calc(90vh - 60px); /* Adjust height considering padding and title */
+    overflow-y: auto; /* Add scroll to the modal body */
+}
+
+/* Modal Tabs (Sidebar) */
+.tabs-sidebar {
+    display: flex;
+    flex-direction: column; /* Stack tabs vertically */
+    border-right: 1px solid var(--border-color); /* Separator line */
+    margin-right: 30px; /* Space between tabs and content */
+    padding-right: 20px;
+    flex-shrink: 0; /* Prevent sidebar from shrinking */
+    width: 180px; /* Fixed width for sidebar */
 }
 
 .tab-button {
     background-color: transparent;
     border: none;
-    padding: 10px 15px;
+    padding: 10px 0; /* Adjust padding for vertical tabs */
     cursor: pointer;
     font-size: 1rem;
     color: var(--tab-button-color);
-    border-bottom: 2px solid transparent;
-    transition: color 0.3s ease, border-bottom-color 0.3s ease, background-color 0.3s ease;
-    flex-shrink: 0; /* Prevent buttons from shrinking */
+    border-bottom: none; /* Remove bottom border */
+    border-left: 4px solid transparent; /* Indicator on the left */
+    transition: color 0.3s ease, border-left-color 0.3s ease, background-color 0.3s ease;
+    flex-shrink: 0;
+    text-align: left; /* Align text left */
+    margin-bottom: 5px; /* Space between buttons */
+    display: flex; /* Use flexbox for icon and text */
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
 }
 
 .tab-button:hover:not(.active) {
@@ -568,9 +599,52 @@ strong {
 
 .tab-button.active {
     color: var(--tab-button-active-color);
-    border-bottom-color: var(--tab-button-active-border);
+    border-left-color: var(--tab-button-active-border);
     font-weight: 600;
 }
+
+/* Tab Icons */
+.tab-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    background-color: var(--tab-icon-color); /* Control color with background */
+    transition: background-color 0.3s ease;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
+}
+
+.tab-button.active .tab-icon {
+    background-color: var(--tab-icon-active-color); /* Active icon color */
+}
+
+/* Specific Icon Masks */
+.settings-icon-svg {
+    mask-image: url('../icons/settings.svg');
+    -webkit-mask-image: url('../icons/settings.svg');
+}
+
+.palette-icon-svg {
+    mask-image: url('../icons/palette.svg');
+    -webkit-mask-image: url('../icons/palette.svg');
+}
+
+.info-icon-svg {
+    mask-image: url('../icons/info.svg');
+    -webkit-mask-image: url('../icons/info.svg');
+}
+
+
+.tab-content-area {
+    flex-grow: 1; /* Allow content area to take remaining space */
+    overflow-y: auto; /* Add scroll to content area if needed */
+    padding-right: 10px; /* Add some padding for scrollbar */
+}
+
 
 .tab-content {
     display: none; /* Hide tab content by default */
@@ -585,14 +659,14 @@ strong {
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 1px solid var(--setting-item-border);
-    display: flex; /* Use flexbox for setting items */
+    display: flex;
     align-items: center;
-    flex-wrap: wrap; /* Allow items to wrap */
-    gap: 10px; /* Space between label and input/select */
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .setting-item:last-child {
-    border-bottom: none; /* Remove border from last setting item */
+    border-bottom: none;
     padding-bottom: 0;
     margin-bottom: 0;
 }
@@ -600,7 +674,7 @@ strong {
 .setting-item label {
     font-weight: 600;
     color: var(--text-color);
-    flex-shrink: 0; /* Prevent label from shrinking */
+    flex-shrink: 0;
 }
 
 .setting-item select,
@@ -621,7 +695,7 @@ strong {
 .theme-option {
     display: flex;
     align-items: center;
-    margin-right: 20px; /* Space between theme options */
+    margin-right: 20px;
     cursor: pointer;
 }
 
@@ -637,9 +711,9 @@ strong {
 }
 
 .clear-cache-button {
-    display: block; /* Make button a block element */
-    width: auto; /* Auto width */
-    margin: 20px auto 0 auto; /* Center button and add space above */
+    display: block;
+    width: auto;
+    margin: 20px auto 0 auto;
     padding: 10px 20px;
     background-color: var(--clear-cache-button-bg);
     color: white;
@@ -663,14 +737,14 @@ strong {
 }
 
 .settings-support h2 {
-    font-size: 1.5rem; /* Smaller heading in modal support */
+    font-size: 1.5rem;
     margin-top: 0;
     border-bottom: none;
     padding-bottom: 0;
 }
 
 .settings-support .support-link {
-    padding: 8px 15px; /* Smaller padding for links in modal */
+    padding: 8px 15px;
     font-size: 0.95rem;
 }
 
@@ -731,6 +805,8 @@ strong {
 
     .modal-content {
         padding: 20px;
+        flex-direction: column; /* Stack modal body vertically */
+        max-width: 95%; /* Allow modal to be wider on small screens */
     }
 
     .modal-content h3 {
@@ -743,29 +819,53 @@ strong {
         font-size: 24px;
     }
 
-    .tabs {
-        flex-wrap: wrap; /* Allow tabs to wrap on small screens */
-        border-bottom: none; /* Remove bottom border if wrapped */
+    .modal-body {
+        flex-direction: column; /* Stack modal body vertically */
+        max-height: calc(90vh - 50px); /* Adjust height for smaller title area */
+        overflow-y: auto; /* Ensure scrolling works */
+    }
+
+    .tabs-sidebar {
+        flex-direction: row; /* Arrange tabs horizontally */
+        border-right: none;
+        border-bottom: 1px solid var(--border-color); /* Add bottom border */
+        margin-right: 0;
+        padding-right: 0;
+        margin-bottom: 20px; /* Space below tabs */
+        padding-bottom: 10px;
+        overflow-x: auto; /* Allow horizontal scrolling for tabs */
+        width: 100%; /* Full width */
+        justify-content: space-around; /* Distribute space */
     }
 
     .tab-button {
-        border-bottom: 1px solid var(--border-color); /* Add border to wrapped buttons */
-        margin-bottom: 5px;
+        border-left: none; /* Remove left indicator */
+        border-bottom: 2px solid transparent; /* Add bottom indicator */
+        padding: 10px 5px; /* Adjust padding */
+        justify-content: center; /* Center icon and text */
+        gap: 5px; /* Reduced gap */
+        margin-bottom: 0; /* Remove bottom margin */
     }
 
-    .tab-button.active {
-        border-bottom-color: var(--tab-button-active-border);
+     .tab-button.active {
+        border-left-color: transparent; /* Remove left indicator */
+        border-bottom-color: var(--tab-button-active-border); /* Add bottom indicator */
+     }
+
+    .tab-content-area {
+        padding-right: 0; /* Remove padding */
     }
+
 
     .setting-item {
-        flex-direction: column; /* Stack setting items vertically */
+        flex-direction: column;
         align-items: flex-start;
-        gap: 5px; /* Reduced gap for stacked items */
+        gap: 5px;
     }
 
     .setting-item label {
         margin-right: 0;
-        margin-bottom: 0; /* Removed bottom margin as gap handles spacing */
+        margin-bottom: 0;
     }
 
     .theme-option {
