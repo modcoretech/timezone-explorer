@@ -221,14 +221,31 @@ strong {
     width: 30px;
     height: 30px;
     cursor: pointer;
-    fill: var(--settings-icon-color); /* Use CSS variable for color */
-    transition: fill 0.3s ease, transform 0.2s ease;
+    /* Use mask-image to apply the SVG shape */
+    mask-image: url('../icons/settings.svg');
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    mask-position: center;
+    /* Control the color using background-color */
+    background-color: var(--settings-icon-color);
+    transition: background-color 0.3s ease, transform 0.2s ease;
     z-index: 10; /* Ensure icon is above other content */
+    -webkit-mask-image: url('../icons/settings.svg'); /* Vendor prefix for Safari */
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-position: center;
 }
 
 .settings-icon:hover {
     transform: rotate(45deg); /* Rotate on hover */
-    fill: var(--primary-color); /* Change color on hover */
+    background-color: var(--primary-color); /* Change color on hover */
+}
+
+.settings-icon:focus-visible {
+     outline: 2px solid var(--primary-color);
+     outline-offset: 2px;
+     border-radius: 4px;
+     background-color: var(--primary-color); /* Also change color on focus */
 }
 
 
@@ -571,18 +588,24 @@ strong {
     display: flex; /* Use flexbox for setting items */
     align-items: center;
     flex-wrap: wrap; /* Allow items to wrap */
+    gap: 10px; /* Space between label and input/select */
+}
+
+.setting-item:last-child {
+    border-bottom: none; /* Remove border from last setting item */
+    padding-bottom: 0;
+    margin-bottom: 0;
 }
 
 .setting-item label {
     font-weight: 600;
-    margin-right: 15px;
     color: var(--text-color);
     flex-shrink: 0; /* Prevent label from shrinking */
 }
 
 .setting-item select,
 .setting-item input[type="radio"] {
-    margin-top: 5px; /* Add some space on top for wrapped items */
+    /* margin-top: 5px; Removed margin-top as gap handles spacing */
 }
 
 .setting-item select {
@@ -737,11 +760,12 @@ strong {
     .setting-item {
         flex-direction: column; /* Stack setting items vertically */
         align-items: flex-start;
+        gap: 5px; /* Reduced gap for stacked items */
     }
 
     .setting-item label {
         margin-right: 0;
-        margin-bottom: 5px;
+        margin-bottom: 0; /* Removed bottom margin as gap handles spacing */
     }
 
     .theme-option {
