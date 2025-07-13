@@ -11,12 +11,13 @@
     --secondary-color: #e9ecef; /* Light Gray */
     --border-color: #dee2e6; /* Lighter Gray */
     --shadow-color: rgba(0, 0, 0, 0.1); /* Subtle Shadow */
+    --placeholder-color: #6c757d; /* Medium Gray for placeholders */
 
     /* Cards */
     --card-bg-color: #ffffff;
     --card-border-color: #e9ecef;
     --card-shadow: 0 4px 8px var(--shadow-color);
-    --card-hover-shadow: 0 8px 16px var(--shadow-color);
+    --card-hover-shadow: 0 8px 16px rgba(0, 123, 255, 0.2); /* Enhanced hover shadow */
     --card-hover-border-color: var(--primary-color);
     --card-favorite-border-color: #ffc107; /* Yellow for favorites */
     --card-favorite-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); /* Yellow shadow */
@@ -46,8 +47,8 @@
 
 
     /* Detail View */
-    --detail-card-bg: #e9ecef; /* Light Gray */
-    --detail-card-border: #ced4da; /* Lighter Gray */
+    --detail-card-bg: var(--secondary-color); /* Light Gray */
+    --detail-card-border: var(--border-color); /* Lighter Gray */
 
     /* Icons (using CSS mask) */
     --icon-color: var(--text-color);
@@ -71,13 +72,24 @@
     --nav-icon-color: var(--text-color); /* Nav icon color */
     --nav-icon-hover-color: var(--primary-color); /* Nav icon hover color */
 
-    /* Time Difference Indicator - REMOVED STYLES */
-
-
     /* Skeleton Loading */
     --skeleton-bg-color: #e9ecef;
     --skeleton-highlight-color: #f8f9fa;
-    /* REMOVED: animation: pulse 1.5s infinite ease-in-out; */ /* Pulse animation */
+
+    /* Go to Top Button */
+    --go-to-top-bg: var(--primary-color);
+    --go-to-top-color: white;
+    --go-to-top-hover-bg: var(--button-hover-bg);
+
+    /* Toast Notifications */
+    --toast-bg-success: #28a745;
+    --toast-bg-info: #007bff;
+    --toast-bg-error: #dc3545;
+    --toast-text-color: white;
+
+    /* Preloader */
+    --preloader-bg: var(--background-color);
+    --spinner-color: var(--primary-color);
 }
 
 /* Dark Mode Variables */
@@ -86,19 +98,19 @@
     --container-bg-color: #343a40;
     --text-color: #e9ecef;
     --heading-color: #f8f9fa;
-    --primary-color: #00aaff;
+    --primary-color: #00aaff; /* Lighter blue for dark mode */
     --secondary-color: #495057;
     --border-color: #495057;
     --shadow-color: rgba(0, 0, 0, 0.4);
+    --placeholder-color: #adb5bd;
 
     --card-bg-color: #343a40;
     --card-border-color: #495057;
     --card-shadow: 0 4px 8px var(--shadow-color);
-    --card-hover-shadow: 0 8px 16px var(--shadow-color);
+    --card-hover-shadow: 0 8px 16px rgba(0, 170, 255, 0.2);
     --card-hover-border-color: var(--primary-color);
     --card-favorite-border-color: #ffc107; /* Yellow for favorites */
     --card-favorite-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); /* Yellow shadow */
-
 
     --input-border-color: #495057;
     --input-focus-border-color: var(--primary-color);
@@ -107,29 +119,25 @@
     --button-bg-color: var(--primary-color);
     --button-text-color: #212529; /* Dark text on light primary */
     --button-hover-bg: #0077cc;
-    --button-focus-shadow: 0 0 0 0.2rem rgba(0, 170, 255, 0.25); /* Use primary color shadow */
+    --button-focus-shadow: 0 0 0 0.2rem rgba(0, 170, 255, 0.25);
 
-    --support-bg-color: #1e7e34;
-    --support-hover-bg-color: #1c7430;
+    --support-bg-color: #28a745; /* Keep green for consistency in support */
+    --support-hover-bg-color: #218838;
     --link-color: var(--primary-color);
     --link-hover-color: #0077cc;
-    --clear-cache-button-bg: #c82333;
-    --clear-cache-button-hover-bg: #bd2130;
+    --clear-cache-button-bg: #dc3545;
+    --clear-cache-button-hover-bg: #c82333;
 
     --loading-text-color: #adb5bd;
-    --loading-icon-color: var(--loading-text-color); /* Loading icon color in dark mode */
-
+    --loading-icon-color: var(--loading-text-color);
 
     --detail-card-bg: #495057;
     --detail-card-border: #6c757d;
 
-    --icon-color: var(--text-color); /* Icons in dark mode match text */
-    --icon-hover-color: var(--primary-color); /* Hover color is primary */
-    --favorite-icon-color: #adb5bd; /* Default gray star */
-    --favorite-icon-color-active: #ffc107; /* Yellow star when favorited */
-    --nav-icon-color: var(--text-color); /* Nav icons in dark mode match text */
-    --nav-icon-hover-color: var(--primary-color); /* Nav hover color is primary */
-
+    --icon-color: var(--text-color);
+    --icon-hover-color: var(--primary-color);
+    --favorite-icon-color: #adb5bd;
+    --favorite-icon-color-active: #ffc107;
 
     --scrollbar-thumb: #495057;
     --scrollbar-track: #343a40;
@@ -138,207 +146,251 @@
     --nav-border-color: var(--border-color);
     --nav-shadow: 0 2px 8px var(--shadow-color);
     --nav-text-color: var(--heading-color);
-    --nav-search-bg-color: var(--secondary-color);
+    --nav-search-bg-color: #495057;
     --nav-search-input-border: var(--border-color);
     --nav-search-input-focus-border: var(--primary-color);
-
-    /* Time Difference Indicator - REMOVED STYLES */
-
+    --nav-icon-color: var(--text-color);
+    --nav-icon-hover-color: var(--primary-color);
 
     --skeleton-bg-color: #495057;
     --skeleton-highlight-color: #6c757d;
+
+    --go-to-top-bg: var(--primary-color);
+    --go-to-top-color: #212529; /* Dark text on light primary in dark mode */
+    --go-to-top-hover-bg: #0077cc;
+
+    --toast-bg-success: #28a745;
+    --toast-bg-info: #00aaff; /* Use dark mode primary */
+    --toast-bg-error: #dc3545;
+    --toast-text-color: white;
+
+    --preloader-bg: #212529;
+    --spinner-color: var(--primary-color);
 }
 
 
 /* --- Base Styles --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background-color);
-    display: flex;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    margin: 0;
-    line-height: 1.6;
     color: var(--text-color);
-    box-sizing: border-box;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    overflow-y: scroll;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    padding-top: 80px; /* Add padding to the top to prevent content from being hidden by sticky nav */
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-y: scroll; /* Always show scrollbar */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
 }
 
-/* Scrollbar Styling */
-body::-webkit-scrollbar { width: 12px; }
-body::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
-body::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; border: 3px solid var(--scrollbar-track); }
-body { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
-
-
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Inter', sans-serif; /* Ensure all headings use Inter */
-    color: var(--heading-color);
-    transition: color 0.3s ease;
+/* Scrollbar Styles */
+body::-webkit-scrollbar {
+    width: 12px;
 }
 
-/* Removed .heading-archivo styles */
+body::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
 
-h1 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
-h2 { font-size: 2rem; font-weight: 600; margin-top: 40px; margin-bottom: 20px; border-bottom: 3px solid var(--secondary-color); padding-bottom: 15px; transition: color 0.3s ease, border-color 0.3s ease; }
-h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 15px; color: var(--primary-color); border-bottom: 1px solid var(--secondary-color); padding-bottom: 10px; transition: color 0.3s ease, border-color 0.3s ease; }
-h4 { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
-
-p { font-size: 1.1rem; margin-bottom: 15px; color: var(--text-color); transition: color 0.3s ease; }
-strong { color: var(--heading-color); transition: color 0.3s ease; }
+body::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 6px;
+    border: 3px solid var(--scrollbar-track);
+}
 
 .container {
-    background-color: var(--container-bg-color);
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-    max-width: 1400px;
-    width: 100%;
-    text-align: center;
-    box-sizing: border-box;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    flex-grow: 1; /* Allow container to grow and push footer down */
 }
 
-/* --- Settings Icon (Main) --- */
-/* Target the div/span element using CSS mask */
-.settings-icon {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    /* Use mask-image to apply the SVG */
-    mask-image: url('../icons/settings.svg');
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    /* Use background-color to color the mask */
-    background-color: var(--icon-color); /* Use the icon color variable */
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    z-index: 10;
-    /* Add webkit prefix for broader compatibility */
-    -webkit-mask-image: url('../icons/settings.svg');
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    outline: none;
-}
-
-#main-settings-icon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-}
-
-.settings-icon:hover {
-    transform: rotate(45deg);
-    background-color: var(--icon-hover-color); /* Change background-color on hover */
-}
-
-.settings-icon:focus-visible {
-     outline: 2px solid var(--primary-color);
-     outline-offset: 2px;
-     border-radius: 4px;
-     background-color: var(--icon-hover-color); /* Change background-color on focus */
-}
-
-
-/* --- Controls (Main Search) --- */
-#main-controls {
-    margin-bottom: 40px;
-    text-align: left;
-    transition: opacity 0.3s ease;
-}
-
-.controls label {
-    display: block;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 10px;
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
     color: var(--heading-color);
-    transition: color 0.3s ease;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
-#timezone-search { /* Styling for the single search input element */
-    padding: 14px;
+h2.section-title {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+/* Links & Buttons */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+button, .button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
     border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+button:hover, .button:hover {
+    background-color: var(--button-hover-bg);
+    transform: translateY(-2px);
+}
+
+button:active, .button:active {
+    transform: translateY(0);
+}
+
+button:focus-visible, .button:focus-visible {
+    outline: none;
+    box-shadow: var(--button-focus-shadow);
+}
+
+.support-link.button {
+    background-color: var(--support-bg-color);
+}
+
+.support-link.button:hover {
+    background-color: var(--support-hover-bg-color);
+}
+
+.clear-cache-button.button {
+    background-color: var(--clear-cache-button-bg);
+}
+
+.clear-cache-button.button:hover {
+    background-color: var(--clear-cache-button-hover-bg);
+}
+
+/* Form Elements */
+input[type="text"],
+select {
+    padding: 10px 15px;
     border: 1px solid var(--input-border-color);
-    font-size: 1.1rem;
-    width: 100%;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--container-bg-color);
+    border-radius: 8px;
+    font-size: 1rem;
     color: var(--text-color);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-    outline: none;
+    background-color: var(--container-bg-color);
+    width: 100%; /* Default to full width */
+    max-width: 400px; /* Max width for general inputs */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-#timezone-search:focus {
+input[type="text"]::placeholder {
+    color: var(--placeholder-color);
+}
+
+input[type="text"]:focus,
+select:focus {
     outline: none;
-    border-color: var(--primary-color);
+    border-color: var(--input-focus-border-color);
     box-shadow: var(--input-focus-shadow);
 }
 
-/* Styling for the search input when it's in the nav */
-#timezone-search.in-nav {
-     padding: 10px;
-     border-radius: 6px;
-     border: 1px solid var(--nav-search-input-border);
-     font-size: 1rem;
-     background-color: var(--nav-search-bg-color);
-     color: var(--text-color);
+/* Utility Classes */
+.hidden {
+    display: none !important;
 }
 
-#timezone-search.in-nav:focus {
-    border-color: var(--nav-search-input-focus-border);
-    box-shadow: var(--input-focus-shadow);
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }
 
-
-/* --- Sticky Navigation Bar --- */
-.sticky-nav {
+/* --- Preloader --- */
+.preloader {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: var(--nav-bg-color);
-    box-shadow: var(--nav-shadow);
-    z-index: 50;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, background-color 0.3s ease, box-shadow 0.3s ease;
-    transform: translateY(-100%);
-    opacity: 0;
-    border-bottom: 1px solid var(--nav-border-color);
-    box-sizing: border-box;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    height: 100%;
+    background-color: var(--preloader-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 200; /* Above everything else */
+    transition: opacity 0.5s ease-out;
 }
 
-.sticky-nav.visible {
-    transform: translateY(0);
-    opacity: 1;
+.preloader.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.spinner {
+    border: 6px solid rgba(0, 0, 0, 0.1);
+    border-top: 6px solid var(--spinner-color);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.preloader p {
+    color: var(--heading-color);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- Sticky Navigation Bar --- */
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: var(--nav-bg-color);
+    border-bottom: 1px solid var(--nav-border-color);
+    box-shadow: var(--nav-shadow);
+    z-index: 50; /* Below modal, above content */
+    padding: 0 20px;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 10px 0;
 }
 
 .nav-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: var(--nav-text-color);
-    transition: color 0.3s ease;
-    font-family: 'Inter', sans-serif; /* Ensure nav title uses Inter */
 }
 
 .nav-icons {
@@ -347,457 +399,472 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     gap: 15px;
 }
 
-/* Nav Icons (Search and Settings) - using CSS mask */
 .nav-icon {
     width: 24px;
     height: 24px;
     cursor: pointer;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    background-color: var(--nav-icon-color); /* Color the mask */
+    background-color: var(--nav-icon-color);
+    -webkit-mask-size: cover;
+    mask-size: cover;
     transition: background-color 0.2s ease, transform 0.1s ease;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    outline: none;
 }
 
-/* Specific Nav Icon Masks */
-/* Ensure these paths are correct relative to the CSS file location */
-.nav-search-icon { mask-image: url('../icons/search.svg'); -webkit-mask-image: url('../icons/search.svg'); }
-/* Settings icon mask is defined in .settings-icon */
-
-
 .nav-icon:hover {
-    background-color: var(--nav-icon-hover-color); /* Change color on hover */
+    background-color: var(--nav-icon-hover-color);
     transform: scale(1.1);
 }
 
 .nav-icon:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
-    border-radius: 4px;
-    background-color: var(--nav-icon-hover-color); /* Change color on focus */
+    border-radius: 4px; /* Adjust as needed for icon shape */
 }
 
+/* Specific Nav Icons (SVG Mask) */
+.info-icon-svg {
+    mask-image: url('../icons/info-circle-fill.svg');
+    -webkit-mask-image: url('../icons/info-circle-fill.svg');
+}
+.nav-search-icon {
+    mask-image: url('../icons/search.svg');
+    -webkit-mask-image: url('../icons/search.svg');
+}
+.nav-settings-icon {
+    mask-image: url('../icons/gear-fill.svg');
+    -webkit-mask-image: url('../icons/gear-fill.svg');
+}
 
-/* Animated Search Bar in Nav */
+.nav-link-icon {
+    display: flex; /* To make the span centered within the anchor */
+    align-items: center;
+}
+
 .nav-search-bar {
     background-color: var(--nav-search-bg-color);
-    padding: 10px 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-    overflow: hidden;
-    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, background-color 0.3s ease;
+    padding: 10px 0;
     max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    /* Removed filter blur here - apply blur to the nav itself */
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, background-color 0.3s ease;
 }
 
 .nav-search-bar.expanded {
-    max-height: 60px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    max-height: 60px; /* Sufficient height for input */
+    border-top: 1px solid var(--nav-border-color);
 }
 
 #nav-search-input-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+#timezone-search.in-nav {
     width: 100%;
+    border: 1px solid var(--nav-search-input-border);
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
 }
 
-
-/* --- Grid Layout --- */
-#grid-view {
-    /* Ensures padding/margins outside the grid-view container */
-     margin-top: 30px;
-     margin-bottom: 30px;
+#timezone-search.in-nav:focus {
+    border-color: var(--nav-search-input-focus-border);
+    box-shadow: var(--input-focus-shadow); /* Re-use general input focus shadow */
 }
 
+/* --- Main Content Layout --- */
+.main-controls {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.main-controls .search-input {
+    max-width: 600px; /* Wider search input in main view */
+}
+
+/* --- Local Timezone Section --- */
+.local-timezone-section {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.local-card {
+    border: 2px solid var(--primary-color) !important; /* Highlight local card */
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.25) !important;
+    background-color: var(--container-bg-color) !important; /* Ensure it matches container bg */
+    padding: 25px;
+}
+
+.local-card .timezone-name {
+    font-size: 1.8rem;
+    color: var(--primary-color); /* Local card name color */
+}
+
+.local-card .current-time, .local-card .current-date {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* --- Timezones Grid --- */
 .timezones-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
-    padding: 0 10px;
-    box-sizing: border-box;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+    min-height: 300px; /* Minimum height to prevent content jumping */
 }
 
 .timezone-card {
     background-color: var(--card-bg-color);
-    padding: 25px;
-    border-radius: 12px;
     border: 1px solid var(--card-border-color);
+    border-radius: 12px;
+    padding: 20px;
     box-shadow: var(--card-shadow);
-    text-align: left;
+    transition: all 0.2s ease;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    cursor: pointer;
-    transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.3s ease;
-    overflow: hidden;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    height: auto; /* Allow height to adjust based on content */
-    position: relative; /* Needed for absolute positioning of favorite icon */
+    position: relative; /* For favorite icon positioning */
 }
 
-/* Style for favorite cards */
+.timezone-card:hover {
+    box-shadow: var(--card-hover-shadow);
+    border-color: var(--card-hover-border-color);
+    transform: translateY(-5px);
+}
+
 .timezone-card.favorite {
     border-color: var(--card-favorite-border-color);
     box-shadow: var(--card-favorite-shadow);
 }
 
-
-.timezone-card:hover {
-    box-shadow: var(--card-hover-shadow);
-    border-color: var(--primary-color);
-}
-
 .timezone-card h3 {
-    font-size: 1.35rem;
-    font-weight: 600;
-    margin-bottom: 12px;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
     color: var(--heading-color);
-    border-bottom: none;
-    padding-bottom: 0;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    padding-right: 35px; /* Add padding to make space for favorite icon */
-    position: relative; /* Needed for z-index if favorite icon is inside h3 */
-    z-index: 1; /* Ensure text is above icon if icon is inside h3 */
 }
 
 .timezone-card p {
-    margin-bottom: 6px;
-    font-size: 1rem;
-    line-height: 1.4;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    color: var(--text-color);
 }
 
-.timezone-card p strong {
-    display: inline-block;
-    margin-right: 5px;
+.timezone-card .current-time {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary-color);
 }
 
-/* Favorite Icon on Card */
-.timezone-card .favorite-icon {
+.timezone-card .current-date {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.favorite-icon {
     position: absolute;
-    top: 10px; /* Adjusted position */
-    right: 10px; /* Adjusted position */
-    width: 28px; /* Slightly larger */
-    height: 28px; /* Slightly larger */
+    top: 15px;
+    right: 15px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
-    mask-image: url('../icons/star.svg'); /* Path to your star SVG */
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    background-color: var(--favorite-icon-color); /* Default color */
+    background-color: var(--favorite-icon-color);
+    -webkit-mask-image: url('../icons/star-fill.svg');
+    mask-image: url('../icons/star-fill.svg');
+    background-size: cover;
     transition: background-color 0.2s ease, transform 0.1s ease;
-    -webkit-mask-image: url('../icons/star.svg');
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    z-index: 2; /* Ensure icon is above heading */
-    outline: none;
 }
 
-.timezone-card .favorite-icon:hover {
+.favorite-icon.active {
+    background-color: var(--favorite-icon-color-active);
+}
+
+.favorite-icon:hover {
     transform: scale(1.1);
-    background-color: var(--favorite-icon-color-active); /* Highlight color on hover */
 }
 
-.timezone-card .favorite-icon.active {
-    background-color: var(--favorite-icon-color-active); /* Active color */
+.favorite-icon:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
-.timezone-card .favorite-icon:focus-visible {
-     outline: 2px solid var(--primary-color);
-     outline-offset: 2px;
-     border-radius: 4px;
-}
 
-/* Time Difference Indicator - REMOVED STYLES */
-
-
-/* Loading/Status messages outside the grid */
-.loading-message, .loading-more, .end-of-list {
-    grid-column: 1 / -1; /* Span across all grid columns if inside grid */
+/* --- Loading & Empty States --- */
+.loading-message,
+.loading-more,
+.no-results-message,
+.end-of-list {
     text-align: center;
-    font-size: 1.3rem;
+    padding: 20px;
+    font-size: 1.1rem;
     color: var(--loading-text-color);
-    padding: 30px;
-    transition: color 0.3s ease;
-    display: flex; /* Use flexbox to align icon and text */
-    justify-content: center;
+    font-weight: 600;
+    display: flex;
     align-items: center;
-    gap: 10px; /* Space between icon and text */
-    width: 100%; /* Ensure they take full width below the grid */
-    box-sizing: border-box;
+    justify-content: center;
+    gap: 10px;
 }
 
-.loading-more, .end-of-list {
-    margin-top: 0; /* Remove extra margin */
-    padding: 15px 30px; /* Adjust padding */
-}
-
-/* Loading Icon Style */
 .loading-icon {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    mask-image: url('../icons/loading.svg'); /* Path to your loading SVG */
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    background-color: var(--loading-icon-color); /* Color the icon */
-    -webkit-mask-image: url('../icons/icons/loading.svg'); /* Corrected path */
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-    /* Add a simple spin animation */
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--loading-icon-color);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* --- Skeleton Loader --- */
+.skeleton-loader {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
 }
 
-
-.hidden {
-    display: none !important;
-}
-
-/* --- Skeleton Loading Styles --- */
 .skeleton-card {
     background-color: var(--skeleton-bg-color);
-    padding: 25px;
     border-radius: 12px;
-    border: 1px solid var(--border-color); /* Use general border */
-    box-shadow: var(--card-shadow); /* Use general shadow */
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Space between skeleton lines */
-    /* REMOVED: animation: pulse 1.5s infinite ease-in-out; */ /* Pulse animation */
-    min-height: 150px; /* Ensure a minimum height */
+    padding: 20px;
+    height: 180px; /* Approximate height of a timezone card */
+    position: relative;
+    overflow: hidden;
+    animation: loading-pulse 1.5s infinite linear;
 }
 
-.skeleton-line {
-    height: 1em; /* Height based on font size */
-    background: linear-gradient(90deg, var(--skeleton-bg-color) 0%, var(--skeleton-highlight-color) 50%, var(--skeleton-bg-color) 100%);
-    background-size: 200% 100%;
-    border-radius: 4px;
-    animation: loading 1.5s infinite;
+@keyframes loading-pulse {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
 }
 
-/* Animation for skeleton lines */
-@keyframes loading {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+.skeleton-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--skeleton-highlight-color), transparent);
+    animation: skeleton-shimmer 1.5s infinite;
 }
 
-/* Pulse animation for the card - REMOVED */
-/* @keyframes pulse { */
-/* 0% { opacity: 0.8; } */
-/* 50% { opacity: 1; } */
-/* 100% { opacity: 0.8; } */
-/* } */
-
-.skeleton-line-lg {
-    width: 70%; /* Longer line for title */
-}
-
-.skeleton-line-sm {
-    width: 40%; /* Shorter line for details */
+@keyframes skeleton-shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    60% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 
-/* --- Detail Page View --- */
-#detail-view {
+/* --- Detail View --- */
+.detail-view {
+    background-color: var(--container-bg-color);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: var(--card-shadow);
     margin-top: 30px;
-    text-align: left;
+}
+
+.detail-view .back-button {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    align-self: flex-start; /* Ensure it's left-aligned if in a flex container */
+}
+
+.detail-view .back-button:hover {
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
 }
 
 .detail-card {
     background-color: var(--detail-card-bg);
-    padding: 30px;
+    border: 1px solid var(--detail-card-border);
     border-radius: 12px;
-    border: 1px dashed var(--detail-card-border);
-    margin-bottom: 30px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    padding: 30px;
+    text-align: center;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05); /* Subtle inner shadow */
 }
 
 .detail-card h3 {
     font-size: 2rem;
-    font-family: 'Inter', sans-serif; /* Use Inter for detail heading */
-    margin-bottom: 20px;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 10px;
-    color: var(--heading-color);
-    transition: color 0.3s ease, border-color 0.3s ease;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    color: var(--primary-color);
+    margin-bottom: 15px;
 }
 
 .detail-card p {
     font-size: 1.1rem;
-    margin-bottom: 10px;
-}
-
-.detail-more-info {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
-    transition: border-color 0.3s ease;
-}
-
-.detail-more-info h4 {
-     color: var(--heading-color);
-     transition: color 0.3s ease;
-}
-
-
-.back-link {
-    display: inline-block;
-    margin-top: 20px;
-    color: var(--link-color);
-    text-decoration: none;
-    font-size: 1.1rem;
-    transition: color 0.3s ease, text-decoration 0.3s ease;
-}
-
-.back-link:hover {
-    color: var(--link-hover-color);
-    text-decoration: underline;
-}
-
-
-/* --- Support Section --- */
-.support-section {
-    margin-top: 60px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border-color);
-    transition: border-color 0.3s ease;
-}
-
-.support-section h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
+    margin-bottom: 8px;
     color: var(--heading-color);
-    margin-bottom: 20px;
-    border-bottom: none;
-    padding-bottom: 0;
-    transition: color 0.3s ease;
-    font-family: 'Inter', sans-serif; /* Ensure support heading uses Inter */
 }
 
-.support-section p {
-    margin-bottom: 20px;
-}
-
-/* Apply general button styles to support links with the 'button' class */
-.support-link.button {
-    display: inline-block;
-    background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    padding: 12px 25px;
-    border-radius: 8px;
-    text-decoration: none;
+.detail-card span {
     font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 0 15px;
-    border: none; /* Ensure no default button border */
-    cursor: pointer; /* Ensure cursor is pointer */
-    outline: none; /* Remove default outline */
 }
 
-.support-link.button:hover {
-    background-color: var(--button-hover-bg);
+.detail-card #detail-display-time {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.detail-actions {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.detail-actions .favorite-button,
+.detail-actions .share-button {
+    padding: 12px 25px;
+    font-size: 1.05rem;
+}
+
+.detail-actions .star-icon,
+.detail-actions .share-icon {
+    width: 20px;
+    height: 20px;
+    background-color: currentColor; /* Inherit color from button text */
+    -webkit-mask-size: cover;
+    mask-size: cover;
+}
+
+.detail-actions .star-icon {
+    -webkit-mask-image: url('../icons/star-fill.svg');
+    mask-image: url('../icons/star-fill.svg');
+}
+
+.detail-actions .share-icon {
+    -webkit-mask-image: url('../icons/share-fill.svg');
+    mask-image: url('../icons/share-fill.svg');
+}
+
+.favorite-button.active .star-icon {
+    background-color: var(--favorite-icon-color-active);
+}
+
+/* --- Go to Top Button --- */
+.go-to-top-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--go-to-top-bg);
+    color: var(--go-to-top-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.2s ease, transform 0.1s ease;
+    z-index: 40; /* Below nav, above most content */
+}
+
+.go-to-top-button.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.go-to-top-button:hover {
+    background-color: var(--go-to-top-hover-bg);
     transform: translateY(-3px);
 }
 
-.support-link.button:focus-visible {
-     outline: 2px solid var(--primary-color);
-     outline-offset: 2px;
-     border-radius: 4px;
-     box-shadow: var(--button-focus-shadow);
+.go-to-top-button:active {
+    transform: translateY(0);
+}
+
+.go-to-top-button .arrow-up-icon {
+    width: 24px;
+    height: 24px;
+    background-color: currentColor; /* Inherit color from button text */
+    -webkit-mask-image: url('../icons/arrow-up.svg');
+    mask-image: url('../icons/arrow-up.svg');
+    background-size: cover;
 }
 
 
-/* --- Accessibility --- */
-/* Kept reduced motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* --- Toast Notifications --- */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-*:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-  border-radius: 4px;
+.toast {
+    background-color: var(--toast-bg-info); /* Default info */
+    color: var(--toast-text-color);
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    min-width: 250px;
+    max-width: 400px;
+    text-align: center;
+    font-size: 0.95rem;
 }
 
-/* --- Responsive adjustments --- */
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.hide {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.toast.success {
+    background-color: var(--toast-bg-success);
+}
+
+.toast.error {
+    background-color: var(--toast-bg-error);
+}
+
+
+/* --- Media Queries --- */
 @media (max-width: 768px) {
     body {
-        padding: 10px;
-        padding-top: 70px;
+        padding-top: 60px; /* Adjust for sticky nav height */
     }
 
     .container {
-        padding: 15px;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    h2 {
-         font-size: 1.5rem;
-    }
-
-    h3 {
-        font-size: 1.2rem;
-    }
-
-    .timezone-card {
-        padding: 15px;
-    }
-
-    .timezone-card h3 {
-        font-size: 1.1rem;
-        padding-right: 30px; /* Adjust padding for smaller favorite icon */
-    }
-
-    .timezone-card p {
-        font-size: 0.9rem;
-    }
-
-     .detail-card {
-        padding: 20px;
-     }
-
-     .detail-card h3 {
-        font-size: 1.5rem;
-     }
-
-     .detail-card p {
-        font-size: 1rem;
-     }
-
-    .support-link.button { /* Adjusted selector */
-        display: block;
         margin: 10px auto;
+        padding: 0 15px;
     }
 
-    /* Nav adjustments */
+    h2.section-title {
+        font-size: 1.5rem;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
     .sticky-nav {
         padding: 0 10px;
     }
@@ -807,7 +874,6 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     .nav-title {
         font-size: 1.4rem;
     }
-    /* Target div/span nav icons */
     .nav-icon {
         width: 20px;
         height: 20px;
@@ -818,43 +884,111 @@ strong { color: var(--heading-color); transition: color 0.3s ease; }
     .nav-search-bar.expanded {
         max-height: 50px;
     }
-    #timezone-search.in-nav { /* Adjusted selector */
+    #timezone-search.in-nav {
         padding: 8px;
         font-size: 0.9rem;
     }
 
-    /* Target div/span main settings icon */
-    #main-settings-icon.settings-icon {
-        top: 10px;
-        right: 10px;
-        width: 25px;
-        height: 25px;
+    .main-controls {
+        margin-bottom: 20px;
+        margin-top: 15px;
     }
 
-    /* Favorite Icon on Card (Mobile) */
-    .timezone-card .favorite-icon {
+    .timezones-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        padding: 15px 0;
+    }
+
+    .timezone-card {
+        padding: 15px;
+    }
+
+    .timezone-card h3 {
+        font-size: 1.3rem;
+    }
+
+    .timezone-card p {
+        font-size: 0.9rem;
+    }
+
+    .timezone-card .current-time {
+        font-size: 1rem;
+    }
+    .timezone-card .current-date {
+        font-size: 0.85rem;
+    }
+
+    .favorite-icon {
         top: 10px;
         right: 10px;
         width: 20px;
         height: 20px;
     }
 
-
-    /* Skeleton Card (Mobile) */
-    .skeleton-card {
+    .loading-message, .loading-more, .no-results-message, .end-of-list {
+        font-size: 1rem;
         padding: 15px;
     }
-
-    /* Loading Message (Mobile) */
-    .loading-message, .loading-more, .end-of-list {
-        font-size: 1.1rem;
-        padding: 15px;
-    }
-
     .loading-icon {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
     }
 
-    /* Modal adjustments moved to settings.css */
+    .skeleton-loader {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        padding: 15px 0;
+    }
+    .skeleton-card {
+        height: 160px;
+    }
+
+    .detail-view {
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .detail-card {
+        padding: 20px;
+    }
+
+    .detail-card h3 {
+        font-size: 1.7rem;
+    }
+
+    .detail-card p {
+        font-size: 1rem;
+    }
+
+    .detail-card #detail-display-time {
+        font-size: 1.3rem;
+    }
+
+    .detail-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .detail-actions .favorite-button,
+    .detail-actions .share-button {
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .go-to-top-button {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+
+    .toast {
+        min-width: unset;
+        width: 90%;
+        max-width: 300px;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
 }
