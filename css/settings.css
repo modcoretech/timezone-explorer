@@ -17,8 +17,8 @@
     --setting-label-color: var(--heading-color); /* Use heading color for labels */
     --setting-input-bg: var(--container-bg-color); /* Use container bg for inputs */
     --setting-input-border: var(--input-border-color); /* Use general input border */
-    --setting-input-focus-border: var(--setting-input-focus-border); /* Use general input focus border */
-    --setting-input-focus-shadow: var(--setting-input-focus-shadow); /* Use general input focus shadow */
+    --setting-input-focus-border: var(--input-focus-border-color); /* Use general input focus border */
+    --setting-input-focus-shadow: var(--input-focus-shadow); /* Use general input focus shadow */
     --switch-bg: #adb5bd; /* Gray for off state */
     --switch-checked-bg: var(--primary-color); /* Primary color for on state */
     --switch-circle-bg: #ffffff; /* White circle */
@@ -64,7 +64,14 @@
     z-index: 100; /* Ensure modal is on top */
     backdrop-filter: blur(5px); /* Subtle blur effect */
     -webkit-backdrop-filter: blur(5px); /* Safari support */
-    /* REMOVED: transition: background-color 0.3s ease, backdrop-filter 0.3s ease; */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Add transition */
+}
+
+.modal.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
 .modal-content {
@@ -73,127 +80,104 @@
     border-radius: 12px;
     max-width: 800px;
     width: 90%;
-    max-height: 90vh; /* Limit height */
-    overflow-y: auto; /* Enable scrolling for content */
+    max-height: 90vh; /* Limit height for scrollability on smaller screens */
+    overflow-y: auto; /* Enable scrolling for content overflow */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     position: relative;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--modal-border-color);
-    /* REMOVED: transition: background-color 0.3s ease, border-color 0.3s ease; */
+    transform: translateY(20px); /* Initial offset for transition */
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; /* Add transition */
 }
 
-.modal-content h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-    color: var(--heading-color);
-    border-bottom: 2px solid var(--primary-color); /* Use primary color for heading border */
-    padding-bottom: 10px;
-    /* REMOVED: transition: color 0.3s ease, border-color 0.3s ease; */
+.modal.visible .modal-content {
+    transform: translateY(0); /* Slide in effect */
 }
 
-
-/* Modal Scrollbar Styling (if content overflows) */
-.modal-content::-webkit-scrollbar { width: 10px; }
-.modal-content::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
-.modal-content::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 10px; border: 3px solid var(--scrollbar-track); }
-.modal-content { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
-
-
-/* Prevent body scroll when modal is open */
-body.modal-open {
-    overflow: hidden;
-}
-
-
-/* Close Button */
-.close-button {
+.modal-close-button {
     position: absolute;
     top: 15px;
     right: 15px;
     background: none;
     border: none;
     font-size: 1.8rem;
-    cursor: pointer;
     color: var(--text-color);
-    transition: color 0.2s ease, transform 0.2s ease;
-    outline: none;
-    padding: 5px; /* Add padding for easier clicking */
-    line-height: 1; /* Ensure icon sits correctly */
+    cursor: pointer;
+    line-height: 1;
+    padding: 5px;
+    transition: color 0.2s ease, transform 0.1s ease;
 }
 
-.close-button:hover {
+.modal-close-button::before {
+    content: '\00D7'; /* Multiplication sign for 'X' */
+}
+
+.modal-close-button:hover {
     color: var(--primary-color);
     transform: rotate(90deg);
 }
 
-.close-button:focus-visible {
+.modal-close-button:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
     border-radius: 4px;
 }
 
-/* Close Icon (using CSS mask) */
-.close-icon {
-    display: block;
-    width: 24px;
-    height: 24px;
-    mask-image: url('../icons/close.svg'); /* Path to your close SVG */
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    background-color: var(--text-color); /* Default color */
-    transition: background-color 0.2s ease;
-    -webkit-mask-image: url('../icons/close.svg');
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
-}
 
-.close-button:hover .close-icon {
-    background-color: var(--primary-color); /* Change color on button hover */
-}
-
-.close-button:focus-visible .close-icon {
-     background-color: var(--primary-color); /* Change color on button focus */
-}
-
-
-/* --- Modal Body Layout (Tabs) --- */
-.modal-body {
+/* --- Tabs Layout --- */
+.tabs-container {
     display: flex;
-    /* gap: 30px; Kept as gap is useful */
-    flex-wrap: nowrap; /* Prevent wrapping on smaller screens to force side-by-side */
-    flex-direction: row; /* Explicitly set to row */
-    gap: 30px; /* Added gap back */
+    flex-direction: column; /* Default for mobile */
+    gap: 20px;
 }
 
 .tabs-sidebar {
-    /* Adjust flex-basis to give the sidebar a minimum width but allow content area to shrink */
-    flex: 0 0 200px; /* Keep fixed width sidebar for larger screens */
-    border-right: 1px solid var(--tab-sidebar-border-color);
-    padding-right: 20px;
     display: flex;
-    flex-direction: column; /* Ensure tabs are vertical within the sidebar */
+    flex-direction: row; /* Default to row for mobile tabs */
+    flex-wrap: wrap;
     gap: 10px;
-    /* REMOVED: transition: border-color 0.3s ease; */
+    border-bottom: 1px solid var(--tab-sidebar-border-color); /* Separator for horizontal tabs */
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+@media (min-width: 769px) {
+    .tabs-container {
+        flex-direction: row; /* Desktop: sidebar layout */
+    }
+
+    .tabs-sidebar {
+        flex-direction: column; /* Vertical tabs on desktop */
+        min-width: 180px;
+        border-bottom: none; /* Remove bottom border */
+        border-right: 1px solid var(--tab-sidebar-border-color); /* Add right border */
+        padding-right: 20px;
+        margin-bottom: 0;
+    }
 }
 
 .tab-button {
     background: none;
     border: none;
-    text-align: left;
-    padding: 12px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-family: 'Inter', sans-serif;
     color: var(--tab-button-color);
-    transition: background-color 0.2s ease, color 0.2s ease;
-    outline: none;
-    display: flex; /* Align icon and text */
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
     align-items: center;
     gap: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    flex-grow: 1; /* Allow buttons to grow in mobile row layout */
+    justify-content: center; /* Center text and icon in mobile row */
 }
+
+@media (min-width: 769px) {
+    .tab-button {
+        justify-content: flex-start; /* Left align text and icon on desktop */
+        flex-grow: 0; /* Don't grow on desktop */
+    }
+}
+
 
 .tab-button:hover {
     background-color: var(--tab-button-hover-bg);
@@ -201,10 +185,13 @@ body.modal-open {
 
 .tab-button.active {
     color: var(--tab-button-active-color);
+    border: 1px solid var(--tab-button-active-border);
+    background-color: var(--secondary-color); /* Highlight active tab background */
     font-weight: 600;
-    background-color: var(--tab-button-hover-bg); /* Highlight active tab */
-    border-left: 4px solid var(--tab-button-active-border); /* Indicate active tab */
-    padding-left: 11px; /* Adjust padding due to border */
+}
+
+.tab-button.active .tab-icon {
+    background-color: var(--tab-icon-active-color);
 }
 
 .tab-button:focus-visible {
@@ -213,94 +200,74 @@ body.modal-open {
     border-radius: 4px;
 }
 
-
-/* Tab Icons (using CSS mask) */
 .tab-icon {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    mask-repeat: no-repeat;
-    mask-size: contain;
-    mask-position: center;
-    background-color: var(--tab-icon-color); /* Default color */
+    width: 20px;
+    height: 20px;
+    background-color: var(--tab-icon-color);
+    -webkit-mask-size: cover;
+    mask-size: cover;
     transition: background-color 0.2s ease;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    -webkit-mask-position: center;
 }
 
-/* Specific Tab Icon Masks */
-/* Ensure these paths are correct relative to the CSS file location */
-.settings-icon-svg { mask-image: url('../icons/settings.svg'); -webkit-mask-image: url('../icons/settings.svg'); }
-.info-icon-svg { mask-image: url('../icons/info.svg'); -webkit-mask-image: url('../icons/info.svg'); }
-
-
-.tab-button:hover .tab-icon {
-    background-color: var(--primary-color); /* Change icon color on button hover */
+/* Specific Tab Icons (SVG Mask) */
+.appearance-icon-svg {
+    mask-image: url('../icons/palette-fill.svg');
+    -webkit-mask-image: url('../icons/palette-fill.svg');
 }
-
-.tab-button.active .tab-icon {
-    background-color: var(--tab-icon-active-color); /* Active icon color */
+.time-date-icon-svg {
+    mask-image: url('../icons/clock-fill.svg');
+    -webkit-mask-image: url('../icons/clock-fill.svg');
 }
-
-.tab-button:focus-visible .tab-icon {
-     background-color: var(--primary-color); /* Change icon color on button focus */
+.about-icon-svg {
+    mask-image: url('../icons/question-circle-fill.svg');
+    -webkit-mask-image: url('../icons/question-circle-fill.svg');
 }
 
 
 .tab-content-area {
-    flex-grow: 1; /* Allow content area to take remaining space */
-    padding-right: 10px; /* Add some padding on the right */
-    min-width: 0; /* Allow content to shrink below its ideal width */
+    flex-grow: 1;
+    padding-left: 0; /* Default for mobile */
 }
 
-.tab-content {
-    display: none;
+@media (min-width: 769px) {
+    .tab-content-area {
+        padding-left: 20px; /* Add padding when sidebar is on left */
+        padding-right: 10px; /* Adjust content to shrink */
+    }
 }
 
-.tab-content.active {
-    display: block;
-}
 
 .tab-content h4 {
-    margin-top: 0;
-    margin-bottom: 20px;
     font-size: 1.4rem;
+    margin-bottom: 20px;
     color: var(--heading-color);
-    /* REMOVED: transition: color 0.3s ease; */
 }
 
 .setting-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 20px;
+    padding: 15px 0;
     border-bottom: 1px solid var(--setting-item-border);
-    /* REMOVED: transition: border-bottom-color 0.3s ease; */
+    margin-bottom: 15px;
+}
+
+.setting-item:last-of-type {
+    border-bottom: none; /* No border for the last item */
 }
 
 .setting-item label {
     font-size: 1.1rem;
-    font-weight: 500;
     color: var(--setting-label-color);
-    margin-right: 20px;
-    flex-shrink: 0; /* Prevent label from shrinking */
-    /* REMOVED: transition: color 0.3s ease; */
+    font-weight: 600;
 }
 
 .setting-item select {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid var(--setting-input-border);
-    font-size: 1rem;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--setting-input-bg);
-    color: var(--text-color);
-    /* REMOVED: transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease; */
-    outline: none;
+    width: auto;
     max-width: 250px; /* Limit select width */
-    width: 100%; /* Allow width to adjust */
+    background-color: var(--setting-input-bg);
+    border-color: var(--setting-input-border);
+    color: var(--text-color);
 }
 
 .setting-item select:focus {
@@ -308,199 +275,128 @@ body.modal-open {
     box-shadow: var(--setting-input-focus-shadow);
 }
 
-/* Toggle Switch Styling (for dark mode) */
-.theme-option {
+
+/* --- Toggle Switch Styles --- */
+.switch-label {
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 15px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--setting-label-color);
-    cursor: pointer;
-    /* REMOVED: transition: color 0.3s ease; */
 }
 
-.theme-option input[type="checkbox"] {
-    /* Hide the default checkbox */
-    appearance: none;
-    -webkit-appearance: none;
-    visibility: hidden; /* Hide the checkbox visually */
-    width: 0; /* Give it 0 width */
-    height: 0; /* Give it 0 height */
-    margin: 0; /* Remove margin */
-    padding: 0; /* Remove padding */
+.switch-checkbox {
+    display: none; /* Hide default checkbox */
 }
 
-/* Create a custom toggle switch */
-.theme-option input[type="checkbox"] + label {
+.switch-button {
     position: relative;
-    display: inline-block;
-    width: 45px; /* Width of the toggle */
-    height: 25px; /* Height of the toggle */
+    width: 50px;
+    height: 28px;
     background-color: var(--switch-bg);
-    border-radius: 25px; /* Make it rounded */
-    transition: background-color 0.3s ease; /* Keep this transition for color change */
+    border-radius: 14px;
     cursor: pointer;
-    flex-shrink: 0; /* Prevent it from shrinking */
+    transition: background-color 0.3s;
     border: 1px solid var(--switch-border);
-    box-sizing: border-box; /* Include border in dimensions */
 }
 
-/* Style the circle (the knob) */
-.theme-option input[type="checkbox"] + label::after {
+.switch-button::after {
     content: '';
     position: absolute;
-    top: 3px; /* Adjust position */
-    left: 3px; /* Adjust position */
-    width: 17px; /* Size of the circle */
-    height: 17px; /* Size of the circle */
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
     background-color: var(--switch-circle-bg);
     border-radius: 50%;
-    transition: transform 0.3s ease; /* Keep this transition for knob movement */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    transition: transform 0.3s, background-color 0.3s;
 }
 
-/* Style the toggle when checked */
-.theme-option input[type="checkbox"]:checked + label {
+.switch-checkbox:checked + .switch-button {
     background-color: var(--switch-checked-bg);
-    border-color: var(--switch-checked-bg); /* Match border color */
+    border-color: var(--switch-checked-bg); /* Match border to checked background */
 }
 
-/* Move the circle when checked */
-.theme-option input[type="checkbox"]:checked + label::after {
-    transform: translateX(20px); /* Move circle to the right */
+.switch-checkbox:checked + .switch-button::after {
+    transform: translateX(22px);
 }
 
-/* Focus style for the toggle (applied to the custom label) */
-.theme-option input[type="checkbox"]:focus-visible + label {
-     outline: 2px solid var(--primary-color);
-     outline-offset: 3px;
-     border-radius: 25px;
+.switch-checkbox:focus-visible + .switch-button {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 16px; /* Match switch button border-radius */
+}
+
+
+/* --- Support Section (within settings) --- */
+.support-section {
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.support-section h2 {
+    color: var(--heading-color);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.support-section p {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.support-section .support-link {
+    margin: 5px;
+    display: inline-block;
+}
+
+.settings-about-link {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.settings-about-link p {
+    margin-bottom: 10px;
 }
 
 
 .setting-description {
-    font-size: 0.95rem;
-    color: #6c757d; /* Gray description text */
+    font-size: 0.9rem;
+    color: var(--loading-text-color); /* Use a more subtle color */
     margin-top: 10px;
-    margin-bottom: 25px;
-    line-height: 1.5;
-}
-
-.settings-support {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
-}
-
-.settings-support h2 {
-    font-size: 1.6rem;
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 15px;
-}
-
-.settings-support p {
-    font-size: 1rem;
-    margin-bottom: 15px;
-}
-
-/* Clear Cache Button */
-.clear-cache-button {
-    display: block; /* Make it a block element */
-    margin: 30px auto 15px auto; /* Center it and add vertical margin */
-    background-color: var(--clear-cache-button-bg);
-    color: var(--button-text-color);
-    padding: 12px 25px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Keep these transitions */
-    border: none;
-    cursor: pointer;
-    outline: none;
-}
-
-.clear-cache-button:hover {
-    background-color: var(--clear-cache-button-hover-bg);
-    transform: translateY(-3px);
-}
-
-.clear-cache-button:focus-visible {
-     outline: 2px solid var(--clear-cache-button-bg);
-     outline-offset: 2px;
-     border-radius: 8px;
-     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); /* Red shadow */
+    text-align: center;
 }
 
 
-
-/* --- Responsive adjustments (Modal Specific) --- */
+/* --- Mobile Responsiveness for Settings Modal --- */
 @media (max-width: 768px) {
     .modal-content {
-        padding: 15px;
-        width: 95%;
-        max-height: 95vh; /* Allow more height on smaller screens */
+        padding: 20px;
+        width: 95%; /* Make it slightly wider on small screens */
+        max-height: 95vh;
     }
 
-    .modal-content h3 {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-        padding-bottom: 8px;
-    }
-
-    .close-button {
+    .modal-close-button {
+        font-size: 1.5rem;
         top: 10px;
         right: 10px;
-        font-size: 1.5rem;
-        padding: 3px;
-    }
-
-    .close-icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .modal-body {
-        /* Prevent column direction on small screens */
-        flex-direction: row;
-        /* Re-adjust gap and flex properties for side-by-side on small screens */
-        gap: 15px; /* Reduced gap */
     }
 
     .tabs-sidebar {
-        /* Ensure vertical direction for tabs within sidebar */
-        flex-direction: column;
-        /* Adjust flex-basis for the sidebar on small screens */
-        flex: 0 0 120px; /* Give sidebar a smaller fixed width on mobile */
-        border-right: 1px solid var(--tab-sidebar-border-color);
-        padding-right: 10px; /* Adjusted padding */
-         gap: 5px; /* Adjusted gap between tabs */
+        flex-direction: column; /* Stack tabs vertically on mobile */
+        border-right: none;
+        padding-right: 0;
+        gap: 5px;
     }
 
     .tab-button {
-        padding: 8px 10px; /* Adjusted padding */
-         font-size: 0.8rem; /* Smaller font size */
-         gap: 5px; /* Smaller gap for icon and text */
-         justify-content: flex-start; /* Align text/icon to the start */
-         border-left: 4px solid transparent; /* Keep border for active state */
-         border-bottom: none; /* Remove bottom border */
+        font-size: 1rem;
+        padding: 8px 10px;
+        justify-content: flex-start; /* Align content to start */
     }
 
-     .tab-button.active {
-        border-left-color: var(--tab-button-active-border); /* Active indicator */
-        border-bottom-color: transparent; /* Ensure bottom border is gone */
-        padding-left: 6px; /* Adjust padding due to border */
-     }
-
-
-    .tab-content-area {
-        flex-grow: 1; /* Allow content area to take remaining space */
-        min-width: 0; /* Allow content to shrink */
-        padding-right: 0;
-    }
-
-    /* Target div/span tab icons */
     .tab-icon {
         width: 18px; /* Smaller icon size */
         height: 18px;
@@ -512,7 +408,7 @@ body.modal-open {
     }
 
     .setting-item {
-        flex-direction: column; /* Keep stacking setting items within content */
+        flex-direction: column; /* Stack setting items within content */
         align-items: flex-start;
         gap: 8px;
         margin-bottom: 20px;
@@ -533,44 +429,32 @@ body.modal-open {
         gap: 10px;
     }
 
-    .theme-option input[type="checkbox"] + label {
+    .switch-button {
         width: 40px;
         height: 22px;
     }
 
-     .theme-option input[type="checkbox"] + label::after {
+    .switch-button::after {
         top: 3px;
         left: 3px;
         width: 16px;
         height: 16px;
-     }
+    }
 
-    .theme-option input[type="checkbox"]:checked + label::after {
+    .switch-checkbox:checked + .switch-button::after {
         transform: translateX(17px);
     }
 
     .setting-description {
         font-size: 0.9rem;
         margin-top: 8px;
-        margin-bottom: 20px;
     }
 
-    .settings-support {
-        margin-top: 20px;
-        padding-top: 15px;
+    .support-section {
+        padding: 15px;
     }
 
-    .settings-support h2 {
-        font-size: 1.4rem;
-    }
-
-    .settings-support p {
-        font-size: 0.9rem;
-    }
-
-    .clear-cache-button {
-         padding: 10px 20px;
-         font-size: 0.95rem;
-         margin: 20px auto 10px auto;
+    .support-section h2 {
+        font-size: 1.3rem;
     }
 }
