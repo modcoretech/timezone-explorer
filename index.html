@@ -4,16 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timezone Explorer</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="description" content="Explore timezones around the world, view local times, and manage your favorites.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://modcoretech.github.io/timezone-explorer/">
+    <meta property="og:title" content="Timezone Explorer">
+    <meta property="og:description" content="Explore timezones around the world, view local times, and manage your favorites.">
+    <meta property="og:image" content="https://modcoretech.github.io/timezone-explorer/images/social-share.jpg"> <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://modcoretech.github.io/timezone-explorer/">
+    <meta property="twitter:title" content="Timezone Explorer">
+    <meta property="twitter:description" content="Explore timezones around the world, view local times, and manage your favorites.">
+    <meta property="twitter:image" content="https://modcoretech.github.io/timezone-explorer/images/social-share.jpg"> <link rel="icon" type="image/png" href="images/favicon.png"> <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/settings.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="preloader" class="preloader">
+        <div class="spinner"></div>
+        <p>Loading Timezone Explorer...</p>
+    </div>
+
     <nav id="sticky-nav" class="sticky-nav">
         <div class="nav-content">
             <div class="nav-title">Timezone Explorer</div>
             <div class="nav-icons">
-                 <a href="about.html" class="nav-link-icon" aria-label="About Your Timezone & Me">
+                 <a href="about.html" class="nav-link-icon" aria-label="About Your Timezone & Us">
                       <span class="nav-icon info-icon-svg" aria-hidden="true"></span>
                  </a>
                 <div class="nav-icon nav-search-icon" id="nav-search-icon" aria-label="Toggle Search" role="button" tabindex="0"></div>
@@ -25,128 +40,136 @@
         </div>
     </nav>
 
-    <div class="container">
-        <h1>Timezone Explorer</h1>
-        <p>Explore current time and detailed information for timezones around the world.</p>
+    <main class="container">
+        <div id="announcer" aria-live="polite" class="visually-hidden"></div>
 
-        <div class="settings-icon" id="main-settings-icon" aria-label="Open Settings" role="button" tabindex="0"></div>
+        <div id="main-controls" class="main-controls">
+            <input type="text" id="timezone-search" placeholder="Search for a city or timezone..." class="search-input">
+        </div>
 
-        <div class="controls" id="main-controls">
-             <div class="search-container">
-                 <label for="timezone-search">Search Timezone:</label>
-                 <input type="text" id="timezone-search" placeholder="e.g., London, New York, Asia/Tokyo">
-             </div>
-             </div>
+        <section id="local-timezone-section" class="local-timezone-section">
+            <h2 class="section-title">Your Local Time</h2>
+            <div id="local-timezone-card" class="timezone-card local-card">
+                </div>
+        </section>
 
-        <div id="grid-view">
+        <section id="grid-view" class="grid-view">
+            <h2 class="section-title">Timezones</h2>
+            <div id="skeleton-loader" class="skeleton-loader">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
             <div id="timezones-grid" class="timezones-grid">
                 </div>
             <div class="loading-message">
-                 <span class="loading-icon" aria-hidden="true"></span>
-                 Loading timezones...
-             </div>
-            <div class="loading-more hidden">
-                 <span class="loading-icon" aria-hidden="true"></span>
-                 Loading more...
+                <div class="loading-icon"></div>
+                Loading timezones...
             </div>
-            <div class="end-of-list hidden">End of list</div>
-        </div>
+            <div class="loading-more">
+                <div class="loading-icon"></div>
+                Loading more...
+            </div>
+            <div class="no-results-message hidden">No timezones found for your search.</div>
+            <div class="end-of-list">End of list.</div>
+        </section>
 
-        <div id="detail-view" class="hidden">
+        <section id="detail-view" class="detail-view hidden">
+            <button id="back-to-grid-button" class="back-button">&larr; Back to List</button>
             <div class="detail-card">
                 <h3 id="detail-timezone-name"></h3>
-                <p><strong>Current Date:</strong> <span id="detail-display-date"></span></p>
-                <p><strong>Current Time:</strong> <span id="detail-display-time"></span></p>
-                <p><strong>UTC Offset:</strong> <span id="detail-display-offset"></span></p>
-                <div class="detail-more-info">
-                    <h4>More Details:</h4>
-                    <p><strong>Example Countries:</strong> <span id="detail-countries">Information not available in this version.</span></p>
-                    <p><strong>DST Status:</strong> <span id="detail-dst-status">Loading...</span></p>
+                <p>Date: <span id="detail-display-date"></span></p>
+                <p>Time: <span id="detail-display-time"></span></p>
+                <p>UTC Offset: <span id="detail-display-offset"></span></p>
+                <p>Daylight Saving: <span id="detail-dst-status"></span></p>
+                <div class="detail-actions">
+                     <button id="favorite-detail-button" class="favorite-button">
+                         <span class="star-icon"></span>
+                         <span class="button-text">Add to Favorites</span>
+                     </button>
+                     <button id="share-detail-button" class="share-button">
+                         <span class="share-icon"></span>
+                         <span class="button-text">Share Timezone</span>
+                     </button>
                 </div>
             </div>
-            <a href="index.html" class="back-link">&larr; Back to All Timezones</a>
-        </div>
+        </section>
 
-        <div class="support-section">
-            <h2>Support This Project</h2>
-            <p>If you find this tool helpful, please consider supporting its development.</p>
-            <p>
-                <a href="https://github.com/Nitra-Global/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-                <a href="https://github.com/Nitra-Global/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">Donate</a>
-            </p>
-        </div>
-    </div>
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <button id="settings-close-button" class="modal-close-button" aria-label="Close settings"></button>
+                <div class="tabs-container">
+                    <div class="tabs-sidebar">
+                        <button class="tab-button active" data-tab="appearance" aria-controls="tab-appearance" role="tab" aria-selected="true">
+                            <span class="tab-icon appearance-icon-svg" aria-hidden="true"></span>Appearance
+                        </button>
+                        <button class="tab-button" data-tab="time-date" aria-controls="tab-time-date" role="tab" aria-selected="false">
+                            <span class="tab-icon time-date-icon-svg" aria-hidden="true"></span>Time & Date
+                        </button>
+                        <button class="tab-button" data-tab="about-support" aria-controls="tab-about-support" role="tab" aria-selected="false">
+                            <span class="tab-icon about-icon-svg" aria-hidden="true"></span>About & Support
+                        </button>
+                    </div>
+                    <div class="tab-content-area">
+                        <div id="tab-appearance" class="tab-content active" role="tabpanel" aria-labelledby="appearance-tab-button">
+                            <h4>Appearance Settings</h4>
+                            <div class="setting-item theme-option">
+                                <label for="dark-mode-toggle" class="switch-label">Dark Mode</label>
+                                <input type="checkbox" id="dark-mode-toggle" class="switch-checkbox">
+                                <label for="dark-mode-toggle" class="switch-button" aria-label="Toggle Dark Mode"></label>
+                            </div>
+                        </div>
 
-    <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
-        <div class="modal-content">
-            <h3 id="settings-modal-title">Settings</h3>
-            <button class="close-button" id="settings-close-button" aria-label="Close Settings Modal">
-                 <span class="close-icon" aria-hidden="true"></span>
-            </button>
+                        <div id="tab-time-date" class="tab-content" role="tabpanel" aria-labelledby="time-date-tab-button">
+                            <h4>Time and Date Display</h4>
+                            <div class="setting-item">
+                                <label for="time-format">Time Format:</label>
+                                <select id="time-format">
+                                    <option value="12">12-Hour (AM/PM)</option>
+                                    <option value="24">24-Hour</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label for="date-locale">Date Display Format (Locale):</label>
+                                <select id="date-locale">
+                                    <option value="en-US">English (United States)</option>
+                                </select>
+                            </div>
+                        </div>
 
-            <div class="modal-body">
-                <div class="tabs-sidebar" role="tablist" aria-orientation="vertical">
-                    <button class="tab-button active" data-tab="general" aria-controls="tab-general" role="tab" aria-selected="true" id="tab-button-general">
-                         <span class="tab-icon settings-icon-svg" aria-hidden="true"></span>
-                         General
-                    </button>
-                    <button class="tab-button" data-tab="support" aria-controls="tab-support" role="tab" aria-selected="false" id="tab-button-support">
-                         <span class="tab-icon info-icon-svg" aria-hidden="true"></span>
-                         Support
-                    </button>
+                        <div id="tab-about-support" class="tab-content" role="tabpanel" aria-labelledby="about-support-tab-button">
+                            <h4>About This Project & Support</h4>
+                            <p><strong>Timezone Explorer</strong> is a simple, open-source tool to help you easily view and compare times across different timezones globally.</p>
+                            <p>Developed by NGDE. Contact: <a href="mailto:NGDE@WEB.DE">NGDE@WEB.DE</a></p>
+                            <div class="support-section settings-support">
+                                <h2>Support This Project</h2>
+                                <p>If you find this tool helpful, please consider supporting its development.</p>
+                                <p>
+                                    <a href="https://github.com/modcoretech/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                                    <a href="https://github.com/modcoretech/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">Donate</a>
+                                </p>
+                            </div>
+                            <div class="settings-about-link">
+                                 <p>Learn more about this project and your local timezone:</p>
+                                 <a href="about.html" class="button support-link">About Your Timezone & Us</a>
+                            </div>
+                            <button id="clear-cache-button" class="clear-cache-button button">Clear Saved Settings</button>
+                            <p class="setting-description">Clearing saved settings will remove your saved time/date preferences and disable Dark Mode in this browser, resetting them to default.</p>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </main>
 
-                <div class="tab-content-area">
-                    <div class="tab-content active" id="tab-general" role="tabpanel" aria-labelledby="tab-button-general" aria-hidden="false">
-                         <h4>General Settings</h4>
-                         <div class="setting-item">
-                             <label for="time-format">Time Format:</label>
-                             <select id="time-format">
-                                 <option value="12">12-Hour (AM/PM)</option>
-                                 <option value="24">24-Hour</option>
-                             </select>
-                         </div>
-                         <div class="setting-item">
-                             <label for="date-locale">Date Display Format:</label>
-                             <select id="date-locale">
-                                 <option value="en-US">English (US)</option>
-                                 <option value="de-DE">German (DE)</option>
-                                 <option value="fr-FR">French (FR)</option>
-                                 <option value="es-ES">Spanish (ES)</option>
-                                 </select>
-                         </div>
-                          <div class="setting-item">
-                              <label class="theme-option">
-                                  <input type="checkbox" id="dark-mode-toggle">
-                                  Enable Dark Mode
-                              </label>
-                          </div>
-                         <p class="setting-description">Choose your preferred time format (12-hour with AM/PM or 24-hour), the language and format used for displaying dates (like weekdays and months, influenced by locale), and toggle Dark Mode.</p>
-                     </div>
+    <button id="go-to-top-button" class="go-to-top-button hidden" aria-label="Go to top of page">
+        <span class="arrow-up-icon"></span>
+    </button>
 
-                     <div class="tab-content" id="tab-support" role="tabpanel" aria-labelledby="tab-button-support" aria-hidden="true">
-                         <h4>Support</h4>
-                         <p>This project is developed by UNBOUND LABEL.</p>
-                         <p>For support or inquiries, please contact: <a href="mailto:NGDE@WEB.DE">NGDE@WEB.DE</a></p>
-                         <div class="support-section settings-support">
-                             <h2>Support This Project</h2>
-                             <p>If you find this tool helpful, please consider supporting its development.</p>
-                             <p>
-                                 <a href="https://github.com/Nitra-Global/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">View on GitHub</a>
-                                 <a href="https://github.com/Nitra-Global/timezone-explorer/" class="support-link button" target="_blank" rel="noopener noreferrer">Donate</a>
-                             </p>
-                         </div>
-                         <div class="settings-about-link">
-                              <p>Learn more about this project and your local timezone:</p>
-                              <a href="about.html" class="button support-link">About Your Timezone & Us</a>
-                         </div>
-                         <button id="clear-cache-button" class="clear-cache-button button">Clear Saved Settings</button>
-                         <p class="setting-description">Clearing saved settings will remove your saved time/date preferences and disable Dark Mode in this browser, resetting them to default.</p>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
+    <div id="toast-container" class="toast-container"></div>
 
     <script src="js/script.js"></script>
 </body>
