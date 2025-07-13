@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js')
+            // Corrected path for GitHub Pages subfolder hosting
+            navigator.serviceWorker.register('/timezone-explorer/service-worker.js')
                 .then(registration => {
                     console.log('Service Worker registered with scope:', registration.scope);
                 })
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const detailDisplayTime = document.getElementById('detail-display-time');
     const detailDisplayOffset = document.getElementById('detail-display-offset');
     // const detailCountries = document.getElementById('detail-countries'); // Not implemented in this version
-    const detailDstStatus = document.getElementById('detail-dst-status');
+    const detailDstStatus = document = document.getElementById('detail-dst-status');
 
     // Settings Modal Elements (Now within script.js scope)
     const settingsModal = document.getElementById('settings-modal');
